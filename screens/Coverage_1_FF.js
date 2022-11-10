@@ -1,24 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button} from 'react-native';
 
-export default function FootballField({ navigation }) {
+export default function Coverage_1_FF({ navigation }) {
   return (
     <View style={styles.container}>
-      <Button
+      <Button 
         title="Close"
-        onPress={() => navigation.pop()}
+        onPress={() => navigation.navigate("HomeScreen")}/>
+      <Button color="#000000"
+        title="Football Field"
       />
       <Button
-        title="Add Valuation"
-        onPress={() => navigation.push("Valuation")}
+        title="Targets"
+        onPress={() => navigation.navigate("Coverage_2_Targets")}
       />
       <Button
-        title="Valuation Bar (Placeholder)"
-        onPress={() => navigation.push("Valuation")}
-      />
-      <Button
-        title="Favorites"
-        onPress={() => navigation.navigate("Coverage_2_Valuations")}
+        title="Screens"
+        onPress={() => navigation.navigate("Coverage_3_Screens")}
       />
       <StatusBar style="auto" />
     </View>
@@ -31,5 +29,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  current: {
+    backgroundColor: '#000000'
   },
 });

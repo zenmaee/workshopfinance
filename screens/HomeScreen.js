@@ -1,14 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Button, View } from 'react-native';
+import { StyleSheet, Text, Button, View } from 'react-native';
 
 export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Button 
-        title="Draw"
+      <Button  
+        title="Draw Football Field"
         onPress={() => navigation.navigate("FootballField")}
       />
-      <StatusBar style="auto" />
+      <Button  
+        title="Coverage"
+        onPress={() => navigation.navigate("Coverage_1_FF")}
+      />
+      <StatusBar style="auto" /> 
     </View>
   );
 }
