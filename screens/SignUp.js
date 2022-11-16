@@ -1,3 +1,5 @@
+import * as React from 'react';
+import { Component } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Button} from 'react-native';
 
@@ -5,24 +7,27 @@ import { StyleSheet, Text, View, Image, Button} from 'react-native';
   const [username, onChangeText] = React.useState("Username");
 */
 
-export default function SignIn({ navigation }) {
-  return (
-    <View style={styles.container}>
-      <Image style={styles.logo} resizeMode="contain" source={require('./logo_dark.png')}/>
-      {/* <TextInput 
-      style={styles.input}
-      onChangeText={onChangeText}
-      value={username}
-      /> */}
-      <View style={styles.buttons}>
-        <Button 
-          title="Sign Up"
-          color="#FFFFFF"
-          onPress={() => navigation.navigate("SignIn")}
-        />
-      </View>
-    </View>
-  );
+//export default function SignIn({ navigation }) {
+  export default class SignIn extends Component{
+    render(){
+      return (
+        <View style={styles.container}>
+          <Image style={styles.logo} resizeMode="contain" source={require('./logo_dark.png')}/>
+          {/* <TextInput 
+          style={styles.input}
+          onChangeText={onChangeText}
+          value={username}
+          /> */}
+          <View style={styles.buttons}>
+            <Button 
+              title="Sign Up"
+              color="#FFFFFF"
+              onPress={() => navigation.navigate("SignIn")}
+            />
+          </View>
+        </View>
+      );
+    }
 }
 
 const styles = StyleSheet.create({
