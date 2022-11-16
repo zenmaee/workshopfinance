@@ -9,7 +9,7 @@ export default function AboutWF({ navigation }) {
     </View>
   );
 }
-
+#holaaaaaa
 const styles = StyleSheet.create({
   container: {
     flex: 1,
