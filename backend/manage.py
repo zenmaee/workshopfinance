@@ -7,7 +7,7 @@ def deploy():
 
     app = create_app()
     app.app_context().push()
-
+    #
     # create database and tables
     db.create_all()
     # migrate database to latest revision
