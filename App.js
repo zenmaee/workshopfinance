@@ -5,6 +5,7 @@ import SignIn from "./screens/SignIn";
 import HomeScreen from "./screens/HomeScreen";
 import FootballField from "./screens/FootballField";
 import Valuation from "./screens/Valuation";
+import AboutWF from "./screens/AboutWF";
 import Coverage_1_FF from "./screens/Coverage_1_FF";
 import Coverage_2_Targets from "./screens/Coverage_2_Targets";
 import Coverage_3_Screens from "./screens/Coverage_3_Screens";
@@ -47,6 +48,9 @@ const AppNavigator = createStackNavigator({
   },
   Coverage_3_Screens: {
     screen: Coverage_3_Screens
+  },
+  AboutWF: {
+    screen: AboutWF
   },
   ApiDisp: {
     screen: ApiDisp
