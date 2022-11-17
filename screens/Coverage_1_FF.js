@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Component } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button} from 'react-native';
+import { createStackNavigator } from "react-navigation-stack";
+import { createAppContainer } from "react-navigation";
 
 //export default function Coverage_1_FF({ navigation }) {
 export default class Coverage_1_FF extends Component {
@@ -10,17 +12,17 @@ export default class Coverage_1_FF extends Component {
       <View style={styles.container}>
         <Button 
           title="Close"
-          onPress={() => navigation.navigate("HomeScreen")}/>
+          onPress={() => this.props.navigation.navigate("HomeScreen")}/>
         <Button color="#000000"
           title="Football Field"
         />
         <Button
           title="Targets"
-          onPress={() => navigation.navigate("Coverage_2_Targets")}
+          onPress={() => this.props.navigation.navigate("Coverage_2_Targets")}
         />
         <Button
           title="Screens"
-          onPress={() => navigation.navigate("Coverage_3_Screens")}
+          onPress={() => this.props.navigation.navigate("Coverage_3_Screens")}
         />
         <StatusBar style="auto" />
       </View>

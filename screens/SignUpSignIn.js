@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Component } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, SafeAreaView, Text, View, Image, Button} from 'react-native';
+import { createStackNavigator } from "react-navigation-stack";
+import { createAppContainer } from "react-navigation";
 
 const Separator = () => (
   <View style={styles.separator}/>
@@ -17,7 +19,7 @@ export default class SignUpSignIn extends Component{
             <Button
               title="Sign In"
               color="#FFFFFF"
-              onPress={() => navigation.navigate("SignIn")}
+              onPress={() => this.props.navigation.navigate("SignIn")}
             />
           </View>
             <Separator/>
@@ -25,7 +27,7 @@ export default class SignUpSignIn extends Component{
             <Button
               title="Sign Up"
               color="#FFFFFF"
-              onPress={() => navigation.navigate("SignUp")}
+              onPress={() => this.props.navigation.navigate("SignUp")}
             />
           </View>
           <StatusBar style="auto" /> 

@@ -9,7 +9,8 @@ import Coverage_1_FF from "./screens/Coverage_1_FF";
 import Coverage_2_Targets from "./screens/Coverage_2_Targets";
 import Coverage_3_Screens from "./screens/Coverage_3_Screens";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator, createAppContainer } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
+import { createAppContainer } from "react-navigation";
 import { StyleSheet, View, Button} from 'react-native';
 
 export default class App extends React.Component {

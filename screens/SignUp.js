@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Component } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Button} from 'react-native';
+import { createStackNavigator } from "react-navigation-stack";
+import { createAppContainer } from "react-navigation";
 
 /*const PlaceholderText = () => {
   const [username, onChangeText] = React.useState("Username");
@@ -22,7 +24,7 @@ import { StyleSheet, Text, View, Image, Button} from 'react-native';
             <Button 
               title="Sign Up"
               color="#FFFFFF"
-              onPress={() => navigation.navigate("SignIn")}
+              onPress={() => this.props.navigation.navigate("SignIn")}
             />
           </View>
         </View>

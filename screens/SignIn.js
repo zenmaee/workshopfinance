@@ -2,6 +2,8 @@ import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Component } from 'react';
 import { StyleSheet, Text, View, Image, Button, TextInput } from 'react-native';
+import { createStackNavigator } from "react-navigation-stack";
+import { createAppContainer } from "react-navigation";
 
 /*const PlaceholderText = () => {
   const [username, onChangeText] = React.useState("Username");
@@ -22,7 +24,7 @@ export default class SignIn extends Component {
           <Button  
             title="Sign In"
             color="#FFFFFF"
-            onPress={() => navigation.navigate("HomeScreen")}
+            onPress={() => this.props.navigation.navigate("HomeScreen")}
           />
         </View>
       </View>
