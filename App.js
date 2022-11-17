@@ -8,6 +8,7 @@ import Valuation from "./screens/Valuation";
 import Coverage_1_FF from "./screens/Coverage_1_FF";
 import Coverage_2_Targets from "./screens/Coverage_2_Targets";
 import Coverage_3_Screens from "./screens/Coverage_3_Screens";
+import ApiDisp from "./screens/ApiDisp";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
@@ -46,6 +47,9 @@ const AppNavigator = createStackNavigator({
   },
   Coverage_3_Screens: {
     screen: Coverage_3_Screens
+  },
+  ApiDisp: {
+    screen: ApiDisp
   },
 });
 

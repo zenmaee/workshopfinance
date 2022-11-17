@@ -15,6 +15,7 @@ export default class Coverage_1_FF extends Component {
           onPress={() => this.props.navigation.navigate("HomeScreen")}/>
         <Button color="#000000"
           title="Football Field"
+          onPress={() => this.props.navigation.navigate("ApiDisp")}
         />
         <Button
           title="Targets"
