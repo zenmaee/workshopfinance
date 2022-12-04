@@ -2,11 +2,17 @@ import React from 'react';
 import { StyleSheet, Image, Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
 import InputTextField from '../components/InputTextField';
 
-const SignUpSignIn = ({ navigation }) => {
-  return (
-    <SafeAreaView style={styles.container}>
-          <Image style={styles.wfLogo} resizeMode="contain" source={require('./logo_dark.png')}/>
+const actions = [
+  { name: "SignUpSignIn_Main", type: "a"},
+  { name: "SignUp", type: "b"}
+]
 
+const SignUpSignIn = ({ navigation }) => {
+  const [ content, setContent ] = React.useState("SignUpSignIn_Main")
+  const [ content, setContent ] = React.useState("SignUp")
+
+  const SignUpSignIn_Main = () => {
+    <View>
           <View>
               <TouchableOpacity>
                   <View style={styles.socialButton}>
@@ -19,13 +25,11 @@ const SignUpSignIn = ({ navigation }) => {
           <Text style={[styles.buttonText, { textAlign: "center", marginVertical: 20 }]}>or</Text>
 
           <InputTextField 
-            title="Email"
-            placeholder="Enter your email"
+            title="Username"
             // value={userid}
             ></InputTextField> 
           <InputTextField 
-            style={{ marginTop: 10, marginBottom: 10}}
-            placeholder="Enter your password" 
+            style={{ marginTop: 10, marginBottom: 10}} 
             title="Password"
             // value={password}
             isSecure={true}
@@ -35,18 +39,30 @@ const SignUpSignIn = ({ navigation }) => {
             <Text style={[styles.buttonText, { marginLeft: 130, fontWeight: "600" }]}>Forgot Password?</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('HomeScreen')}>
+          <TouchableOpacity style={styles.buttons}>
               <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           
           <View style={{ marginTop: 10 }}>
             <Text style={styles.buttonText}>
                 Don't have an account?   
-                <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+                <TouchableOpacity onPress={() => { setState('SignUp') }}>
                     <Text style={[styles.buttonText, { fontWeight: "600"}]}> Register Now</Text>
                 </TouchableOpacity>
             </Text>
-          </View> 
+          </View>
+    </View> 
+  }
+
+  const SignUp = () => {
+    <Text>Hi!</Text>
+  }
+
+  return (
+    <SafeAreaView style={styles.container}>
+          <Image style={styles.wfLogo} resizeMode="contain" source={require('./logo_dark.png')}/>
+
+
     </SafeAreaView>
   );
 }
@@ -105,3 +121,5 @@ const styles = StyleSheet.create({
         color: "#FFF"
     }
   });
+
+ 
