@@ -6,7 +6,7 @@ from functions import gen_valuation
 now = datetime.now()
 
 # Basket_of_comps and tgt_ticker will later be obtained from javascript user interaction
-basket_of_comps = ['MSFT', 'AMZN', 'GOOGL', 'FB', 'BABA', 'NVDA', 'PYPL', 'INTC', 'NFLX'] #List of comparables within a valuation
+basket_of_comps = ['MSFT', 'AMZN', 'GOOGL', 'FB', 'BABA', 'NVDA', 'PYPL', 'INTC', 'KO'] #List of comparables within a valuation
 tgt_ticker = 'AAPL' #Target company. This value will be obtained from the FootballField object
 
 #This may change when we increase the scope
@@ -22,7 +22,7 @@ footballFieldId=0
 valuationStat="Average"
 valuationSpread=0.1 #10%
 valuationCompsPeriod="LTM"
-valuationCompsMetric= "EvToEbitda"
+valuationCompsMetric= "evToEbitda"
 asOfDate="Today" #asOfDate is the comps date field that the user reads when generating the Valuation
 
 if asOfDate=="Today":#valuationCompsDate is the comps date that goes into our dataset
@@ -31,4 +31,4 @@ else:
     valuationCompsDate=asOfDate
 
 ####def generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, ownerId, timeDateCreated, valuationName, footballFieldId, valuationStat, valuationSpread, valuationCompsDate, valuationCompsMetric, valuationCompsPeriod):
-gen_valuation.generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, ownerId, timeDateCreated, valuationName, footballFieldId, valuationSpread, valuationCompsDate, valuationCompsMetric, valuationCompsPeriod)
+gen_valuation.generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, ownerId, timeDateCreated, valuationName, footballFieldId, valuationStat,valuationSpread, valuationCompsDate, valuationCompsMetric, valuationCompsPeriod)

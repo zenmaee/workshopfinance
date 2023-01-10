@@ -1,7 +1,5 @@
 import pandas as pd
 import requests
-from datetime import datetime
-import time
 
 #FROM EACH COMP, WE NEED (priority 1):
 #enterprise value
@@ -60,7 +58,6 @@ def Add_COMP(compSymbol,enterpriseValue,evToEbitdaLTM,evToRevenueLTM,valuationId
         "valuationId": valuationId
     }
     ])
-    time.sleep(0.1) #Wait some time between each entry to the dataset.
     return r
 
 def Add_VALUATION(multiples, valuationId, ownerId,timeDateCreated,valuationName,footballFieldId,valuationStat,valuationSpread,valuationCompsDate,valuationCompsMetric,valuationCompsPeriod):
@@ -113,7 +110,7 @@ def get_multiples(basket_of_comps, tgt_ticker, desired_multiples, valuationComps
 
     desired_multiples_period=[]
     for i in desired_multiples:
-        desired_multiples_period=desired_multiples[i]+valuationCompsPeriod
+        desired_multiples_period.append(i+valuationCompsPeriod)
 
     fundamentals = pd.DataFrame(raw_data, columns = desired_multiples_period, index = ticker)
     multiples = pd.DataFrame(columns = desired_multiples_period, index = ['Comp avg', 'Tgt/Comp avg', 'Comp median', 'Tgt/Comp median', 'Comp high' ,'Tgt/Comp high', 'Comp low','Tgt/Comp low' ] )
@@ -128,11 +125,8 @@ def get_multiples(basket_of_comps, tgt_ticker, desired_multiples, valuationComps
     multiples.iloc[5] = tgt_df / multiples.iloc[4]#Tgt/Comp max
     multiples.iloc[6] = comps_df.min()#Comps min
     multiples.iloc[7] = tgt_df / multiples.iloc[6]#Tgt/Comp min
-# If signup is successful <Response [200]>. If email exists "Email Exists".
-
-
     for i in range(0,len(comps_df.index)):
-        Add_COMP(comps_df.index[i],comps_df.iloc[i]['enterpriseValue'] , comps_df.iloc[i]['evToEbitdaLTM'], comps_df.iloc[i]['evToRevenueLTM'],valuationId)
+        Add_COMP(comps_df.index[i],comps_df.iloc[i]['enterpriseValueLTM'] , comps_df.iloc[i]['evToEbitdaLTM'], comps_df.iloc[i]['evToRevenueLTM'],valuationId)
 
     return multiples
 
