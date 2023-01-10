@@ -6,6 +6,7 @@ import numpy as np
 #from termcolor import colored as cl
 from datetime import date
 from datetime import datetime
+import time
 
 # datetime object containing current date and time
 now = datetime.now()
