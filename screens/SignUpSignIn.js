@@ -43,7 +43,7 @@ const SignUpSignIn = ({ navigation }) => {
             <Text style={styles.buttonText}>
                 Don't have an account?   
                 <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-                    <Text style={[styles.buttonText, { fontWeight: "600"}]}> Register Now</Text>
+                    <Text style={[styles.buttonText, { fontWeight: "600", marginTop: 15 }]}> Register Now</Text>
                 </TouchableOpacity>
             </Text>
           </View> 
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     wfLogo: {
-      marginTop: 100,
+      top: 100,
       height: 100,
       width: 350
     },
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
       marginRight: 8
     },
     socialButton: {
-        marginTop: 50, 
+        marginTop: 150, 
         flexDirection: "row",
         marginHorizontal: 12,
         paddingVertical: 12,

@@ -1,4 +1,4 @@
-import { StyleSheet, StatusBar, Text, View } from 'react-native';
+import { StyleSheet, StatusBar, Image } from 'react-native';
 import Coverage from "./screens/Coverage";
 import FootballField from "./screens/FootballField";
 import Profile_About from "./screens/Profile_About";
@@ -13,7 +13,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <StatusBar hidden={false}/> 
+      <StatusBar backgroundColor="#000" barStyle="light-content"/> 
         <Stack.Navigator>
           <Stack.Screen
             name="SignUpSignIn"
@@ -28,7 +28,10 @@ export default function App() {
             options={{
               title: "Sign Up",
               headerStyle: {
-                backgroundColor: 'white'
+                backgroundColor: '#000'
+              },
+              headerTitleStyle: {
+                color: 'white'
               }
             }}
           />
@@ -36,25 +39,71 @@ export default function App() {
             name="HomeScreen"
             component={HomeScreen}
             options={{
-              title: "Home"
+              title: "Home",
+              headerStyle: {
+                backgroundColor: '#000'
+              },
+              headerTitleStyle: {
+                color: 'white'
+              }
             }}
           />
           <Stack.Screen
             name="FootballField"
             component={FootballField}
             options={{
-              title: "Football Field"
+              headerTitle: (props) => ( 
+                <Image
+                  style={{ width: 200, height: 50 }}
+                  source={require('./screens/logo_dark.png')}
+                  resizeMode='contain'
+                />
+              ),
+              headerTitleStyle: { 
+                flex: 1, textAlign: 'center' 
+              },
+              headerStyle: {
+                backgroundColor: '#000'
+              },
             }}
           />
           <Stack.Screen
             name="Coverage"
             component={Coverage}
-            options={{}}
+            options={{
+              headerTitle: (props) => ( 
+                <Image
+                  style={{ width: 200, height: 50 }}
+                  source={require('./screens/logo_dark.png')}
+                  resizeMode='contain'
+                />
+              ),
+              headerTitleStyle: { 
+                flex: 1, textAlign: 'center' 
+              },
+              headerStyle: {
+                backgroundColor: '#000'
+              },
+            }}
           />
           <Stack.Screen
             name="Profile_About"
             component={Profile_About}
-            options={{}}
+            options={{
+              headerTitle: (props) => ( 
+                <Image
+                  style={{ width: 200, height: 50 }}
+                  source={require('./screens/logo_dark.png')}
+                  resizeMode='contain'
+                />
+              ),
+              headerTitleStyle: { 
+                flex: 1, textAlign: 'center' 
+              },
+              headerStyle: {
+                backgroundColor: '#000'
+              },
+            }}
           />
         </Stack.Navigator>
     </NavigationContainer>

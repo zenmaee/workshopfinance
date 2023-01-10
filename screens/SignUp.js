@@ -8,7 +8,7 @@ const SignUp = ({ navigation }) => {
           <Image style={styles.wfLogo} resizeMode="contain" source={require('./logo_dark.png')}/>
 
           <InputTextField 
-            style={{ marginTop: 10}}
+            style={{ marginTop: 80}}
             title="First Name"
             ></InputTextField> 
           <InputTextField 
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     wfLogo: {
-      marginTop: 100,
+      top: 55,
       height: 100,
       width: 350
     },

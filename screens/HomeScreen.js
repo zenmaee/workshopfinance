@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Image, Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
-import InputTextField from '../components/InputTextField';
+import { Button } from 'react-native-paper';
 
 const HomeScreen = ({ navigation }) => {
   return (
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         width: 200,
         borderRadius: 4, 
-        marginTop: 30, 
+        marginTop: 130, 
         paddingVertical: 7,
         paddingHorizontal: 20,
         alignItems: "center", 
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     wfLogo: {
-      marginTop: 100,
+      top: 55,
       height: 100,
       width: 350
     },
