@@ -1,6 +1,3 @@
-# Import the required packages
-#!pip install flask
-#!pip install models
 # Import the required libraries
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy

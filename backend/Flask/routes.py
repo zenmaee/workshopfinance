@@ -1,3 +1,19 @@
+##Installing packages we need
+import subprocess
+import sys
+#Function to install packages:
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package]) 
+install('flask')
+install('flask_sqlalchemy')
+install('flask_migrate')
+install('flask_marshmallow')
+install('flask_cors')
+install('pandas')
+install('requests')
+install('termcolor')
+
+##Installing libraries we need
 from flask import current_app,jsonify,request
 from app import create_app
 from app import db

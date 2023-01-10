@@ -1,41 +1,76 @@
-import * as React from 'react';
-import { Component } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button} from 'react-native';
-import { createStackNavigator } from "react-navigation-stack";
-import { createAppContainer } from "react-navigation";
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 
-// export default function FootballField({ navigation }) {
-export default class FootballField extends Component {
-  render(){
-    return (
-      <View style={styles.container}>
-        <Button
-          title="Close"
-          onPress={() => this.props.navigation.pop()}
-        />
-        <Button
-          title="Add Valuation"
-          onPress={() => this.props.navigation.push("Valuation")}
-        />
-        <Button
-          title="Valuation Bar (Placeholder)"
-          onPress={() => this.props.navigation.push("Valuation")}
-        />
-        <Button
-          title="Favorites"
-          onPress={() => this.props.navigation.navigate("Coverage_2_Valuations")}
-        />
-        <StatusBar style="auto" />
-      </View>
-    );
-  }
+function TabFootballField() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Football Fields</Text>
+    </View>
+  );
+}
+
+function TabTargets() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Targets</Text>
+    </View>
+  );
+}
+
+function TabScreens() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Screens</Text>
+    </View>
+  );
+}
+
+const Tab = createMaterialTopTabNavigator();
+
+function MainTabs() {
+  return (
+    <Tab.Navigator
+      initialRouteName="FF"
+      tabBarPosition='top'
+      screenOptions={{
+        tabBarActiveTintColor: '#e91e63',
+        tabBarLabelStyle: { fontSize: 12 },
+        tabBarStyle: { backgroundColor: 'powderblue' },
+      }}>
+          <Tab.Screen 
+            name="FF" 
+            component={TabFootballField} 
+            options={{ tabBarLabel: 'Football Field' }}
+          />
+          <Tab.Screen 
+            name="Targets" 
+            component={TabTargets}
+            options={{ tabBarLabel: 'Targets' }}
+          />
+          <Tab.Screen 
+            name="Screens" 
+            component={TabScreens} 
+            options={{ tabBarLabel: 'Screens' }}
+          />
+    </Tab.Navigator>
+  );
+}
+
+export default function FootballField({ navigation }) {
+  return (
+    <NavigationContainer independent={true} style={styles.container}>
+        <Text style={{color:'#fff'}}>Placeholder Text</Text>
+        <MainTabs/>
+        <Text style={{color:'#fff'}}>Placeholder Text</Text>
+    </NavigationContainer>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
     alignItems: 'center',
     justifyContent: 'center',
   },
