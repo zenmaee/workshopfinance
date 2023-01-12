@@ -19,19 +19,19 @@ def get_metrics(stock):
 
     #Fetching API
     fundamentals_api = "https://cloud.iexapis.com/stable//time-series/FUNDAMENTAL_VALUATIONS/"+stock+"/?token="+iex_api_key
+    financials_api = "https://cloud.iexapis.com/stable//time-series/financials/"+stock+"/?token="+iex_api_key
     fundamentals_request=requests.get(fundamentals_api)
-
+    financials_request=requests.get(financials_api)
     #Storing metrics in fundamentals list
     enterpriseValue = fundamentals_request.json()[0]['enterpriseValue']
     fundamentals.append(enterpriseValue)
         
-    evToEbitdaLTM = fundamentals_request.json()[0]['evToEbitda']
+    ebitda = financials_request.json()[0]['EBITDA']
+    evToEbitdaLTM=enterpriseValue/ebitda
     fundamentals.append( evToEbitdaLTM)
     
-    freeCashFlowToRevenueLTM = fundamentals_request.json()[0]['freeCashFlowToRevenue']
-    freeCashFlowLTM = fundamentals_request.json()[0]['freeCashFlow']
-    revenueLTM=freeCashFlowLTM/freeCashFlowToRevenueLTM
-    evToRevenueLTM=enterpriseValue/revenueLTM#evToRevenue doesn't come directly. We have to calculate it.
+    revenue= financials_request.json()[0]['revenue']
+    evToRevenueLTM=enterpriseValue/revenue#evToRevenue doesn't come directly. We have to calculate it.
     fundamentals.append(evToRevenueLTM)
     return fundamentals #funadamentals=[enterpriseValue,evToEbitda,evToRevenue]
 
