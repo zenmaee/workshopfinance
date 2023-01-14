@@ -1,45 +1,129 @@
-import React from 'react';
-import { StyleSheet, Image, Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
+import React, {useState} from 'react';
+import { StyleSheet, Image, Text, View, TextInput, SafeAreaView, TouchableOpacity } from 'react-native';
 import InputTextField from '../components/InputTextField';
 
+
 const SignUp = ({ navigation }) => {
+  const [FirstName, setFirstName]=useState("")
+  const [LastName, setLastName]=useState("")
+  const [Email, setEmail]=useState("")
+  const [Password, setPassword]=useState("")
+
+  const addUsers=async ()=>{
+    console.log("holaa")
+    console.log(FirstName)
+    ///vamos a hacer un get primero.
+    
+    await fetch('http://127.0.0.1:5000/users', {
+          method:"get"
+      })
+      .then(resp=>resp.json())
+      .then(console.log(resp))
+      
+  }
+
+
+//    let res = await fetch('http://127.0.0.1:5000/users',{
+  //          method:'POST',
+    //        headers:{
+      //          'Accept':'application/json',
+        //        'Content-Type':'application/json'
+          //  },
+            //body:JSON.stringify({
+              //'FirstName':FirstName, 
+//              'LastName':LastName, 
+  //            'Email':Email, 
+    //          'Password':Password})
+              
+      //  }.catch(function(error) {
+        //  console.log('There has been a problem with your fetch operation: ' + error.message);
+          // // ADD THIS THROW error
+            //throw error;
+//          })
+  //      )
+    //    console.log(body)
+      //  //.then(console.log("hola2"))
+        ////.then(resp=>console.log(resp))
+        ////.then(resp=>resp.json())
+        //let json = await res.json()
+        //console.log(json)
+  //}
+
   return (
     <SafeAreaView style={styles.container}>
           <Image style={styles.wfLogo} resizeMode="contain" source={require('./logo_dark.png')}/>
+            <View style={{ marginTop: 10}}>
+              <Text style={styles.inputTitle}>First Name</Text>
+              <TextInput
+                //placeholder={this.placeholder}
+                //secureTextEntry={this.isSecure}
+                style={styles.input}
+                value={FirstName}
+                onChangeText = {text=>setFirstName(text)} 
+                keyboardType="default"
+                ></TextInput>
+              <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            </View>
 
-          <InputTextField 
-            style={{ marginTop: 80}}
-            title="First Name"
-            ></InputTextField> 
-          <InputTextField 
-            style={{ marginTop: 10, marginBottom: 10}} 
-            title="Last Name"
-          ></InputTextField>
-          <InputTextField 
-            title="Email Address"
-            style={{ marginTop: 10, marginBottom: 10}}
-            // value={userid}
-            ></InputTextField> 
-          <InputTextField 
-            style={{ marginTop: 10, marginBottom: 10}} 
-            title="Enter Password"
-            // value={password}
-            isSecure={true}
-          ></InputTextField>
-          <InputTextField 
-            style={{ marginTop: 10, marginBottom: 10}} 
-            title="Confirm Password"
-            // value={password}
-            isSecure={true}
-          ></InputTextField>
+            <View style={{ marginTop: 1, marginBottom: 1}} >
+              <Text style={styles.inputTitle}>Last Name</Text>
+              <TextInput
+                //placeholder={this.placeholder}
+                //secureTextEntry={this.isSecure}
+                style={styles.input}
+                value={LastName}
+                onChangeText = {text=>setLastName(text)} 
+                keyboardType="default"
+                ></TextInput>
+              <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            </View>
 
-          <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('HomeScreen')}>
+            <View style={{ marginTop: 1, marginBottom: 1}} >
+              <Text style={styles.inputTitle}>Email Address</Text>
+              <TextInput
+                //placeholder={this.placeholder}
+                //secureTextEntry={this.isSecure}
+                style={styles.input}
+                value={Email}
+                onChangeText = {text=>setEmail(text)} 
+                keyboardType="default"
+                ></TextInput>
+              <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            </View>
+
+            <View style={{ marginTop: 1, marginBottom: 1}} >
+              <Text style={styles.inputTitle}>Enter password</Text>
+              <TextInput
+                //placeholder={this.placeholder}
+                //secureTextEntry={this.isSecure}
+                style={styles.input}
+                //value={Password}
+                //onChangeText = {text=>this.setPassword()} 
+                keyboardType="default"
+                ></TextInput>
+              <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            </View>
+
+            <View style={{ marginTop: 1, marginBottom: 1}} >
+              <Text style={styles.inputTitle}>Confirm password</Text>
+              <TextInput
+                //placeholder={this.placeholder}
+                //secureTextEntry={this.isSecure}
+                style={styles.input}
+                value={Password}
+                onChangeText = {text=>setPassword(text)} 
+                keyboardType="default"
+                ></TextInput>
+              <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            </View>
+
+          <TouchableOpacity style={styles.buttons} onPress={() => addUsers()}>
               <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
     </SafeAreaView>
   );
 }
-
+console.log()
 export default SignUp;
 
 const styles = StyleSheet.create({
@@ -76,5 +160,18 @@ const styles = StyleSheet.create({
     buttonText: {
         fontFamily: "Avenir Next", 
         color: "#FFF"
+    },
+
+    inputTitle: {
+      color: "#FFF", 
+      fontSize: 14
+    },
+    input: {
+      paddingVertical: 12,
+      color: "#FFF", 
+      fontSize: 14, 
+      fontFamily: "Avenir Next"
     }
-  });
+});
+
+

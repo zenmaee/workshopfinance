@@ -17,13 +17,13 @@ cors = CORS()
 def create_app():
     """Application-factory pattern"""
     app = Flask(__name__)
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///local_database.sql"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:@localhost/workshopfinance"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     # Initialize extensions
     # To use the application instances above, instantiate with an application:
-#    db.init_app(app)
-#    migrate.init_app(app, db)
+    db.init_app(app)
+    migrate.init_app(app, db)
     ma.init_app(app)
     cors.init_app(app)
 

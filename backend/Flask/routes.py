@@ -12,29 +12,64 @@ install('flask_cors')
 install('pandas')
 install('requests')
 install('termcolor')
+install('pymysql')
 
 ##Installing libraries we need
 from flask import current_app,jsonify,request
 from app import create_app
 from app import db
-import models
-from models import Multiples, multiples_schema,  various_multiples_schema
-
+from models import Users, users_schema
+from app import create_app
 # Create an application instance
-app = create_app()
-multiplesDf=models.multiples
 # Define a route to fetch the avaialable articles
-
-@app.route("/multiples", methods=["GET"], strict_slashes=False)
-def multiplesGen():
-    comps=Multiples(0, round (multiplesDf.iloc[0].pe,3), round(multiplesDf.iloc[0].evEbitda,3), round(multiplesDf.iloc[0].evEbit,3), round (multiplesDf.iloc[0].evRevenue, 3))
-    tgt=Multiples(1, round (multiplesDf.iloc[1].pe,3), round(multiplesDf.iloc[1].evEbitda,3), round(multiplesDf.iloc[1].evEbit,3),round(multiplesDf.iloc[1].evRevenue,3))
-    
-    multiples = [comps,tgt]
-    results = various_multiples_schema.dump(multiples)
-
+#getusers-not needed for now
+app = create_app()
+app.app_context().push()
+    #
+@app.route('/users', methods = ['GET'])
+def get_users():
+    all_users = Users.query.all()
+    results = users_schema.dump(all_users)
+    print("ha entrado en esta funcion")
     return jsonify(results)
 
 
-if __name__ == "__main__":
-	app.run(debug=True)
+#@app.route('/get/<id>/', methods = ['GET'])
+#def post_details(id):
+#    article = Articles.query.get(id)
+#    return article.schema.jsonify(article)
+
+@app.route('/users', methods = ['POST'])
+def add_article():
+    FirstName=request.json['FirstName']
+    LastName=request.json['LastName']
+    Email=request.json['Email']
+    Password=request.json['Password']
+
+    user=Users(FirstName, LastName, Email, Password)
+    db.session(user)
+    db.session.commit()
+    return users_schema.jsonify(user)
+
+#@app.route('/update/<id>/', methods = ['PUT'])
+#def update_article(id):
+#    article= Articles.query.get(id)
+
+#    title=request.json['title']
+#    body=request.json['body']
+
+#    article.title = title
+#    article.body = body
+
+#    db.session.commit()
+#    return articles_schema.jsonify(article)
+
+#@app.route('/delete/<id>/', methods = ['DELETE'])
+#def article_delete(id):
+#    article = Articles.query.get(id)
+#    db.session.delete(article)
+#    db.session.commit()
+
+#    return articles_schema.jsonify(article)
+if __name__=="__main__":
+    app.run(host='127.0.0.1', port=5000, debug=True)
