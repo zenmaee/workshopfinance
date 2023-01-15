@@ -9,45 +9,40 @@ const SignUp = ({ navigation }) => {
   const [Email, setEmail]=useState("")
   const [Password, setPassword]=useState("")
 
-  const addUsers=async ()=>{
+  const addUsers= () => {
     console.log("holaa")
     console.log(FirstName)
     ///vamos a hacer un get primero.
-    
-    await fetch('http://127.0.0.1:5000/users', {
-          method:"get"
-      })
-      .then(resp=>resp.json())
-      .then(console.log(resp))
+    console.log("resp:")
+    //await fetch('http://192.168.1.158:19000/users', {
+      //    method:"get"
+      //})
+      //.then(resp=>resp.text())
+      //.then(resp=>console.log(resp))
+      
+  //}
+
+
+    fetch('http://192.168.1.158:19000/users',{
+            method:'POST',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              FirstName:FirstName, 
+              LastName:LastName, 
+              Email:Email, 
+              Password:Password})}
+        )
+        //console.log(body)
+        //.then(console.log("hola2"))
+        //.then(resp=>console.log(resp))
+        .then(resp=>resp.text())
+        .then(resp=>console.log(resp))
+        
       
   }
-
-
-//    let res = await fetch('http://127.0.0.1:5000/users',{
-  //          method:'POST',
-    //        headers:{
-      //          'Accept':'application/json',
-        //        'Content-Type':'application/json'
-          //  },
-            //body:JSON.stringify({
-              //'FirstName':FirstName, 
-//              'LastName':LastName, 
-  //            'Email':Email, 
-    //          'Password':Password})
-              
-      //  }.catch(function(error) {
-        //  console.log('There has been a problem with your fetch operation: ' + error.message);
-          // // ADD THIS THROW error
-            //throw error;
-//          })
-  //      )
-    //    console.log(body)
-      //  //.then(console.log("hola2"))
-        ////.then(resp=>console.log(resp))
-        ////.then(resp=>resp.json())
-        //let json = await res.json()
-        //console.log(json)
-  //}
 
   return (
     <SafeAreaView style={styles.container}>
