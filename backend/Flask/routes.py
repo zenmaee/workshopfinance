@@ -1,6 +1,7 @@
 ##Installing packages we need
 import subprocess
 import sys
+
 #Function to install packages:
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package]) 
@@ -20,17 +21,17 @@ from app import create_app
 from app import db
 from models import Users, users_schema
 from app import create_app
+from functions.user_identification import Add_USERDATA, SignIn
 # Create an application instance
 # Define a route to fetch the avaialable articles
 #getusers-not needed for now
 app = create_app()
 app.app_context().push()
-    #
+
 @app.route('/users', methods = ['GET'])
 def get_users():
     all_users = Users.query.all()
     results = users_schema.dump(all_users)
-    print("ha entrado en esta funcion")
     return jsonify(results)
 
 
@@ -46,10 +47,8 @@ def add_article():
     Email=request.json['Email']
     Password=request.json['Password']
 
-    user=Users(FirstName, LastName, Email, Password)
-    db.session(user)
-    db.session.commit()
-    return users_schema.jsonify(user)
+    Add_USERDATA(FirstName, LastName, Email, Password)
+    return "Successful POST"
 
 #@app.route('/update/<id>/', methods = ['PUT'])
 #def update_article(id):
@@ -72,4 +71,4 @@ def add_article():
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
-    app.run(host='192.168.1.158', port=19000, debug=True)
+    app.run(host='192.168.1.158', port=5000, debug=True) #changes every time we change wifi

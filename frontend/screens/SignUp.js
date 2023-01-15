@@ -10,20 +10,7 @@ const SignUp = ({ navigation }) => {
   const [Password, setPassword]=useState("")
 
   const addUsers= () => {
-    console.log("holaa")
-    console.log(FirstName)
-    ///vamos a hacer un get primero.
-    console.log("resp:")
-    //await fetch('http://192.168.1.158:19000/users', {
-      //    method:"get"
-      //})
-      //.then(resp=>resp.text())
-      //.then(resp=>console.log(resp))
-      
-  //}
-
-
-    fetch('http://192.168.1.158:19000/users',{
+    fetch('http://192.168.1.158:5000/users',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -35,9 +22,6 @@ const SignUp = ({ navigation }) => {
               Email:Email, 
               Password:Password})}
         )
-        //console.log(body)
-        //.then(console.log("hola2"))
-        //.then(resp=>console.log(resp))
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
         
