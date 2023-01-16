@@ -9,8 +9,8 @@ import requests
 ####FUNCTIONS THAT WE WILL NEED
 
 #get_metrics:Gets financial metrics from the comps and the target from IEX
-#Add_COMP:Adds comparables to COMPS table from IEX
-#Add_VALUATION:Adds valuation to COMPS table from IEX
+#add_COMP:Adds comparables to COMPS table from IEX
+#add_VALUATION:Adds valuation to COMPS table from IEX
 #get_multiples:Gets multiples of tgt/comps
 #generate_valuation:Generates Valuation. Main function to call
 
@@ -37,7 +37,7 @@ def get_metrics(stock,iex_api_key):
     fundamentals.append(evToRevenueLTM)
     return fundamentals #funadamentals=[enterpriseValueLTM,evToEbitdaLTM,evToRevenueLTM]
 
-def Add_COMP(compSymbol,enterpriseValueLTM,evToEbitdaLTM,evToRevenueLTM,valuationId,iex_api_key):
+def add_COMP(compSymbol,enterpriseValueLTM,evToEbitdaLTM,evToRevenueLTM,valuationId,iex_api_key):
   
     #If this dataset COMPS is empty, the firs compId will be 1. From then on, each compId will be the previous compId+1.
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS?&token="+iex_api_key
@@ -62,7 +62,7 @@ def Add_COMP(compSymbol,enterpriseValueLTM,evToEbitdaLTM,evToRevenueLTM,valuatio
     r = requests.post(url, json=comps)
     return r
 
-def Add_VALUATION(multiples, valuationId, ownerId,timeDateCreated,valuationName,footballFieldId,valuationSpread,valuationCompsDate,valuationType,iex_api_key):
+def add_VALUATION(multiples, valuationId, ownerId,timeDateCreated,valuationName,footballFieldId,valuationSpread,valuationCompsDate,valuationType,iex_api_key):
     
     #desired_multiples=[enterpriseValueLTM, evToEbitdaLTM,evToRevenueLTM]
     
@@ -133,7 +133,7 @@ def get_multiples(basket_of_comps, tgt_ticker, desired_multiples, valuationId,ie
     multiples.iloc[6] = comps_df.min()#Comps min
     multiples.iloc[7] = tgt_df / multiples.iloc[6]#Tgt/Comp min
     for i in range(0,len(comps_df.index)):
-        Add_COMP(comps_df.index[i],comps_df.iloc[i]['enterpriseValueLTM'] , comps_df.iloc[i]['evToEbitdaLTM'], comps_df.iloc[i]['evToRevenueLTM'],valuationId,iex_api_key)
+        add_COMP(comps_df.index[i],comps_df.iloc[i]['enterpriseValueLTM'] , comps_df.iloc[i]['evToEbitdaLTM'], comps_df.iloc[i]['evToRevenueLTM'],valuationId,iex_api_key)
     #print(multiples)
     return multiples
 
@@ -150,4 +150,4 @@ def generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, ownerId, 
         valuationId=comps_json[0]['valuationId']+1
     
     multiples=get_multiples(basket_of_comps, tgt_ticker, desired_multiples, valuationId,iex_api_key)
-    Add_VALUATION(multiples, valuationId, ownerId,timeDateCreated,valuationName,footballFieldId,valuationSpread,valuationCompsDate,valuationType,iex_api_key)
+    add_VALUATION(multiples, valuationId, ownerId,timeDateCreated,valuationName,footballFieldId,valuationSpread,valuationCompsDate,valuationType,iex_api_key)
