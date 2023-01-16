@@ -23,6 +23,7 @@ valuationName='Testing1'
 footballFieldId=0
 valuationSpread=0.1 #10%
 asOfDate="Today" #asOfDate is the comps date field that the user reads when generating the Valuation
+valuationType="COMPS"
 
 if asOfDate=="Today":#valuationCompsDate is the comps date that goes into our dataset
     valuationCompsDate=now.strftime("%m/%d/%Y")
@@ -30,4 +31,4 @@ if asOfDate=="Today":#valuationCompsDate is the comps date that goes into our da
 else:
     valuationCompsDate=asOfDate
 
-generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, ownerId, timeDateCreated, valuationName, footballFieldId, valuationSpread, valuationCompsDate,iex_api_key)
+generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, ownerId, timeDateCreated, valuationName, footballFieldId, valuationSpread, valuationCompsDate,valuationType,iex_api_key)

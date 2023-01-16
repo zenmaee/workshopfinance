@@ -62,7 +62,7 @@ def Add_COMP(compSymbol,enterpriseValueLTM,evToEbitdaLTM,evToRevenueLTM,valuatio
     r = requests.post(url, json=comps)
     return r
 
-def Add_VALUATION(multiples, valuationId, ownerId,timeDateCreated,valuationName,footballFieldId,valuationSpread,valuationCompsDate,iex_api_key):
+def Add_VALUATION(multiples, valuationId, ownerId,timeDateCreated,valuationName,footballFieldId,valuationSpread,valuationCompsDate,valuationType,iex_api_key):
     
     #desired_multiples=[enterpriseValueLTM, evToEbitdaLTM,evToRevenueLTM]
     
@@ -97,7 +97,8 @@ def Add_VALUATION(multiples, valuationId, ownerId,timeDateCreated,valuationName,
         "valuationCompsDate":valuationCompsDate,
         "valuationId":valuationId,
         "valuationName":valuationName,
-        "valuationSpread":valuationSpread
+        "valuationSpread":valuationSpread,
+        "valuationType":valuationType
     }]
 
     #POST each comp into the VALUATIONS dataset
@@ -136,7 +137,7 @@ def get_multiples(basket_of_comps, tgt_ticker, desired_multiples, valuationId,ie
     #print(multiples)
     return multiples
 
-def generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, ownerId, timeDateCreated, valuationName, footballFieldId, valuationSpread, valuationCompsDate,iex_api_key):
+def generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, ownerId, timeDateCreated, valuationName, footballFieldId, valuationSpread, valuationCompsDate,iex_api_key, valuationType):
     
     #If this dataset VALUATIONS is empty, the firs compId will be 1. From then on, each compId will be the previous compId+1.
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
@@ -149,4 +150,4 @@ def generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, ownerId, 
         valuationId=comps_json[0]['valuationId']+1
     
     multiples=get_multiples(basket_of_comps, tgt_ticker, desired_multiples, valuationId,iex_api_key)
-    Add_VALUATION(multiples, valuationId, ownerId,timeDateCreated,valuationName,footballFieldId,valuationSpread,valuationCompsDate,iex_api_key)
+    Add_VALUATION(multiples, valuationId, ownerId,timeDateCreated,valuationName,footballFieldId,valuationSpread,valuationCompsDate,valuationType,iex_api_key)
