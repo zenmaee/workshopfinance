@@ -21,7 +21,7 @@ from app import create_app
 from app import db
 from models import Users, users_schema
 from app import create_app
-from functions.user_identification import Add_USERDATA, SignIn
+from functions.user_identification import add_USERDATA, signIn
 # Create an application instance
 # Define a route to fetch the avaialable articles
 #getusers-not needed for now
@@ -42,12 +42,12 @@ def get_users():
 
 @app.route('/users', methods = ['POST'])
 def add_article():
-    FirstName=request.json['FirstName']
-    LastName=request.json['LastName']
-    Email=request.json['Email']
-    Password=request.json['Password']
+    firstName=request.json['firstName']
+    lastName=request.json['lastName']
+    email=request.json['email']
+    password=request.json['password']
 
-    Add_USERDATA(FirstName, LastName, Email, Password)
+    add_USERDATA(firstName, lastName, email, password)
     return "Successful POST"
 
 #@app.route('/update/<id>/', methods = ['PUT'])

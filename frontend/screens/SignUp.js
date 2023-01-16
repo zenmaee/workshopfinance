@@ -4,10 +4,10 @@ import InputTextField from '../components/InputTextField';
 
 
 const SignUp = ({ navigation }) => {
-  const [FirstName, setFirstName]=useState("")
-  const [LastName, setLastName]=useState("")
-  const [Email, setEmail]=useState("")
-  const [Password, setPassword]=useState("")
+  const [firstName, setFirstName]=useState("")
+  const [lastName, setLastName]=useState("")
+  const [email, setEmail]=useState("")
+  const [password, setPassword]=useState("")
 
   const addUsers= () => {
     fetch('http://192.168.1.158:5000/users',{
@@ -17,10 +17,10 @@ const SignUp = ({ navigation }) => {
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              FirstName:FirstName, 
-              LastName:LastName, 
-              Email:Email, 
-              Password:Password})}
+              firstName:firstName, 
+              lastName:lastName, 
+              email:email, 
+              password:password})}
         )
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
@@ -37,7 +37,7 @@ const SignUp = ({ navigation }) => {
                 //placeholder={this.placeholder}
                 //secureTextEntry={this.isSecure}
                 style={styles.input}
-                value={FirstName}
+                value={firstName}
                 onChangeText = {text=>setFirstName(text)} 
                 keyboardType="default"
                 ></TextInput>
@@ -50,7 +50,7 @@ const SignUp = ({ navigation }) => {
                 //placeholder={this.placeholder}
                 //secureTextEntry={this.isSecure}
                 style={styles.input}
-                value={LastName}
+                value={lastName}
                 onChangeText = {text=>setLastName(text)} 
                 keyboardType="default"
                 ></TextInput>
@@ -63,7 +63,7 @@ const SignUp = ({ navigation }) => {
                 //placeholder={this.placeholder}
                 //secureTextEntry={this.isSecure}
                 style={styles.input}
-                value={Email}
+                value={email}
                 onChangeText = {text=>setEmail(text)} 
                 keyboardType="default"
                 ></TextInput>
@@ -89,7 +89,7 @@ const SignUp = ({ navigation }) => {
                 //placeholder={this.placeholder}
                 //secureTextEntry={this.isSecure}
                 style={styles.input}
-                value={Password}
+                value={password}
                 onChangeText = {text=>setPassword(text)} 
                 keyboardType="default"
                 ></TextInput>
