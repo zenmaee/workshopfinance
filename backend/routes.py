@@ -17,10 +17,9 @@ install('pymysql')
 
 ##Installing libraries we need
 from flask import current_app,jsonify,request
-from app import create_app
-from app import db
+#Importing from my one modules/packages
+from app import create_app, db
 from models import Users, users_schema
-from app import create_app
 from functions.user_identification import add_USERDATA
 # Create an application instance
 # Define a route to fetch the avaialable articles
