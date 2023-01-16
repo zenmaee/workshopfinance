@@ -21,7 +21,7 @@ from app import create_app
 from app import db
 from models import Users, users_schema
 from app import create_app
-from functions import user_identification
+from functions.user_identification import add_USERDATA
 # Create an application instance
 # Define a route to fetch the avaialable articles
 #getusers-not needed for now
@@ -47,7 +47,7 @@ def add_article():
     email=request.json['email']
     password=request.json['password']
 
-    user_identification.add_USERDATA(firstName, lastName, email, password,iex_api_key)
+    add_USERDATA(firstName, lastName, email, password,iex_api_key)
     return "Successful POST"
 
 #@app.route('/update/<id>/', methods = ['PUT'])
