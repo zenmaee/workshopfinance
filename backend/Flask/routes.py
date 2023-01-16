@@ -27,7 +27,7 @@ from functions.user_identification import add_USERDATA, signIn
 #getusers-not needed for now
 app = create_app()
 app.app_context().push()
-
+iex_api_key="sk_29735f4ddf4a47efb27623b229dda54a"
 @app.route('/users', methods = ['GET'])
 def get_users():
     all_users = Users.query.all()
@@ -47,7 +47,7 @@ def add_article():
     email=request.json['email']
     password=request.json['password']
 
-    add_USERDATA(firstName, lastName, email, password)
+    add_USERDATA(firstName, lastName, email, password,iex_api_key)
     return "Successful POST"
 
 #@app.route('/update/<id>/', methods = ['PUT'])
