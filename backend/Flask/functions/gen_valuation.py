@@ -11,6 +11,8 @@ import requests
 #get_metrics:Gets financial metrics from the comps and the target from IEX
 #Add_COMP:Adds comparables to COMPS table from IEX
 #Add_VALUATION:Adds valuation to COMPS table from IEX
+#get_multiples:Gets multiples of tgt/comps
+#generate_valuation:Generates Valuation. Main function to call
 
 def get_metrics(stock,iex_api_key):
     #Preparing code
