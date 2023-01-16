@@ -2,6 +2,9 @@
 import hashlib
 import requests
 
+#add_USERDATA: Adds new user when there is a Sign Up
+#signIn: Verifies if the user is introducing the password properly
+
 def add_USERDATA(firstName,lastName,email,password, iex_api_key):
   email_lower = email.lower()
   emailHash = hashlib.sha256(email_lower.encode('utf-8')).hexdigest()
