@@ -1,5 +1,5 @@
 from datetime import datetime
-from Flask.functions.gen_valuation import generate_valuation
+from functions.gen_valuation import generate_valuation
 
 #token
 iex_api_key="sk_29735f4ddf4a47efb27623b229dda54a"
