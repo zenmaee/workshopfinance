@@ -41,7 +41,10 @@ def add_COMP(compSymbol,enterpriseValue,evToEbitdaLTM,evToRevenueLTM,valuationId
   
     #If this dataset COMPS is empty, the firs compId will be 1. From then on, each compId will be the previous compId+1.
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS?&token="+iex_api_key
+    print("url")
+    print(url)
     comps_json=requests.get(url).json()
+    print(comps_json)
     exists = len(comps_json)
     if (exists == 0 ):
         compId=1
@@ -60,6 +63,8 @@ def add_COMP(compSymbol,enterpriseValue,evToEbitdaLTM,evToRevenueLTM,valuationId
 
     #POST each comp into the COMPS dataset
     r = requests.post(url, json=comps)
+    print("r de comps")
+    print(r)
     return r
 
 def add_VALUATION(multiples, valuationId, ownerId,timeDateCreated,valuationName,footballFieldId,valuationSpread,valuationCompsDate,valuationType,iex_api_key):
@@ -101,9 +106,10 @@ def add_VALUATION(multiples, valuationId, ownerId,timeDateCreated,valuationName,
         "valuationType":valuationType
     }]
 
-    #POST each comp into the VALUATIONS dataset
+    #POST into the VALUATIONS dataset
     r = requests.post(url, json=valuations)
-
+    print("r de valuatios")
+    print(r)
     return r
 
 
