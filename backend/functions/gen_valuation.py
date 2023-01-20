@@ -19,25 +19,25 @@ def get_metrics(stock,iex_api_key):
     fundamentals = [] #Fundamentals will store desired financial metrics of each company
 
     #Fetching API
-    fundamentals_api_ltm = "https://cloud.iexapis.com/stable//time-series/FUNDAMENTAL_VALUATIONS/"+stock+"/ttm?token="+iex_api_key
+    fundamentals_api = "https://cloud.iexapis.com/stable//time-series/FUNDAMENTAL_VALUATIONS/"+stock+"/ttm?token="+iex_api_key
     financials_api = "https://cloud.iexapis.com/stable//time-series/financials/"+stock+"/?token="+iex_api_key
     
-    fundamentals_request_ltm=requests.get(fundamentals_api_ltm)
+    fundamentals_request=requests.get(fundamentals_api)
     financials_request=requests.get(financials_api)
     #Storing metrics in fundamentals list
-    enterpriseValueLTM = fundamentals_request_ltm.json()[0]['enterpriseValue']
-    fundamentals.append(enterpriseValueLTM)
+    enterpriseValue = fundamentals_request.json()[0]['enterpriseValue']
+    fundamentals.append(enterpriseValue)
         
-    ebitda = financials_request.json()[0]['EBITDA']
-    evToEbitdaLTM=enterpriseValueLTM/ebitda
+    ebitdaLTM = financials_request.json()[0]['EBITDA']
+    evToEbitdaLTM=enterpriseValue/ebitdaLTM
     fundamentals.append( evToEbitdaLTM)
     
-    revenue= financials_request.json()[0]['revenue']
-    evToRevenueLTM=enterpriseValueLTM/revenue#evToRevenue doesn't come directly. We have to calculate it.
+    revenueLTM= financials_request.json()[0]['revenue']
+    evToRevenueLTM=enterpriseValue/revenueLTM
     fundamentals.append(evToRevenueLTM)
-    return fundamentals #funadamentals=[enterpriseValueLTM,evToEbitdaLTM,evToRevenueLTM]
+    return fundamentals #funadamentals=[enterpriseValue,evToEbitdaLTM,evToRevenueLTM]
 
-def add_COMP(compSymbol,enterpriseValueLTM,evToEbitdaLTM,evToRevenueLTM,valuationId,iex_api_key):
+def add_COMP(compSymbol,enterpriseValue,evToEbitdaLTM,evToRevenueLTM,valuationId,iex_api_key):
   
     #If this dataset COMPS is empty, the firs compId will be 1. From then on, each compId will be the previous compId+1.
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS?&token="+iex_api_key
@@ -52,7 +52,7 @@ def add_COMP(compSymbol,enterpriseValueLTM,evToEbitdaLTM,evToRevenueLTM,valuatio
         
         "compId": compId,
         "compSymbol": compSymbol,
-        "enterpriseValueLTM": enterpriseValueLTM,
+        "enterpriseValue": enterpriseValue,
         "evToEbitdaLTM": evToEbitdaLTM,
         "evToRevenueLTM": evToRevenueLTM,
         "valuationId": valuationId
@@ -64,7 +64,7 @@ def add_COMP(compSymbol,enterpriseValueLTM,evToEbitdaLTM,evToRevenueLTM,valuatio
 
 def add_VALUATION(multiples, valuationId, ownerId,timeDateCreated,valuationName,footballFieldId,valuationSpread,valuationCompsDate,valuationType,iex_api_key):
     
-    #desired_multiples=[enterpriseValueLTM, evToEbitdaLTM,evToRevenueLTM]
+    #desired_multiples=[enterpriseValue, evToEbitdaLTM,evToRevenueLTM]
     
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
 
@@ -133,7 +133,7 @@ def get_multiples(basket_of_comps, tgt_ticker, desired_multiples, valuationId,ie
     multiples.iloc[6] = comps_df.min()#Comps min
     multiples.iloc[7] = tgt_df / multiples.iloc[6]#Tgt/Comp min
     for i in range(0,len(comps_df.index)):
-        add_COMP(comps_df.index[i],comps_df.iloc[i]['enterpriseValueLTM'] , comps_df.iloc[i]['evToEbitdaLTM'], comps_df.iloc[i]['evToRevenueLTM'],valuationId,iex_api_key)
+        add_COMP(comps_df.index[i],comps_df.iloc[i]['enterpriseValue'] , comps_df.iloc[i]['evToEbitdaLTM'], comps_df.iloc[i]['evToRevenueLTM'],valuationId,iex_api_key)
     #print(multiples)
     return multiples
 

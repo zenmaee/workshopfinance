@@ -11,7 +11,7 @@ basket_of_comps = ['MSFT', 'AMZN', 'GOOGL', 'KO'] #List of comparables within a 
 tgt_ticker = 'AAPL' #Target company. This value will be obtained from the FootballField object
 
 #This may change when we increase the scope
-desired_multiples=["enterpriseValueLTM", "evToEbitdaLTM", "evToRevenueLTM"]
+desired_multiples=["enterpriseValue", "evToEbitdaLTM", "evToRevenueLTM"]
 
 #Testing values. Later, we will obtain these values with communication across the application
 valuationId=0
