@@ -15,7 +15,7 @@ desired_multiples=["enterpriseValue", "evToEbitdaLTM", "evToRevenueLTM"]
 
 #Testing values. Later, we will obtain these values with communication across the application
 valuationId=1
-ownerId="inunezg@bu.edu"
+userId="inunezg@bu.edu"
 timeDateCreated = now.strftime("%m/%d/%Y %H:%M:%S")# timeDateCreated value has to be fixed, can not be editted. It contains the
 timeDateCreated = timeDateCreated[:6]+timeDateCreated[8:-3] #time and date of when the valuation was generated for the first time
 print(timeDateCreated)
@@ -31,4 +31,4 @@ if asOfDate=="Today":#valuationCompsDate is the comps date that goes into our da
 else:
     valuationCompsDate=asOfDate
 
-generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, ownerId, timeDateCreated, valuationName, footballFieldId, valuationSpread, valuationCompsDate,iex_api_key, valuationType)
+generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, userId, timeDateCreated, valuationName, footballFieldId, valuationSpread, valuationCompsDate,iex_api_key, valuationType)
