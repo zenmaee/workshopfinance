@@ -26,7 +26,8 @@ from functions.user_identification import add_USERDATA
 #getusers-not needed for now
 app = create_app()
 app.app_context().push()
-iex_api_key="sk_29735f4ddf4a47efb27623b229dda54a"
+iex_api_key="sk_29735f4ddf4a47efb27623b229dda54a" #add security
+
 @app.route('/users', methods = ['GET'])
 def get_users():
     all_users = Users.query.all()
@@ -40,7 +41,7 @@ def get_users():
 #    return article.schema.jsonify(article)
 
 @app.route('/users', methods = ['POST'])
-def add_article():
+def add_users():
     firstName=request.json['firstName']
     lastName=request.json['lastName']
     email=request.json['email']

@@ -1,6 +1,6 @@
 import pandas as pd
 import requests
-
+from time import time
 #FROM EACH COMP, WE NEED (priority 1):
 #enterprise value
 #evToRevenueLTM
@@ -20,6 +20,7 @@ def get_metrics(stock,iex_api_key):
 
     #Fetching API
     fundamentals_api = "https://cloud.iexapis.com/stable//time-series/FUNDAMENTAL_VALUATIONS/"+stock+"/ttm?token="+iex_api_key
+    #&to=2023-01-01&last=1
     financials_api = "https://cloud.iexapis.com/stable//time-series/financials/"+stock+"/?token="+iex_api_key
     
     fundamentals_request=requests.get(fundamentals_api)
@@ -41,15 +42,7 @@ def add_COMP(compSymbol,enterpriseValue,evToEbitdaLTM,evToRevenueLTM,valuationId
   
     #If this dataset COMPS is empty, the firs compId will be 1. From then on, each compId will be the previous compId+1.
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS?&token="+iex_api_key
-    print("url")
-    print(url)
-    comps_json=requests.get(url).json()
-    print(comps_json)
-    exists = len(comps_json)
-    if (exists == 0 ):
-        compId=1
-    else:
-        compId=comps_json[0]['compId']+1
+    compId=time()*1000000
     comps=[
     {
         
@@ -71,8 +64,6 @@ def add_VALUATION(multiples, valuationId, userId,timeDateCreated,valuationName,f
     
     #desired_multiples=[enterpriseValue, evToEbitdaLTM,evToRevenueLTM]
     
-    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
-
     #Depending on the desired stat, we will want one row of multiples or another.
     #However, even though the stat is changed, no recalculations should be made. All possible calculation should already be made
     valuationCalcAvEvEbitdaLTM=multiples.iloc[1]['evToEbitdaLTM']
@@ -156,4 +147,6 @@ def generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, userId, t
         valuationId=comps_json[0]['valuationId']+1
     
     multiples=get_multiples(basket_of_comps, tgt_ticker, desired_multiples, valuationId,iex_api_key)
+    print("multiples")
+    print(multiples)
     add_VALUATION(multiples, valuationId, userId,timeDateCreated,valuationName,footballFieldId,valuationSpread,valuationCompsDate,valuationType,iex_api_key)
