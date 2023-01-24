@@ -18,6 +18,7 @@ desired_multiples=["enterpriseValue", "evToEbitdaLTM", "evToRevenueLTM"]
 
 #Testing values. Later, we will obtain these values with communication across the application
 valuationId=time()*1000000
+print(valuationId)
 userId="inunezg@bu.edu"
 timeDateCreated = now.strftime("%m/%d/%Y %H:%M:%S")# timeDateCreated value has to be fixed, can not be editted. It contains the
 timeDateCreated = timeDateCreated[:6]+timeDateCreated[8:-3] #time and date of when the valuation was generated for the first time
@@ -35,4 +36,4 @@ else:
     valuationCompsDate=asOfDate
 
 generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, userId, timeDateCreated, valuationName, footballFieldId, valuationSpread, valuationCompsDate,iex_api_key, valuationType)
-add_USERDATA('Ignacio','lastName','email@email.com','password', iex_api_key)
+#add_USERDATA('Ignacio','lastName','email@email.com','password', iex_api_key)

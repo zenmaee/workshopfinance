@@ -147,6 +147,4 @@ def generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, userId, t
         valuationId=comps_json[0]['valuationId']+1
     
     multiples=get_multiples(basket_of_comps, tgt_ticker, desired_multiples, valuationId,iex_api_key)
-    print("multiples")
-    print(multiples)
     add_VALUATION(multiples, valuationId, userId,timeDateCreated,valuationName,footballFieldId,valuationSpread,valuationCompsDate,valuationType,iex_api_key)
