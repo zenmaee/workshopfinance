@@ -14,14 +14,13 @@ from time import time
 #get_multiples:Gets multiples of tgt/comps
 #generate_valuation:Generates Valuation. Main function to call
 
-def get_metrics(stock,iex_api_key):
+def get_metrics(company,asOfDate,iex_api_key):
     #Preparing code
     fundamentals = [] #Fundamentals will store desired financial metrics of each company
 
     #Fetching API
-    fundamentals_api = "https://cloud.iexapis.com/stable//time-series/FUNDAMENTAL_VALUATIONS/"+stock+"/ttm?token="+iex_api_key
-    #&to=2023-01-01&last=1
-    financials_api = "https://cloud.iexapis.com/stable//time-series/financials/"+stock+"/?token="+iex_api_key
+    fundamentals_api = "https://cloud.iexapis.com/stable//time-series/FUNDAMENTAL_VALUATIONS/"+company+"/ttm?token="+iex_api_key
+    financials_api = "https://cloud.iexapis.com/stable//time-series/financials/"+company+"/?token="+iex_api_key+"&to="+asOfDate+"&last=1"
     
     fundamentals_request=requests.get(fundamentals_api)
     financials_request=requests.get(financials_api)
@@ -104,7 +103,7 @@ def add_VALUATION(multiples, valuationId, userId,timeDateCreated,valuationName,f
     return r
 
 
-def get_multiples(basket_of_comps, tgt_ticker, desired_multiples, valuationId,iex_api_key):
+def get_multiples(basket_of_comps, tgt_ticker, desired_multiples, valuationId,asOfDate,iex_api_key):
 
     #ticker contains comps+target
     ticker = basket_of_comps
@@ -112,7 +111,7 @@ def get_multiples(basket_of_comps, tgt_ticker, desired_multiples, valuationId,ie
 
     raw_data = []
     for company in ticker:
-        raw_data.append(get_metrics(company,iex_api_key))
+        raw_data.append(get_metrics(company,asOfDate,iex_api_key))
 
   
 
@@ -134,7 +133,7 @@ def get_multiples(basket_of_comps, tgt_ticker, desired_multiples, valuationId,ie
     #print(multiples)
     return multiples
 
-def generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, userId, timeDateCreated, valuationName, footballFieldId, valuationSpread, valuationCompsDate,iex_api_key, valuationType):
+def generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, userId, timeDateCreated, valuationName, footballFieldId, valuationSpread, valuationCompsDate,asOfDate,iex_api_key, valuationType):
     
     #If this dataset VALUATIONS is empty, the firs compId will be 1. From then on, each compId will be the previous compId+1.
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
@@ -146,5 +145,5 @@ def generate_valuation(basket_of_comps, tgt_ticker, desired_multiples, userId, t
     else:
         valuationId=comps_json[0]['valuationId']+1
     
-    multiples=get_multiples(basket_of_comps, tgt_ticker, desired_multiples, valuationId,iex_api_key)
+    multiples=get_multiples(basket_of_comps, tgt_ticker, desired_multiples, valuationId,asOfDate,iex_api_key)
     add_VALUATION(multiples, valuationId, userId,timeDateCreated,valuationName,footballFieldId,valuationSpread,valuationCompsDate,valuationType,iex_api_key)

@@ -12,7 +12,7 @@ print(time()*1000000)
 # Basket_of_comps and tgt_ticker will later be obtained from javascript user interaction
 basket_of_comps = ['KO'] #List of comparables within a valuation
 tgt_ticker = 'AAPL' #Target company. This value will be obtained from the FootballField object
-
+#asOfDate=YYYY-DD-MM OR today
 #This may change when we increase the scope
 desired_multiples=["enterpriseValue", "evToEbitdaLTM", "evToRevenueLTM"]
 
