@@ -120,14 +120,14 @@ def get_multiples(basket_of_comps, tgt_ticker, desired_multiples, valuationId,as
     comps_df = fundamentals[:len(ticker)-1] # Obtaining data of all companies excluding target
     tgt_df = fundamentals.iloc[-1] # Obtaining data of target
 
-    multiples.iloc[0] = comps_df.mean() #Comp avg
-    multiples.iloc[1] = tgt_df / multiples.iloc[0]#Tgt/ Comp avg
-    multiples.iloc[2] = comps_df.median()#Comp median
-    multiples.iloc[3] = tgt_df / multiples.iloc[2]#Tgt/Comp median
-    multiples.iloc[4] = comps_df.max()#Comp max
-    multiples.iloc[5] = tgt_df / multiples.iloc[4]#Tgt/Comp max
-    multiples.iloc[6] = comps_df.min()#Comps min
-    multiples.iloc[7] = tgt_df / multiples.iloc[6]#Tgt/Comp min
+    multiples.iloc[0] = comps_df.mean() #Comp avg ev, evToEbitda, evToRevenue
+    multiples.iloc[1] = tgt_df / multiples.iloc[0]#Tgt ev, evToEbitda, evToRevenue/ Comp avg ev, evToEbitda, evToRevenue
+    multiples.iloc[2] = comps_df.median()#omp median ev, evToEbitda, evToRevenue
+    multiples.iloc[3] = tgt_df / multiples.iloc[2]#Tgt ev, evToEbitda, evToRevenue/Comp median ev, evToEbitda, evToRevenue
+    multiples.iloc[4] = comps_df.max()#Comp max ev, evToEbitda, evToRevenue
+    multiples.iloc[5] = tgt_df / multiples.iloc[4]#Tgt ev, evToEbitda, evToRevenue/Comp max ev, evToEbitda, evToRevenue
+    multiples.iloc[6] = comps_df.min()#Comps min ev, evToEbitda, evToRevenue
+    multiples.iloc[7] = tgt_df / multiples.iloc[6]#Tgt ev, evToEbitda, evToRevenue/Comp min ev, evToEbitda, evToRevenue
     for i in range(0,len(comps_df.index)):
         add_COMP(comps_df.index[i],comps_df.iloc[i]['enterpriseValue'] , comps_df.iloc[i]['evToEbitdaLTM'], comps_df.iloc[i]['evToRevenueLTM'],valuationId,iex_api_key)
     #print(multiples)
