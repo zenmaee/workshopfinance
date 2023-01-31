@@ -34,8 +34,9 @@ const SignUpSignIn = ({ navigation }) => {
           <TouchableOpacity>
             <Text style={[styles.buttonText, { marginLeft: 130, fontWeight: "600" }]}>Forgot Password?</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('HomeScreen')}>
+          
+          
+          <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('SignUp')}>
               <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           
