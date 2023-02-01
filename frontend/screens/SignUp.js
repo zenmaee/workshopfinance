@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import { StyleSheet, Image, Text, View, TextInput, SafeAreaView, TouchableOpacity } from 'react-native';
-import InputTextField from '../components/InputTextField';
 
 
 const SignUp = ({ navigation }) => {

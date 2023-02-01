@@ -1,17 +1,47 @@
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, SafeAreaView, Image } from 'react-native';
+import React, {useState} from 'react';
+import { StyleSheet, Image, Text, View, TextInput, SafeAreaView, TouchableOpacity } from 'react-native';
 
-export default function FootballField({ navigation }) {
+const FootballField = ({ navigation }) => {
+  const [footballFieldName, setFootballFieldName]=useState("")
+  const [targetId, setTargetId]=useState("")
+  const [footballFieldOutput, setFootballFieldOutput]=useState("")
+  const [footballFieldScale, setFootballFieldScale]=useState("")
 
+  const addFootballField= () => {
+    fetch('http://192.168.1.158:5000/footballfields',{
+            method:'POST',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              footballFieldName:footballFieldName,
+              targetId:targetId})}
+        )
+        .then(resp=>resp.text())
+        .then(resp=>console.log(resp))
+        
+      
+  }
+  
   return (
     <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: '#000' }}>
       {/*<View style={{ backgroundColor: '#FFF', height: 400, width: 400, borderRadius: 10, top: 50 }}>
       </View> To be added*/}
       <View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
         <TextInput style={{ height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
-        placeholder="Football Field Name">
+        placeholder="Football Field Name"
+        value={footballFieldName}
+        onChangeText = {text=>setFootballFieldName(text)} 
+        keyboardType="default">
         </TextInput>
+
         <TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
-        placeholder="Target Name or Ticker">
+        placeholder="Target Name or Ticker"
+        value={targetId}
+        onChangeText = {text=>setTargetId(text)} 
+        keyboardType="default">
+
         </TextInput>
         <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{ color: 'white' }}>Output</Text>
@@ -20,6 +50,12 @@ export default function FootballField({ navigation }) {
           <Text style={{ color: 'white' }}>Scale</Text>
         </View>
       </View>
+
+      <TouchableOpacity style={styles.buttons} onPress={() => addFootballField()}>
+              <Text style={styles.buttonText}>Add Football Field</Text>
+      </TouchableOpacity>
+
+
 
       <View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
         <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
@@ -81,7 +117,7 @@ export default function FootballField({ navigation }) {
     </SafeAreaView>
   );
 }
-
+export default FootballField;
 const styles = StyleSheet.create({
 
 });
