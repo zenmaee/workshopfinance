@@ -6,9 +6,66 @@ const FootballField = ({ navigation }) => {
   const [targetId, setTargetId]=useState("")
   const [footballFieldOutput, setFootballFieldOutput]=useState("")
   const [footballFieldScale, setFootballFieldScale]=useState("")
+  const [valuationCompsDate, setValuationCompsDate]=useState("")
+  const [valuationMetric, setValuationMetric]=useState("")
+  const [valuationAsOfDate, setValuationAsOfDate]=useState("")
+  const [valuationStat, setValuationStat]=useState("")
+  const [valuationSpread, setValuationSpread]=useState("")
+  const [valuationColor, setValuationColor]=useState("")
+  const [basketOfComps, setBasketOfComps]=useState([])
 
   const addFootballField= () => {
     fetch('http://192.168.1.158:5000/footballfields',{
+            method:'POST',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              footballFieldName:footballFieldName,
+              targetId:targetId})}
+        )
+        .then(resp=>resp.text())
+        .then(resp=>console.log(resp))
+        
+      
+  }
+
+  const deleteFootballField= () => {
+    fetch('http://192.168.1.158:5000/footballfields',{
+            method:'DELETE',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              footballFieldName:footballFieldName,
+              targetId:targetId})}
+        )
+        .then(resp=>resp.text())
+        .then(resp=>console.log(resp))
+        
+      
+  }
+
+  const addValuation= () => {
+    fetch('http://192.168.1.158:5000/valuations',{
+            method:'POST',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              valuationName:valuationName,
+              valuationCompsDate:valuationCompsDate})}
+        )
+        .then(resp=>resp.text())
+        .then(resp=>console.log(resp))
+        
+      
+  }
+  const addComp= () => {
+    fetch('http://192.168.1.158:5000/comps',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
