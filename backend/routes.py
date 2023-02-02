@@ -21,6 +21,7 @@ from flask import current_app,jsonify,request
 from app import create_app, db
 from models import Users, users_schema
 from functions.user_identification import add_USERDATA
+from functions.gen_valuation import add_VALUATION, update_VALUATION
 # Create an application instance
 # Define a route to fetch the avaialable articles
 #getusers-not needed for now
@@ -48,6 +49,22 @@ def add_users():
     password=request.json['password']
 
     add_USERDATA(firstName, lastName, email, password,iex_api_key)
+    return "Successful POST"
+
+@app.route('/valuations', methods = ['POST'])
+def add_valuations():
+    footballFieldId=request.json['footballFieldId']
+    userId=request.json['userId']
+
+    add_VALUATION(footballFieldId, userId, iex_api_key)
+    return "Successful POST"
+
+@app.route('/valuations', methods = ['PUT'])
+def update_valuations():
+    #When a user changes the valuation fields, the only one that will re-generate a new valuation is the asOfDate
+    valuationCompsDate=request.json['footballFieldId']
+    
+    
     return "Successful POST"
 
 #@app.route('/update/<id>/', methods = ['PUT'])

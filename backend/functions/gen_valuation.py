@@ -1,6 +1,8 @@
 import pandas as pd
 import requests
 from time import time
+from datetime import datetime
+
 #FROM EACH COMP, WE NEED (priority 1):
 #enterprise value
 #evToRevenueLTM
@@ -10,7 +12,8 @@ from time import time
 
 #get_metrics:Gets financial metrics from the comps and the target from IEX
 #add_COMP:Adds comparables to COMPS table from IEX
-#add_VALUATION:Adds valuation to COMPS table from IEX
+#add_VALUATION:Adds new valuation to VALUATION table from IEX. This only contains the default values
+#update_VALUATION: As soon as a new comp is added to the valuation, a valuation is generated and the valuation already added to the table is updated
 #get_output:Gets valuation output
 #generate_valuation:Generates Valuation. Main function to call
 
@@ -75,7 +78,7 @@ def add_COMP(compSymbol,evToEbitdaLTM,evToRevenueLTM,valuationId,iex_api_key):
     print(r)
     return r
 
-def add_VALUATION(multiples,ev, valuationId, userId,timeDateCreated,valuationName,footballFieldId,valuationSpread,valuationCompsDate,valuationType,iex_api_key):
+def update_VALUATION(multiples,ev, valuationId, userId,timeDateCreated,valuationName,footballFieldId,valuationCompsDate,valuationType,iex_api_key):
     
     #desired_multiples=[evToEbitdaLTM,evToRevenueLTM]
     
@@ -126,14 +129,12 @@ def add_VALUATION(multiples,ev, valuationId, userId,timeDateCreated,valuationNam
         "valuationCompsDate":valuationCompsDate,
         "valuationId":valuationId,
         "valuationName":valuationName,
-        "valuationSpread":valuationSpread,
         "valuationType":valuationType
     }]
 
     #POST into the VALUATIONS dataset
     r = requests.post(url, json=valuations)
-    print("r de valuatios")
-    print(r)
+
     return r
 
 
@@ -184,12 +185,40 @@ def get_output(basket_of_comps, tgt, desired_multiples, valuationId,valuationCom
         add_COMP(comps_df.index[i], comps_df.iloc[i]['evToEbitdaLTM'], comps_df.iloc[i]['evToRevenueLTM'],valuationId,iex_api_key)
     return output
 
-def generate_valuation(basket_of_comps, tgt, desired_multiples, userId, timeDateCreated, valuationName, footballFieldId, valuationSpread, valuationCompsDate,iex_api_key, valuationType):
+def generate_valuation(basket_of_comps, tgt, desired_multiples, userId, timeDateCreated, valuationName, footballFieldId, valuationCompsDate,iex_api_key, valuationType, valuationId):
     
     #If this dataset VALUATIONS is empty, the firs compId will be 1. From then on, each compId will be the previous compId+1.
-    valuationId=time()*1000000
     
     output=get_output(basket_of_comps, tgt, desired_multiples, valuationId,valuationCompsDate,iex_api_key)
     multiples=output[0]
     ev=output[1]
-    add_VALUATION(multiples, ev, valuationId, userId,timeDateCreated,valuationName,footballFieldId,valuationSpread,valuationCompsDate,valuationType,iex_api_key)
+    update_VALUATION(multiples, ev, valuationId, userId,timeDateCreated,valuationName,footballFieldId,valuationCompsDate,valuationType,iex_api_key)
+
+def add_VALUATION(footballFieldId, userId,iex_api_key):
+    valuationId=time()*1000000
+    now = datetime.now()
+    timeDateCreated = now.strftime("%m/%d/%Y %H:%M:%S")# timeDateCreated value has to be fixed, can not be editted. It contains the
+    timeDateCreated = timeDateCreated[:6]+timeDateCreated[8:-3] #time and date of when the valuation was generated for the first time
+    valuationCompsDate=now.strftime("%m/%d/%Y")
+    valuationType="COMPS"
+    
+    url_valuation_name="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+userId+"/?last=100&token="+iex_api_key
+    resp = requests.get(url_valuation_name).json()
+    valuationName="VALUATION"+str(len(resp))
+    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
+    valuations=[
+    {
+        
+        "footballFieldId":footballFieldId,
+        "userId":userId,
+        "timeDateCreated":timeDateCreated,
+        "valuationCompsDate":valuationCompsDate,
+        "valuationId":valuationId,
+        "valuationName":valuationName,
+        "valuationType":valuationType
+    }]
+
+    #POST into the VALUATIONS dataset
+    r = requests.post(url, json=valuations)
+
+    return r

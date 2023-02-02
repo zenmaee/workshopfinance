@@ -36,7 +36,7 @@ def signIn(email,password,iex_api_key):
   resp = requests.get(url_to_check).json()
   if ( len(resp) == 0 ):
     return "User Does Not Exist"  
-  db_password = resp[0]['Password']  
+  db_password = resp[0]['password']  
   passwordHash = hashlib.sha256(password.encode('utf-8')).hexdigest()
   if(db_password == passwordHash ):
     return "correct password"
