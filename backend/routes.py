@@ -58,13 +58,24 @@ def add_valuations():
     add_VALUATION(footballFieldId, userId, iex_api_key)
     return "Successful VALUATION POST"
 
-@app.route('/valuations', methods = ['PUT'])
-def update_valuations():
-    #When a user changes the valuation fields, the only one that will re-generate a new valuation is the asOfDate
+@app.route('/valuations/names', methods = ['PUT'])
+def update_valuation_names():
+    
+    #This UPDATE will only change the valuation name. No recalculation should be done
     valuationCompsDate=request.json['footballFieldId']
     valuationId=request.json['valuationId']
-    #1.Cojo: 
     
+    return "Successful POST"
+
+@app.route('/valuations', methods = ['PUT'])
+def generate_valuations():
+    #When a user changes the valuation fields, the only one that will re-generate a new valuation is the asOfDate
+    #This put will lead to a new valuation generation
+    valuationCompsDate=request.json['footballFieldId']
+    valuationId=request.json['valuationId']
+    #Ver cómo coger valuationId
+    #Ver cómo coger basketofcomps
+    generate_valuation(valuationId, basket_of_comps, tgt, desired_multiples, valuationName, valuationCompsDate,iex_api_key)
     return "Successful POST"
 
 #@app.route('/update/<id>/', methods = ['PUT'])
