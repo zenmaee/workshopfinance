@@ -57,8 +57,12 @@ def get_metrics(company,comp_tgt, valuationCompsDate,iex_api_key):
 
     return fundamentals
 
-def add_COMP(compSymbol,evToEbitdaLTM,evToRevenueLTM,valuationId,iex_api_key):
-  
+def add_COMP(compSymbol,valuationId,valuationCompsDate,iex_api_key):
+
+    fundamentals=get_metrics(compSymbol,"comp", valuationCompsDate,iex_api_key)
+    evToEbitdaLTM=fundamentals[0]
+    evToRevenueLTM=fundamentals[1]
+
     #If this dataset COMPS is empty, the firs compId will be 1. From then on, each compId will be the previous compId+1.
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS?&token="+iex_api_key
     compId=time()*1000000
@@ -78,7 +82,7 @@ def add_COMP(compSymbol,evToEbitdaLTM,evToRevenueLTM,valuationId,iex_api_key):
     print(r)
     return r
 
-def update_VALUATION(valuationId, multiples,ev, valuationName,valuationCompsDate,iex_api_key):
+def update_VALUATION(userId,valuationId, multiples,ev, valuationName,valuationCompsDate,iex_api_key):
     
     #desired_multiples=[evToEbitdaLTM,evToRevenueLTM]
     
@@ -103,7 +107,7 @@ def update_VALUATION(valuationId, multiples,ev, valuationName,valuationCompsDate
     valuationEvHighEvRevLTM=ev.iloc[2]['evToRevenueLTM']#Stat=High, Multiple=evToRevLTM
     valuationEvLowEvRevLTM=ev.iloc[3]['evToRevenueLTM']#Stat=Low, Multiple=evToRevLTM
     
-    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
+    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+userId+"/"+valuationId+"/?&token="+iex_api_key
     valuations=[
     {
         
@@ -128,18 +132,25 @@ def update_VALUATION(valuationId, multiples,ev, valuationName,valuationCompsDate
     }]
 
     #POST into the VALUATIONS dataset
-    r = requests.post(url, json=valuations)
+    r = requests.put(url, json=valuations)
+    
 
     return r
 
-def get_output(basket_of_comps, tgt, desired_multiples, valuationCompsDate,iex_api_key):
+def get_output(basket_of_comps, valuationId, tgt, desired_multiples, valuationCompsDate,iex_api_key):
 
     comps_raw_data = []
     tgt_raw_data=[]
     
-    #We obtain enterpriseValue, evToEbitdaLTM and evToRevenueLTM for the comps
+    #We obtain evToEbitdaLTM and evToRevenueLTM for the comps
+
     for comp in basket_of_comps:
-        comps_raw_data.append(get_metrics(comp,"comp",valuationCompsDate,iex_api_key))
+        url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS/"+valuationId+"/"+comp+"&token="+iex_api_key
+        r=requests.get(url).json()
+        evToEbitdaLTM=r[0]['evToEbitdaLTM']
+        evToRevenueLTM=r[0]['evToRevenueLTM']
+        comps_raw_data.append([evToEbitdaLTM,evToRevenueLTM])
+        
 
     #We obtain ebitdaLTM and revenueLTM for the tgt
     tgt_raw_data.append(get_metrics(tgt,"tgt",valuationCompsDate,iex_api_key))
@@ -179,15 +190,33 @@ def get_output(basket_of_comps, tgt, desired_multiples, valuationCompsDate,iex_a
     #    add_COMP(comps_df.index[i], comps_df.iloc[i]['evToEbitdaLTM'], comps_df.iloc[i]['evToRevenueLTM'],valuationId,iex_api_key)
     return output
 
-def generate_valuation(valuationId, basket_of_comps, tgt, desired_multiples, valuationName, valuationCompsDate,iex_api_key):
-    
+def retrieveTgt(userId, targetId, iex_api_key):
+    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/TARGETS/"+userId+"/"+targetId+"&token="+iex_api_key
+    r=requests.get(url).json()
+    tgt=r[0]['targetSymbol']
+    return tgt
+
+def retrieveValuationComps(userId, valuationId, iex_api_key):
+    #How to obtain all queries from API
+    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS/"+valuationId+"&token="+iex_api_key
+    r=requests.get(url).json()
+    basket_of_comps=[]
+    for comp in r:
+        basket_of_comps.append(comp['compSymbol'])
+    return basket_of_comps
+
+def generate_valuation(userId, valuationId, targetId, desired_multiples, valuationName, valuationCompsDate,iex_api_key):
+    #We obtain the tgt symbol:
+    tgt=retrieveTgt(userId, targetId, iex_api_key)
+    #And the basket of comps:
+    basket_of_comps=retrieveValuationComps(userId, valuationId, iex_api_key)
     #If this dataset VALUATIONS is empty, the firs compId will be 1. From then on, each compId will be the previous compId+1.
 
-    output=get_output(basket_of_comps, tgt, desired_multiples,valuationCompsDate,iex_api_key)
+    output=get_output(basket_of_comps, valuationId, tgt, desired_multiples,valuationCompsDate,iex_api_key)
     multiples=output[0]
     ev=output[1]
 
-    update_VALUATION(valuationId, multiples, ev, valuationName,valuationCompsDate,iex_api_key)
+    update_VALUATION(userId, valuationId, multiples, ev, valuationName,valuationCompsDate,iex_api_key)
 
 def add_VALUATION(footballFieldId, userId,iex_api_key):
     valuationId=time()*1000000
@@ -199,7 +228,7 @@ def add_VALUATION(footballFieldId, userId,iex_api_key):
     
     url_valuation_name="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+userId+"/?last=100&token="+iex_api_key
     resp = requests.get(url_valuation_name).json()
-    valuationName="VALUATION"+str(len(resp))
+    valuationName="VALUATION "+str(len(resp))
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
     valuations=[
     {
@@ -217,3 +246,5 @@ def add_VALUATION(footballFieldId, userId,iex_api_key):
     r = requests.post(url, json=valuations)
 
     return r
+
+

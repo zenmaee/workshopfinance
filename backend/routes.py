@@ -21,7 +21,7 @@ from flask import current_app,jsonify,request
 from app import create_app, db
 from models import Users, users_schema
 from functions.user_identification import add_USERDATA
-from functions.gen_valuation import add_VALUATION, update_VALUATION
+from functions.gen_valuation import add_VALUATION, add_COMP ,update_VALUATION, generate_valuation
 # Create an application instance
 # Define a route to fetch the avaialable articles
 #getusers-not needed for now
@@ -73,10 +73,25 @@ def generate_valuations():
     #This put will lead to a new valuation generation
     valuationCompsDate=request.json['footballFieldId']
     valuationId=request.json['valuationId']
+    targetId=request.json['targetId']
+    valuationName=request.json['valuationName']
     #Ver cómo coger valuationId
     #Ver cómo coger basketofcomps
-    generate_valuation(valuationId, basket_of_comps, tgt, desired_multiples, valuationName, valuationCompsDate,iex_api_key)
+    generate_valuation(valuationId, targetId, ["evToEbitdaLTM", "evToRevenueLTM"], valuationName, valuationCompsDate,iex_api_key)
     return "Successful POST"
+
+@app.route('/valuations', methods = ['GET'])
+
+
+@app.route('/valuations', methods = ['DELETE'])
+
+@app.route('/comps', methods = ['POST'])
+def add_comps():
+    compSymbol=request.json['compSymbol']
+    valuationId=request.json['valuationId']
+    valuationCompsDate=request.json['valuationCompsDate']
+
+    add_COMP(compSymbol,valuationId,valuationCompsDate,iex_api_key)
 
 #@app.route('/update/<id>/', methods = ['PUT'])
 #def update_article(id):

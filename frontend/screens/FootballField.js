@@ -14,7 +14,8 @@ const FootballField = ({ navigation }) => {
   const [valuationStat, setValuationStat]=useState("")
   const [valuationSpread, setValuationSpread]=useState("")
   const [valuationColor, setValuationColor]=useState("")
-  const [basketOfComps, setBasketOfComps]=useState([])
+  const [valuationName, setValuationName]=useState("")
+  const [compSymbol, setCompSymbol]=useState("")
 
   const retrieveFootballField= () => {
     fetch('http://192.168.1.158:5000/footballfields',{
@@ -120,8 +121,9 @@ const FootballField = ({ navigation }) => {
             },
             body:JSON.stringify({
               basketOfComps:basketOfComps,
-              tgt:tgt,
+              targetId:targetId,
               userId:userId,
+              valuationName:valuationName
               
             })}
         )
@@ -156,8 +158,9 @@ const FootballField = ({ navigation }) => {
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              footballFieldName:footballFieldName,
-              targetId:targetId})}
+              compSymbol:compSymbol,
+              valuationId:valuationId,
+              valuationCompsDate:valuationCompsDate})}
         )
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
