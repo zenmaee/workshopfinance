@@ -8,6 +8,7 @@ const FootballField = ({ navigation }) => {
   const [targetId, setTargetId]=useState("")
   const [footballFieldOutput, setFootballFieldOutput]=useState("")
   const [footballFieldScale, setFootballFieldScale]=useState("")
+  const [valuationId, setValuationId]=useState("")
   const [valuationCompsDate, setValuationCompsDate]=useState("")
   const [valuationMetric, setValuationMetric]=useState("")
   const [valuationStat, setValuationStat]=useState("")
@@ -118,7 +119,11 @@ const FootballField = ({ navigation }) => {
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              valuationCompsDate:valuationCompsDate})}
+              basketOfComps:basketOfComps,
+              tgt:tgt,
+              userId:userId,
+              
+            })}
         )
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))

@@ -78,7 +78,7 @@ def add_COMP(compSymbol,evToEbitdaLTM,evToRevenueLTM,valuationId,iex_api_key):
     print(r)
     return r
 
-def update_VALUATION(multiples,ev, valuationId, userId,timeDateCreated,valuationName,footballFieldId,valuationCompsDate,valuationType,iex_api_key):
+def update_VALUATION(multiples,ev, valuationName,valuationCompsDate,iex_api_key):
     
     #desired_multiples=[evToEbitdaLTM,evToRevenueLTM]
     
@@ -137,8 +137,7 @@ def update_VALUATION(multiples,ev, valuationId, userId,timeDateCreated,valuation
 
     return r
 
-
-def get_output(basket_of_comps, tgt, desired_multiples, valuationId,valuationCompsDate,iex_api_key):
+def get_output(basket_of_comps, tgt, desired_multiples, valuationCompsDate,iex_api_key):
 
     comps_raw_data = []
     tgt_raw_data=[]
@@ -180,19 +179,19 @@ def get_output(basket_of_comps, tgt, desired_multiples, valuationId,valuationCom
 
     output=[multiples,ev]
     
-    #We add comps to our comps table
-    for i in range(0,len(comps_df.index)):
-        add_COMP(comps_df.index[i], comps_df.iloc[i]['evToEbitdaLTM'], comps_df.iloc[i]['evToRevenueLTM'],valuationId,iex_api_key)
+    #We add comps to our comps table. Let's re-think this in the future.
+    #for i in range(0,len(comps_df.index)):
+    #    add_COMP(comps_df.index[i], comps_df.iloc[i]['evToEbitdaLTM'], comps_df.iloc[i]['evToRevenueLTM'],valuationId,iex_api_key)
     return output
 
-def generate_valuation(basket_of_comps, tgt, desired_multiples, userId, timeDateCreated, valuationName, footballFieldId, valuationCompsDate,iex_api_key, valuationType, valuationId):
+def generate_valuation(basket_of_comps, tgt, desired_multiples, valuationName, valuationCompsDate,iex_api_key):
     
     #If this dataset VALUATIONS is empty, the firs compId will be 1. From then on, each compId will be the previous compId+1.
     
-    output=get_output(basket_of_comps, tgt, desired_multiples, valuationId,valuationCompsDate,iex_api_key)
+    output=get_output(basket_of_comps, tgt, desired_multiples,valuationCompsDate,iex_api_key)
     multiples=output[0]
     ev=output[1]
-    update_VALUATION(multiples, ev, valuationId, userId,timeDateCreated,valuationName,footballFieldId,valuationCompsDate,valuationType,iex_api_key)
+    update_VALUATION(multiples, ev, valuationName,valuationCompsDate,iex_api_key)
 
 def add_VALUATION(footballFieldId, userId,iex_api_key):
     valuationId=time()*1000000

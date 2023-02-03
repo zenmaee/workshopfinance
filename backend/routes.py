@@ -35,35 +35,35 @@ def get_users():
     results = users_schema.dump(all_users)
     return jsonify(results)
 
-
-#@app.route('/get/<id>/', methods = ['GET'])
-#def post_details(id):
-#    article = Articles.query.get(id)
-#    return article.schema.jsonify(article)
-
 @app.route('/users', methods = ['POST'])
 def add_users():
+    #First we get info from frontend
     firstName=request.json['firstName']
     lastName=request.json['lastName']
     email=request.json['email']
     password=request.json['password']
 
+    #Then we send it to the database
     add_USERDATA(firstName, lastName, email, password,iex_api_key)
-    return "Successful POST"
+
+    return "Successful USERDATA POST"
 
 @app.route('/valuations', methods = ['POST'])
 def add_valuations():
+    #First we get info from frontend
     footballFieldId=request.json['footballFieldId']
     userId=request.json['userId']
 
+    #Then we send it to the database
     add_VALUATION(footballFieldId, userId, iex_api_key)
-    return "Successful POST"
+    return "Successful VALUATION POST"
 
 @app.route('/valuations', methods = ['PUT'])
 def update_valuations():
     #When a user changes the valuation fields, the only one that will re-generate a new valuation is the asOfDate
     valuationCompsDate=request.json['footballFieldId']
-    
+    valuationId=request.json['valuationId']
+    #1.Cojo: 
     
     return "Successful POST"
 
