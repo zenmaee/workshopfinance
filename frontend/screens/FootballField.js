@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import { StyleSheet, Image, Text, View, TextInput, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, ScrollView, Text, View, TextInput, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Dimensions } from 'react-native';
 
 const FootballField = ({ navigation }) => {
   const [footballFieldName, setFootballFieldName]=useState("")
@@ -80,18 +81,63 @@ const FootballField = ({ navigation }) => {
         
       
   }
+
+  const windowWidth = Dimensions.get('window').width;
+  const windowHeight = Dimensions.get('window').height;
+  const valuationWidth = windowWidth-20;
+  const valuationHeight = 20;
+  const table = {
+    minRange: 1_000_000_000,
+    maxRange: 5_000_000_000,
+  }
+  const valuations = [{
+    name: "Valuation #1 (EV/EBITDA) (LTM)",
+    color: "pink",
+    minValuation: 1_000_000_000, 
+    maxValuation: 3_250_000_000,
+  }, 
+  {
+    name: "Valuation #2 (EV/EBITDA) (LTM)",
+    color: "red",
+    minValuation: 3_000_000_000, 
+    maxValuation: 5_000_000_000,
+  }, 
+  {
+    name: "Valuation #3 (EV/EBITDA) (LTM)",
+    color: "blue",
+    minValuation: 2_000_000_000, 
+    maxValuation: 4_250_000_000,
+  }, 
+  ]
   
+  const tableRange = table.maxRange - table.minRange;
+  const pixelsPerDollar = (valuationWidth-20-20) / tableRange;
+
   return (
     <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: '#000' }}>
-      {/*<View style={{ backgroundColor: '#FFF', height: 400, width: 400, borderRadius: 10, top: 50 }}>
-      </View> To be added*/}
+      <View style={{ backgroundColor: '#FFF', height: valuationWidth, width: valuationWidth, borderRadius: 10 }}>
+        <ScrollView
+          contentContainerStyle={{ 
+            padding: 20
+           }}
+        >
+          { valuations.map(( valuation ) => {
+            return (
+            <> 
+              <Text>{valuation.name}</Text>
+              <View style={{ marginStart: (valuation.minValuation - table.minRange)*pixelsPerDollar, marginTop: 10, backgroundColor: valuation.color, height: valuationHeight, width: (valuation.maxValuation - valuation.minValuation) * pixelsPerDollar }}></View>
+            </>
+            )
+          })}
+        </ScrollView>
+      </View> 
       <View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
         <View style={{ alignItems: 'center' }}> 
           <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }}>
             <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Add Valuation</Text>
           </TouchableOpacity>
         </View>
-        <TextInput style={{ height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
+        <TextInput style={{ marginTop: 10, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
         placeholder="Football Field Name"
         value={footballFieldName}
         onChangeText = {text=>setFootballFieldName(text)} 
@@ -113,13 +159,13 @@ const FootballField = ({ navigation }) => {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.buttons} onPress={() => addFootballField()}>
+      {/*<TouchableOpacity style={styles.buttons} onPress={() => addFootballField()}>
               <Text style={styles.buttonText}>Add Football Field</Text>
-      </TouchableOpacity>
+    </TouchableOpacity>*/}
 
 
 
-      <View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
+      {/*<View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
         <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{ color: 'white' }}>Add Comp</Text>
           <TextInput style={{ marginTop: 5, margin: 10, height: 40, width: 200, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
@@ -175,7 +221,7 @@ const FootballField = ({ navigation }) => {
             <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Delete</Text>
           </TouchableOpacity>
         </View>
-      </View>
+    </View>*/}
     </SafeAreaView>
   );
 }
