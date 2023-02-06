@@ -28,7 +28,7 @@ valuations=[{
     "timeDateCreated":"02/03/23 16:08º",
     "valuationCompsDate":"02/03/2023",
     "valuationId":10,
-    "valuationName":"Prueba del put",
+    "valuationName":"Prueba del NAKO",
     "valuationType":"Su vieja"
 }]
 
