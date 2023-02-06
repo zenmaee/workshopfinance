@@ -86,6 +86,11 @@ const FootballField = ({ navigation }) => {
       {/*<View style={{ backgroundColor: '#FFF', height: 400, width: 400, borderRadius: 10, top: 50 }}>
       </View> To be added*/}
       <View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
+        <View style={{ alignItems: 'center' }}> 
+          <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }}>
+            <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Add Valuation</Text>
+          </TouchableOpacity>
+        </View>
         <TextInput style={{ height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
         placeholder="Football Field Name"
         value={footballFieldName}
