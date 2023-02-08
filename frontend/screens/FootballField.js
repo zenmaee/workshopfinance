@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Image, ScrollView, Text, View, TextInput, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Button, ScrollView, Text, View, TextInput, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {Picker} from '@react-native-picker/picker';
 
@@ -15,6 +15,33 @@ const FootballField = ({ navigation }) => {
   const [valuationSpread, setValuationSpread]=useState("")
   const [valuationColor, setValuationColor]=useState("")
   const [basketOfComps, setBasketOfComps]=useState([])
+
+  const [selectedLanguage, setSelectedLanguage] = useState();
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    if (Platform.OS === 'ios') {
+      setShow(false);
+      // for iOS, add a button that closes the picker
+    }
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
+  };
 
   const addFootballField= () => {
     fetch('http://192.168.1.158:5000/footballfields',{
@@ -154,9 +181,31 @@ const FootballField = ({ navigation }) => {
         </TextInput>
         <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{ color: 'white' }}>Output</Text>
+          <Picker
+            selectedValue={selectedLanguage}
+            style={{ marginLeft: 20, backgroundColor: 'white', height: 20, width: 200 }}
+            >
+            <Picker.Item label="Java" value="java" />
+            <Picker.Item label="JavaScript" value="js" />
+          </Picker>
         </View>
         <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{ color: 'white' }}>Scale</Text>
+        </View>
+        <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={{ color: 'white' }}>As of Date</Text>
+          <Button onPress={showDatepicker} title="Show date picker!" />
+          <Button onPress={showTimepicker} title="Show time picker!" />
+          <Text>selected: {date.toLocaleString()}</Text>
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode={mode}
+              is24Hour={true}
+              onChange={onChange}
+            />
+          )}
         </View>
       </View>
 
