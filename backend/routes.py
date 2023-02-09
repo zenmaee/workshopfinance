@@ -51,8 +51,9 @@ def add_users():
 @app.route('/valuations', methods = ['POST'])
 def add_valuations():
     #First we get info from frontend
-    footballFieldId=request.json['footballFieldId']
+    footballFieldName=request.json['footballFieldName']
     userId=request.json['userId']
+    footballFieldId=userId+footballFieldName
     #Then we send it to the database
     add_VALUATION(footballFieldId,iex_api_key)
     return "Successful VALUATION POST"

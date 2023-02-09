@@ -120,7 +120,7 @@ const FootballField = ({ navigation }) => {
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              footballFieldId:0,
+              footballFieldName:"FF Test",
               userId:"Tester2"
             })}
         )
@@ -202,7 +202,7 @@ const FootballField = ({ navigation }) => {
         .then(resp=>console.log(resp))
         
   }
-  
+
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   const valuationWidth = windowWidth-20;
@@ -255,7 +255,7 @@ const FootballField = ({ navigation }) => {
         </View> 
         <View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
           <View style={{ alignItems: 'center' }}> 
-            <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }}>
+            <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }}onPress={() => addValuation()}>
               <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Add Valuation</Text>
             </TouchableOpacity>
           </View>

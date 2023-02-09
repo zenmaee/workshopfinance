@@ -228,7 +228,7 @@ def add_VALUATION(footballFieldId, iex_api_key):
     valuationCompsDate=now.strftime("%m/%d/%Y")
     valuationType="COMPS"
     
-    url_valuation_name="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+userId+"/?last=100&token="+iex_api_key
+    url_valuation_name="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/?last=100&token="+iex_api_key
     resp = requests.get(url_valuation_name).json()
     valuationName="VALUATION "+str(len(resp)+1)
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
