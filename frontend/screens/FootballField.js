@@ -1,7 +1,18 @@
 import React, {useState} from 'react';
 import { StyleSheet, Button, ScrollView, Text, View, TextInput, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import {Picker} from '@react-native-picker/picker';
+
+const InlinePicker = ({ selectedValue, onValueChange, options }) => {
+  return(
+    <Picker
+    selectedValue={selectedValue}
+    onValueChange={onValueChange}
+    style={{ marginLeft: 20, backgroundColor: 'white', height: 200, width: 300 }}
+    >
+    {options.map(option => <Picker.Item label={option.label} value={option.value}/>)}
+  </Picker>
+  );
+}
 
 const FootballField = ({ navigation }) => {
   const [footballFieldName, setFootballFieldName]=useState("")
@@ -15,33 +26,7 @@ const FootballField = ({ navigation }) => {
   const [valuationSpread, setValuationSpread]=useState("")
   const [valuationColor, setValuationColor]=useState("")
   const [basketOfComps, setBasketOfComps]=useState([])
-
-  const [selectedLanguage, setSelectedLanguage] = useState();
-  const [date, setDate] = useState(new Date(1598051730000));
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
-
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
-    setShow(false);
-    setDate(currentDate);
-  };
-
-  const showMode = (currentMode) => {
-    if (Platform.OS === 'ios') {
-      setShow(false);
-      // for iOS, add a button that closes the picker
-    }
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
-  const showTimepicker = () => {
-    showMode('time');
-  };
+  const [selectedLanguage, setSelectedLanguage] = useState("js");
 
   const addFootballField= () => {
     fetch('http://192.168.1.158:5000/footballfields',{
@@ -143,135 +128,142 @@ const FootballField = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: '#000' }}>
-      <View style={{ backgroundColor: '#FFF', height: valuationWidth, width: valuationWidth, borderRadius: 10 }}>
-        <ScrollView
-          contentContainerStyle={{ 
-            padding: 20
-           }}
-        >
-          { valuations.map(( valuation ) => {
-            return (
-            <> 
-              <Text>{valuation.name}</Text>
-              <View style={{ marginStart: (valuation.minValuation - table.minRange)*pixelsPerDollar, marginTop: 10, backgroundColor: valuation.color, height: valuationHeight, width: (valuation.maxValuation - valuation.minValuation) * pixelsPerDollar }}></View>
-            </>
-            )
-          })}
-        </ScrollView>
-      </View> 
-      <View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
-        <View style={{ alignItems: 'center' }}> 
-          <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }}>
-            <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Add Valuation</Text>
-          </TouchableOpacity>
-        </View>
-        <TextInput style={{ marginTop: 10, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
-        placeholder="Football Field Name"
-        value={footballFieldName}
-        onChangeText = {text=>setFootballFieldName(text)} 
-        keyboardType="default">
-        </TextInput>
-
-        <TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
-        placeholder="Target Name or Ticker"
-        value={targetId}
-        onChangeText = {text=>setTargetId(text)} 
-        keyboardType="default">
-
-        </TextInput>
-        <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ color: 'white' }}>Output</Text>
-          <Picker
-            selectedValue={selectedLanguage}
-            style={{ marginLeft: 20, backgroundColor: 'white', height: 20, width: 200 }}
-            >
-            <Picker.Item label="Java" value="java" />
-            <Picker.Item label="JavaScript" value="js" />
-          </Picker>
-        </View>
-        <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ color: 'white' }}>Scale</Text>
-        </View>
-        <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ color: 'white' }}>As of Date</Text>
-          <Button onPress={showDatepicker} title="Show date picker!" />
-          <Button onPress={showTimepicker} title="Show time picker!" />
-          <Text>selected: {date.toLocaleString()}</Text>
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              onChange={onChange}
-            />
-          )}
-        </View>
-      </View>
-
-      {/*<TouchableOpacity style={styles.buttons} onPress={() => addFootballField()}>
-              <Text style={styles.buttonText}>Add Football Field</Text>
-    </TouchableOpacity>*/}
-
-
-
-      {/*<View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
-        <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ color: 'white' }}>Add Comp</Text>
-          <TextInput style={{ marginTop: 5, margin: 10, height: 40, width: 200, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
-            placeholder="Company Name or Ticker">
+      <ScrollView>
+        <View style={{ backgroundColor: '#FFF', height: valuationWidth, width: valuationWidth, borderRadius: 10 }}>
+          <ScrollView
+            contentContainerStyle={{ 
+              padding: 20
+            }}
+          >
+            { valuations.map(( valuation ) => {
+              return (
+              <> 
+                <Text>{valuation.name}</Text>
+                <View style={{ marginStart: (valuation.minValuation - table.minRange)*pixelsPerDollar, marginTop: 10, backgroundColor: valuation.color, height: valuationHeight, width: (valuation.maxValuation - valuation.minValuation) * pixelsPerDollar }}></View>
+              </>
+              )
+            })}
+          </ScrollView>
+        </View> 
+        <View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
+          <View style={{ alignItems: 'center' }}> 
+            <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }}>
+              <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Add Valuation</Text>
+            </TouchableOpacity>
+          </View>
+          <TextInput style={{ marginTop: 10, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
+          placeholder="Football Field Name"
+          value={footballFieldName}
+          onChangeText = {text=>setFootballFieldName(text)} 
+          keyboardType="default">
           </TextInput>
-          <TouchableOpacity
-            title="Add Comp">
-            <Image style={{ height: 40, width: 40, borderRadius: 4, marginLeft: 5 }} source={require('./plus_icon.png')}/>
-          </TouchableOpacity>
+
+          <TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
+          placeholder="Target Name or Ticker"
+          value={targetId}
+          onChangeText = {text=>setTargetId(text)} 
+          keyboardType="default">
+
+          </TextInput>
+          <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ color: 'white' }}>Output</Text>
+            <InlinePicker
+              selectedValue={selectedLanguage}
+              onValueChange={(itemValue, itemIndex) =>
+                setSelectedLanguage(itemValue)}
+              options = {[
+                { label: "EV/Revenue (LTM)",
+                  value: "EV_R"
+                }, {
+                  label: "EV/EBITDA (LTM)",
+                  value: "EV_E"
+                },
+              ]}/>
+          </View>
+          <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ color: 'white' }}>Scale</Text>
+            <InlinePicker
+              selectedValue={selectedLanguage}
+              onValueChange={(itemValue, itemIndex) =>
+                setSelectedLanguage(itemValue)}
+              options = {[
+                { label: "EV/Revenue (LTM)",
+                  value: "EV_R"
+                }, {
+                  label: "EV/EBITDA (LTM)",
+                  value: "EV_E"
+                },
+              ]}/>
+          </View>
+          <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ color: 'white' }}>As of Date</Text>
+          </View>
         </View>
-        <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ color: 'white' }}>Metric</Text>
-        </View>
-        <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ color: 'white' }}>Stat</Text>
-        </View>
-        <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ color: 'white' }}>Spread</Text>
-          <TouchableOpacity
-            title="Decrease Spread">
-            <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./minus_sign.png')}/>
-          </TouchableOpacity>
-          <Text style={{ backgroundColor: 'white', fontSize: 15 }}>10%</Text>
-          <TouchableOpacity
-            title="Increase Spread">
-            <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_sign.png')}/>
-          </TouchableOpacity>
-        </View>
-        <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ color: 'white' }}>Color</Text>
-          <TouchableOpacity
-            title="Blue">
-            <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./blue_color.png')}/>
-          </TouchableOpacity>
-          <TouchableOpacity
-            title="Green">
-            <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./green_color.png')}/>
-          </TouchableOpacity>
-          <TouchableOpacity
-            title="Orange">
-            <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./orange_color.png')}/>
-          </TouchableOpacity>
-          <TouchableOpacity
-            title="Yellow">
-            <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./yellow_color.png')}/>
-          </TouchableOpacity>
-        </View>
-        <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-          <TouchableOpacity>
-            <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Back to Football Field Controls</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{ backgroundColor: 'red', padding: 5, borderRadius: 5 }}>
-            <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Delete</Text>
-          </TouchableOpacity>
-        </View>
-    </View>*/}
+
+        {/*<TouchableOpacity style={styles.buttons} onPress={() => addFootballField()}>
+                <Text style={styles.buttonText}>Add Football Field</Text>
+        </TouchableOpacity>*/}
+
+
+
+          {/*<View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
+            <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ color: 'white' }}>Add Comp</Text>
+              <TextInput style={{ marginTop: 5, margin: 10, height: 40, width: 200, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
+                placeholder="Company Name or Ticker">
+              </TextInput>
+              <TouchableOpacity
+                title="Add Comp">
+                <Image style={{ height: 40, width: 40, borderRadius: 4, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+              </TouchableOpacity>
+            </View>
+            <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ color: 'white' }}>Metric</Text>
+            </View>
+            <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ color: 'white' }}>Stat</Text>
+            </View>
+            <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ color: 'white' }}>Spread</Text>
+              <TouchableOpacity
+                title="Decrease Spread">
+                <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./minus_sign.png')}/>
+              </TouchableOpacity>
+              <Text style={{ backgroundColor: 'white', fontSize: 15 }}>10%</Text>
+              <TouchableOpacity
+                title="Increase Spread">
+                <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_sign.png')}/>
+              </TouchableOpacity>
+            </View>
+            <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ color: 'white' }}>Color</Text>
+              <TouchableOpacity
+                title="Blue">
+                <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./blue_color.png')}/>
+              </TouchableOpacity>
+              <TouchableOpacity
+                title="Green">
+                <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./green_color.png')}/>
+              </TouchableOpacity>
+              <TouchableOpacity
+                title="Orange">
+                <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./orange_color.png')}/>
+              </TouchableOpacity>
+              <TouchableOpacity
+                title="Yellow">
+                <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./yellow_color.png')}/>
+              </TouchableOpacity>
+            </View>
+            <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+              <TouchableOpacity>
+                <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Back to Football Field Controls</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={{ backgroundColor: 'red', padding: 5, borderRadius: 5 }}>
+                <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+        </View>*/}
+      </ScrollView>
     </SafeAreaView>
   );
 }
