@@ -15,18 +15,41 @@ const InlinePicker = ({ selectedValue, onValueChange, options }) => {
 }
 
 const FootballField = ({ navigation }) => {
+  const [userId, setUserId]=useState("")
   const [footballFieldName, setFootballFieldName]=useState("")
+  const [footballFieldId, setFootballFieldId]=useState("")
   const [targetId, setTargetId]=useState("")
   const [footballFieldOutput, setFootballFieldOutput]=useState("")
   const [footballFieldScale, setFootballFieldScale]=useState("")
+  const [valuationId, setValuationId]=useState("")
   const [valuationCompsDate, setValuationCompsDate]=useState("")
   const [valuationMetric, setValuationMetric]=useState("")
-  const [valuationAsOfDate, setValuationAsOfDate]=useState("")
   const [valuationStat, setValuationStat]=useState("")
   const [valuationSpread, setValuationSpread]=useState("")
   const [valuationColor, setValuationColor]=useState("")
+<<<<<<< HEAD
   const [basketOfComps, setBasketOfComps]=useState([])
+=======
+  const [valuationName, setValuationName]=useState("")
+  const [compSymbol, setCompSymbol]=useState("")
+  const [selectedLanguage, setSelectedLanguage] = useState("js");
+>>>>>>> 4ca230354a6c84a5e841daa1a24761ba6b08e9c5
 
+  const retrieveFootballField= () => {
+    fetch('http://192.168.1.158:5000/footballfields',{
+            method:'GET',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              footballFieldName:footballFieldName,
+              targetId:targetId})}
+        )
+        .then(resp=>resp.text())
+        .then(resp=>console.log(resp))
+        
+  }
   const addFootballField= () => {
     fetch('http://192.168.1.158:5000/footballfields',{
             method:'POST',
@@ -41,7 +64,22 @@ const FootballField = ({ navigation }) => {
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
         
-      
+  }
+
+  const updateFootballField= () => {
+    fetch('http://192.168.1.158:5000/footballfields',{
+            method:'PUT',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              footballFieldName:footballFieldName,
+              targetId:targetId})}
+        )
+        .then(resp=>resp.text())
+        .then(resp=>console.log(resp))
+       
   }
 
   const deleteFootballField= () => {
@@ -57,10 +95,23 @@ const FootballField = ({ navigation }) => {
         )
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
-        
-      
+       
   }
-
+  const retrieveValuation= () => {
+    fetch('http://192.168.1.158:5000/valuations',{
+            method:'GET',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              footballFieldName:footballFieldName,
+              targetId:targetId})}
+        )
+        .then(resp=>resp.text())
+        .then(resp=>console.log(resp))
+       
+  }
   const addValuation= () => {
     fetch('http://192.168.1.158:5000/valuations',{
             method:'POST',
@@ -69,17 +120,74 @@ const FootballField = ({ navigation }) => {
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              valuationName:valuationName,
+              footballFieldId:footballFieldId,
+              userId:userId
+            })}
+        )
+        .then(resp=>resp.text())
+        .then(resp=>console.log(resp))
+  }
+
+
+  const updateValuation= () => {
+    fetch('http://192.168.1.158:5000/valuations',{
+            method:'PUT',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              basketOfComps:basketOfComps,
+              targetId:targetId,
+              userId:userId,
+              valuationName:valuationName
+              
+            })}
+        )
+        .then(resp=>resp.text())
+        .then(resp=>console.log(resp))
+       
+  }
+
+
+  const deleteValuation= () => {
+    fetch('http://192.168.1.158:5000/valuations',{
+            method:'DELETE',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              footballFieldName:footballFieldName,
+              targetId:targetId})}
+        )
+        .then(resp=>resp.text())
+        .then(resp=>console.log(resp))
+       
+  }
+
+
+  const addComp= () => {
+    fetch('http://192.168.1.158:5000/comps',{
+            method:'POST',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              compSymbol:compSymbol,
+              valuationId:valuationId,
               valuationCompsDate:valuationCompsDate})}
         )
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
         
-      
   }
-  const addComp= () => {
+
+  
+  const deleteComp= () => {
     fetch('http://192.168.1.158:5000/comps',{
-            method:'POST',
+            method:'DELETE',
             headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json'
@@ -91,7 +199,6 @@ const FootballField = ({ navigation }) => {
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
         
-      
   }
 
   const windowWidth = Dimensions.get('window').width;
