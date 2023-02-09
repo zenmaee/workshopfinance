@@ -121,7 +121,7 @@ const FootballField = ({ navigation }) => {
             },
             body:JSON.stringify({
               footballFieldName:"FF Test",
-              userId:"Tester2"
+              userId:"Tester3"
             })}
         )
         .then(resp=>resp.text())

@@ -211,9 +211,9 @@ def generate_valuation(userId, targetSymbol, desired_multiples, valuationName, v
     #We obtain the tgt symbol:
     tgt=retrieveTgt(userId, targetSymbol, iex_api_key)
     #And the basket of comps:
-    basket_of_comps=retrieveValuationComps(valuationId, iex_api_key)
+    #basket_of_comps=retrieveValuationComps(valuationId, iex_api_key)
     #If this dataset VALUATIONS is empty, the firs compId will be 1. From then on, each compId will be the previous compId+1.
-
+    basket_of_comps=["KO"]
     output=get_output(basket_of_comps, valuationId, tgt, desired_multiples,valuationCompsDate,iex_api_key)
     multiples=output[0]
     ev=output[1]
