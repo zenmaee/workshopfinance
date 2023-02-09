@@ -27,13 +27,9 @@ const FootballField = ({ navigation }) => {
   const [valuationStat, setValuationStat]=useState("")
   const [valuationSpread, setValuationSpread]=useState("")
   const [valuationColor, setValuationColor]=useState("")
-<<<<<<< HEAD
-  const [basketOfComps, setBasketOfComps]=useState([])
-=======
   const [valuationName, setValuationName]=useState("")
   const [compSymbol, setCompSymbol]=useState("")
   const [selectedLanguage, setSelectedLanguage] = useState("js");
->>>>>>> 4ca230354a6c84a5e841daa1a24761ba6b08e9c5
 
   const retrieveFootballField= () => {
     fetch('http://192.168.1.158:5000/footballfields',{
