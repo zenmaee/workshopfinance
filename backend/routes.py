@@ -53,7 +53,6 @@ def add_valuations():
     #First we get info from frontend
     footballFieldId=request.json['footballFieldId']
     userId=request.json['userId']
-
     #Then we send it to the database
     add_VALUATION(footballFieldId, userId, iex_api_key)
     return "Successful VALUATION POST"
@@ -114,4 +113,4 @@ def add_comps():
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
-    app.run(host='10.239.197.141', port=5000, debug=True) #changes every time we change wifi
+    app.run(host='10.239.16.29', port=5000, debug=True) #changes every time we change wifi
