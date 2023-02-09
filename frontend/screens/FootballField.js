@@ -26,7 +26,6 @@ const FootballField = ({ navigation }) => {
   const [valuationSpread, setValuationSpread]=useState("")
   const [valuationColor, setValuationColor]=useState("")
   const [basketOfComps, setBasketOfComps]=useState([])
-  const [selectedLanguage, setSelectedLanguage] = useState("js");
 
   const addFootballField= () => {
     fetch('http://192.168.1.158:5000/footballfields',{
@@ -163,8 +162,8 @@ const FootballField = ({ navigation }) => {
           value={targetId}
           onChangeText = {text=>setTargetId(text)} 
           keyboardType="default">
-
           </TextInput>
+
           <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Output</Text>
             <InlinePicker
