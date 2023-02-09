@@ -23,11 +23,10 @@ valuationType="COMPS"
 url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token=sk_29735f4ddf4a47efb27623b229dda54a"
 valuations=[{
     "footballFieldId":1,
-    "footballFieldId":footballFieldId,
     "userId":userId,
     "timeDateCreated":timeDateCreated,
     "valuationCompsDate":valuationCompsDate,
-    "valuationId":10,
+    "valuationId":967,
     "valuationName":"Prueba del post",
     "valuationType":valuationType
 }]

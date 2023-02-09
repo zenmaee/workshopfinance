@@ -65,11 +65,9 @@ def add_COMP(compSymbol,valuationId,valuationCompsDate,iex_api_key):
 
     #If this dataset COMPS is empty, the firs compId will be 1. From then on, each compId will be the previous compId+1.
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS?&token="+iex_api_key
-    compId=time()*1000000
     comps=[
     {
         
-        "compId": compId,
         "compSymbol": compSymbol,
         "evToEbitdaLTM": evToEbitdaLTM,
         "evToRevenueLTM": evToRevenueLTM,
@@ -219,7 +217,7 @@ def generate_valuation(userId, valuationId, targetId, desired_multiples, valuati
     update_VALUATION(userId, valuationId, multiples, ev, valuationName,valuationCompsDate,iex_api_key)
 
 def add_VALUATION(footballFieldId, userId,iex_api_key):
-    valuationId=time()*1000000
+    valuationId=time()*10000000
     now = datetime.now()
     timeDateCreated = now.strftime("%m/%d/%Y %H:%M:%S")# timeDateCreated value has to be fixed, can not be editted. It contains the
     timeDateCreated = timeDateCreated[:6]+timeDateCreated[8:-3] #time and date of when the valuation was generated for the first time
@@ -228,7 +226,7 @@ def add_VALUATION(footballFieldId, userId,iex_api_key):
     
     url_valuation_name="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+userId+"/?last=100&token="+iex_api_key
     resp = requests.get(url_valuation_name).json()
-    valuationName="VALUATION "+str(len(resp))
+    valuationName="VALUATION "+str(len(resp)+1)
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
     valuations=[
     {

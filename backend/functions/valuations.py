@@ -36,5 +36,5 @@ if asOfDate=="Today":#valuationCompsDate is the comps date that goes into our da
 else:
     valuationCompsDate=asOfDate
 
-generate_valuation(basket_of_comps, tgt, desired_multiples, userId, timeDateCreated, valuationName, footballFieldId, valuationSpread, valuationCompsDate,iex_api_key, valuationType)
 #add_USERDATA('Ignacio','lastName','email@email.com','password', iex_api_key)
+add_VALUATION(0,"0", "sk_29735f4ddf4a47efb27623b229dda54a")

@@ -31,6 +31,9 @@ const FootballField = ({ navigation }) => {
   const [compSymbol, setCompSymbol]=useState("")
   const [selectedLanguage, setSelectedLanguage] = useState("js");
 
+
+
+
   const retrieveFootballField= () => {
     fetch('http://192.168.1.158:5000/footballfields',{
             method:'GET',
@@ -109,19 +112,21 @@ const FootballField = ({ navigation }) => {
        
   }
   const addValuation= () => {
-    fetch('http://192.168.1.158:5000/valuations',{
+    console.log("Hola")
+    fetch('http://10.239.16.29:5000/valuations',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              footballFieldId:footballFieldId,
-              userId:userId
+              footballFieldId:0,
+              userId:"Tester"
             })}
         )
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
+
   }
 
 
@@ -180,7 +185,7 @@ const FootballField = ({ navigation }) => {
         
   }
 
-  
+
   const deleteComp= () => {
     fetch('http://192.168.1.158:5000/comps',{
             method:'DELETE',
@@ -249,8 +254,9 @@ const FootballField = ({ navigation }) => {
         </View> 
         <View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
           <View style={{ alignItems: 'center' }}> 
-            <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }}>
+            <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }} onPress={() => addValuation()}>
               <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Add Valuation</Text>
+
             </TouchableOpacity>
           </View>
           <TextInput style={{ marginTop: 10, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
@@ -267,7 +273,7 @@ const FootballField = ({ navigation }) => {
           keyboardType="default">
 
           </TextInput>
-          <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ marginTop: 1, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Output</Text>
             <InlinePicker
               selectedValue={selectedLanguage}
@@ -282,7 +288,7 @@ const FootballField = ({ navigation }) => {
                 },
               ]}/>
           </View>
-          <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ marginTop: 1, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Scale</Text>
             <InlinePicker
               selectedValue={selectedLanguage}
