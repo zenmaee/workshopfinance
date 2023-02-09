@@ -141,7 +141,8 @@ const FootballField = ({ navigation }) => {
               basketOfComps:basketOfComps,
               targetId:targetId,
               userId:userId,
-              valuationName:valuationName
+              valuationName:valuationName,
+              footballFieldName:footballFieldName
               
             })}
         )

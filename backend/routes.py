@@ -74,9 +74,10 @@ def generate_valuations():
     valuationId=request.json['valuationId']
     targetId=request.json['targetId']
     valuationName=request.json['valuationName']
+    footballFieldName=request.json['footballFieldName']
     #Ver cómo coger valuationId
     #Ver cómo coger basketofcomps
-    generate_valuation(valuationId, targetId, ["evToEbitdaLTM", "evToRevenueLTM"], valuationName, valuationCompsDate,iex_api_key)
+    generate_valuation(valuationId, targetId, ["evToEbitdaLTM", "evToRevenueLTM"], valuationName, valuationCompsDate,iex_api_key,footballFieldName)
     return "Successful POST"
 
 @app.route('/valuations', methods = ['GET'])

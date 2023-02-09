@@ -79,7 +79,7 @@ def add_COMP(compSymbol,valuationId,valuationCompsDate,iex_api_key):
     print("r de comps")
     print(r)
     return r
-
+###STILL NOT WORKING
 def update_VALUATION(footballFieldId, multiples,ev, valuationName,valuationCompsDate,iex_api_key):
     
     #desired_multiples=[evToEbitdaLTM,evToRevenueLTM]
@@ -188,33 +188,38 @@ def get_output(basket_of_comps, valuationId, tgt, desired_multiples, valuationCo
     #    add_COMP(comps_df.index[i], comps_df.iloc[i]['evToEbitdaLTM'], comps_df.iloc[i]['evToRevenueLTM'],valuationId,iex_api_key)
     return output
 
-def retrieveTgt(userId, targetId, iex_api_key):
-    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/TARGETS/"+userId+"/"+targetId+"&token="+iex_api_key
+def retrieveTgt(userId, targetSymbol, iex_api_key):
+    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/TARGETS/"+userId+"/"+targetSymbol+"&token="+iex_api_key
     r=requests.get(url).json()
     tgt=r[0]['targetSymbol']
     return tgt
 
-def retrieveValuationComps(userId, valuationId, iex_api_key):
+def retrieveValuationComps(valuationId, iex_api_key):
     #How to obtain all queries from API
-    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS/"+valuationId+"&token="+iex_api_key
+    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS/"+valuationId+"/?last=100&token="+iex_api_key
     r=requests.get(url).json()
     basket_of_comps=[]
     for comp in r:
         basket_of_comps.append(comp['compSymbol'])
     return basket_of_comps
 
-def generate_valuation(userId, valuationId, targetId, desired_multiples, valuationName, valuationCompsDate,iex_api_key):
+def generate_valuation(userId, targetSymbol, desired_multiples, valuationName, valuationCompsDate,iex_api_key, footballFieldName):
+    #We preprare the IDs:
+    footballFieldId=userId+footballFieldName
+    valuationId=footballFieldId+valuationName
+
     #We obtain the tgt symbol:
-    tgt=retrieveTgt(userId, targetId, iex_api_key)
+    tgt=retrieveTgt(userId, targetSymbol, iex_api_key)
     #And the basket of comps:
-    basket_of_comps=retrieveValuationComps(userId, valuationId, iex_api_key)
+    basket_of_comps=retrieveValuationComps(valuationId, iex_api_key)
     #If this dataset VALUATIONS is empty, the firs compId will be 1. From then on, each compId will be the previous compId+1.
 
     output=get_output(basket_of_comps, valuationId, tgt, desired_multiples,valuationCompsDate,iex_api_key)
     multiples=output[0]
     ev=output[1]
-
-    update_VALUATION(userId, valuationId, multiples, ev, valuationName,valuationCompsDate,iex_api_key)
+    
+    
+    update_VALUATION(footballFieldId, multiples, ev, valuationName,valuationCompsDate,iex_api_key)
 
 def add_VALUATION(footballFieldId, iex_api_key):
     now = datetime.now()
