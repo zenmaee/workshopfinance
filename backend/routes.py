@@ -54,7 +54,7 @@ def add_valuations():
     footballFieldId=request.json['footballFieldId']
     userId=request.json['userId']
     #Then we send it to the database
-    add_VALUATION(footballFieldId, userId, iex_api_key)
+    add_VALUATION(footballFieldId,iex_api_key)
     return "Successful VALUATION POST"
 
 @app.route('/valuations/names', methods = ['PUT'])

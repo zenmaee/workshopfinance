@@ -80,7 +80,7 @@ def add_COMP(compSymbol,valuationId,valuationCompsDate,iex_api_key):
     print(r)
     return r
 
-def update_VALUATION(userId,valuationId, multiples,ev, valuationName,valuationCompsDate,iex_api_key):
+def update_VALUATION(footballFieldId, multiples,ev, valuationName,valuationCompsDate,iex_api_key):
     
     #desired_multiples=[evToEbitdaLTM,evToRevenueLTM]
     
@@ -105,7 +105,7 @@ def update_VALUATION(userId,valuationId, multiples,ev, valuationName,valuationCo
     valuationEvHighEvRevLTM=ev.iloc[2]['evToRevenueLTM']#Stat=High, Multiple=evToRevLTM
     valuationEvLowEvRevLTM=ev.iloc[3]['evToRevenueLTM']#Stat=Low, Multiple=evToRevLTM
     
-    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+userId+"/"+valuationId+"/?&token="+iex_api_key
+    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationName+"/?&token="+iex_api_key
     valuations=[
     {
         
@@ -216,8 +216,7 @@ def generate_valuation(userId, valuationId, targetId, desired_multiples, valuati
 
     update_VALUATION(userId, valuationId, multiples, ev, valuationName,valuationCompsDate,iex_api_key)
 
-def add_VALUATION(footballFieldId, userId,iex_api_key):
-    valuationId=time()*10000000
+def add_VALUATION(footballFieldId, iex_api_key):
     now = datetime.now()
     timeDateCreated = now.strftime("%m/%d/%Y %H:%M:%S")# timeDateCreated value has to be fixed, can not be editted. It contains the
     timeDateCreated = timeDateCreated[:6]+timeDateCreated[8:-3] #time and date of when the valuation was generated for the first time
@@ -232,10 +231,8 @@ def add_VALUATION(footballFieldId, userId,iex_api_key):
     {
         
         "footballFieldId":footballFieldId,
-        "userId":userId,
         "timeDateCreated":timeDateCreated,
         "valuationCompsDate":valuationCompsDate,
-        "valuationId":valuationId,
         "valuationName":valuationName,
         "valuationType":valuationType
     }]
