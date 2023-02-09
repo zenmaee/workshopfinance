@@ -121,7 +121,7 @@ const FootballField = ({ navigation }) => {
             },
             body:JSON.stringify({
               footballFieldId:0,
-              userId:"Tester"
+              userId:"Tester2"
             })}
         )
         .then(resp=>resp.text())
@@ -202,7 +202,7 @@ const FootballField = ({ navigation }) => {
         .then(resp=>console.log(resp))
         
   }
-
+  
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   const valuationWidth = windowWidth-20;
@@ -255,9 +255,8 @@ const FootballField = ({ navigation }) => {
         </View> 
         <View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
           <View style={{ alignItems: 'center' }}> 
-            <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }} onPress={() => addValuation()}>
+            <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }}>
               <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Add Valuation</Text>
-
             </TouchableOpacity>
           </View>
           <TextInput style={{ marginTop: 10, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
@@ -274,7 +273,7 @@ const FootballField = ({ navigation }) => {
           keyboardType="default">
 
           </TextInput>
-          <View style={{ marginTop: 1, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Output</Text>
             <InlinePicker
               selectedValue={selectedLanguage}
@@ -289,7 +288,7 @@ const FootballField = ({ navigation }) => {
                 },
               ]}/>
           </View>
-          <View style={{ marginTop: 1, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Scale</Text>
             <InlinePicker
               selectedValue={selectedLanguage}
