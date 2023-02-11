@@ -79,63 +79,45 @@ def add_COMP(compSymbol,valuationId,valuationCompsDate,iex_api_key):
     print("r de comps")
     print(r)
     return r
-###STILL NOT WORKING
-def update_VALUATION(footballFieldId, multiples,ev, valuationName,valuationCompsDate,iex_api_key):
-    
-    #desired_multiples=[evToEbitdaLTM,evToRevenueLTM]
+
+def update_VALUATION(footballFieldId, multiples,ev, valuationCompsDate,valuationTimeSeries,iex_api_key):
+    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"/?&token="+iex_api_key
+    valuation=requests.get(url).json()
     
     #Depending on the desired stat, we will want one row of multiples/ev or another.
     #However, even though the stat is changed, no recalculations should be made. All possible calculation should already be made
     #If Output=Mult:
-    valuationMultAvEvEbitdaLTM=multiples.iloc[0]['evToEbitdaLTM'] #Stat=Av, Multiple=evToEbitdaLTM
-    valuationMultMedEvEbitdaLTM=multiples.iloc[1]['evToEbitdaLTM'] #Stat=Median, Multiple=evToEbitdaLTM
-    valuationMultHighEvEbitdaLTM=multiples.iloc[2]['evToEbitdaLTM']#Stat=High, Multiple=evToEbitdaLTM
-    valuationMultLowEvEbitdaLTM=multiples.iloc[3]['evToEbitdaLTM']#Stat=Low, Multiple=evToEbitdaLTM
-    valuationMultAvEvRevLTM=multiples.iloc[0]['evToRevenueLTM']#Stat=Av, Multiple=evToRevLTM
-    valuationMultMedEvRevLTM=multiples.iloc[1]['evToRevenueLTM']#Stat=Median, Multiple=evToRevLTM
-    valuationMultHighEvRevLTM=multiples.iloc[2]['evToRevenueLTM']#Stat=High, Multiple=evToRevLTM
-    valuationMultLowEvRevLTM=multiples.iloc[3]['evToRevenueLTM']#Stat=Low, Multiple=evToRevLTM
+    valuation[0]['valuationMultAvEvEbitdaLTM']=multiples.iloc[0]['evToEbitdaLTM'] #Stat=Av, Multiple=evToEbitdaLTM
+    valuation[0]['valuationMultMedEvEbitdaLTM']=multiples.iloc[1]['evToEbitdaLTM'] #Stat=Median, Multiple=evToEbitdaLTM
+    valuation[0]['valuationMultHighEvEbitdaLTM']=multiples.iloc[2]['evToEbitdaLTM']#Stat=High, Multiple=evToEbitdaLTM
+    valuation[0]['valuationMultLowEvEbitdaLTM']=multiples.iloc[3]['evToEbitdaLTM']#Stat=Low, Multiple=evToEbitdaLTM
+    valuation[0]['valuationMultAvEvRevLTM']=multiples.iloc[0]['evToRevenueLTM']#Stat=Av, Multiple=evToRevLTM
+    valuation[0]['valuationMultMedEvRevLTM']=multiples.iloc[1]['evToRevenueLTM']#Stat=Median, Multiple=evToRevLTM
+    valuation[0]['valuationMultHighEvRevLTM']=multiples.iloc[2]['evToRevenueLTM']#Stat=High, Multiple=evToRevLTM
+    valuation[0]['valuationMultLowEvRevLTM']=multiples.iloc[3]['evToRevenueLTM']#Stat=Low, Multiple=evToRevLTM
     #If Output=Ev:
-    valuationEvAvEvEbitdaLTM=ev.iloc[0]['evToEbitdaLTM']#Stat=Av, Multiple=evToEbitdaLTM
-    valuationEvMedEvEbitdaLTM=ev.iloc[1]['evToEbitdaLTM']#Stat=Median, Multiple=evToEbitdaLTM
-    valuationEvHighEvEbitdaLTM=ev.iloc[2]['evToEbitdaLTM']#Stat=High, Multiple=evToEbitdaLTM
-    valuationEvLowEvEbitdaLTM=ev.iloc[3]['evToEbitdaLTM']#Stat=Low, Multiple=evToEbitdaLTM
-    valuationEvAvEvRevLTM=ev.iloc[0]['evToRevenueLTM']#Stat=Av, Multiple=evToRevLTM
-    valuationEvMedEvRevLTM=ev.iloc[1]['evToRevenueLTM']#Stat=Median, Multiple=evToRevLTM
-    valuationEvHighEvRevLTM=ev.iloc[2]['evToRevenueLTM']#Stat=High, Multiple=evToRevLTM
-    valuationEvLowEvRevLTM=ev.iloc[3]['evToRevenueLTM']#Stat=Low, Multiple=evToRevLTM
+    valuation[0]['valuationEvAvEvEbitdaLTM']=ev.iloc[0]['evToEbitdaLTM']#Stat=Av, Multiple=evToEbitdaLTM
+    valuation[0]['valuationEvMedEvEbitdaLTM']=ev.iloc[1]['evToEbitdaLTM']#Stat=Median, Multiple=evToEbitdaLTM
+    valuation[0]['valuationEvHighEvEbitdaLTM']=ev.iloc[2]['evToEbitdaLTM']#Stat=High, Multiple=evToEbitdaLTM
+    valuation[0]['valuationEvLowEvEbitdaLTM']=ev.iloc[3]['evToEbitdaLTM']#Stat=Low, Multiple=evToEbitdaLTM
+    valuation[0]['valuationEvAvEvRevLTM']=ev.iloc[0]['evToRevenueLTM']#Stat=Av, Multiple=evToRevLTM
+    valuation[0]['valuationEvMedEvRevLTM']=ev.iloc[1]['evToRevenueLTM']#Stat=Median, Multiple=evToRevLTM
+    valuation[0]['valuationEvHighEvRevLTM']=ev.iloc[2]['evToRevenueLTM']#Stat=High, Multiple=evToRevLTM
+    valuation[0]['valuationEvLowEvRevLTM']=ev.iloc[3]['evToRevenueLTM']#Stat=Low, Multiple=evToRevLTM
     
-    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationName+"/?&token="+iex_api_key
-    valuations=[
-    {
-        
-        "valuationMultAvEvEbitdaLTM":valuationMultAvEvEbitdaLTM,
-        "valuationMultMedEvEbitdaLTM":valuationMultMedEvEbitdaLTM,
-        "valuationMultHighEvEbitdaLTM":valuationMultHighEvEbitdaLTM,
-        "valuationMultLowEvEbitdaLTM":valuationMultLowEvEbitdaLTM,
-        "valuationMultAvEvRevLTM":valuationMultAvEvRevLTM,
-        "valuationMultMedEvRevLTM":valuationMultMedEvRevLTM,
-        "valuationMultHighEvRevLTM":valuationMultHighEvRevLTM,
-        "valuationMultLowEvRevLTM":valuationMultLowEvRevLTM,
-        "valuationEvAvEvEbitdaLTM":valuationEvAvEvEbitdaLTM,
-        "valuationEvMedEvEbitdaLTM":valuationEvMedEvEbitdaLTM,
-        "valuationEvHighEvEbitdaLTM":valuationEvHighEvEbitdaLTM,
-        "valuationEvLowEvEbitdaLTM":valuationEvLowEvEbitdaLTM,
-        "valuationEvAvEvRevLTM":valuationEvAvEvRevLTM,
-        "valuationEvMedEvRevLTM":valuationEvMedEvRevLTM,
-        "valuationEvHighEvRevLTM":valuationEvHighEvRevLTM,
-        "valuationEvLowEvRevLTM":valuationEvLowEvRevLTM,
-        "valuationCompsDate":valuationCompsDate,
-        "valuationName":valuationName,
-    }]
+    #valuationCompsDate:
+    valuation[0]['valuationCompsDate']=valuationCompsDate
+    
 
-    #POST into the VALUATIONS dataset
-    r = requests.put(url, json=valuations)
-    
+    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token=sk_29735f4ddf4a47efb27623b229dda54a"
+    r=requests.post(url, json=valuation)
 
     return r
+    
 
-def get_output(basket_of_comps, valuationId, tgt, desired_multiples, valuationCompsDate,iex_api_key):
+
+
+def get_output(basket_of_comps, valuationId, targetSymbol, desired_multiples, valuationCompsDate,iex_api_key):
 
     comps_raw_data = []
     tgt_raw_data=[]
@@ -143,15 +125,16 @@ def get_output(basket_of_comps, valuationId, tgt, desired_multiples, valuationCo
     #We obtain evToEbitdaLTM and evToRevenueLTM for the comps
 
     for comp in basket_of_comps:
-        url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS/"+valuationId+"/"+comp+"&token="+iex_api_key
+        url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS/"+valuationId+"/"+comp+"?token="+iex_api_key
         r=requests.get(url).json()
+
         evToEbitdaLTM=r[0]['evToEbitdaLTM']
         evToRevenueLTM=r[0]['evToRevenueLTM']
         comps_raw_data.append([evToEbitdaLTM,evToRevenueLTM])
         
 
     #We obtain ebitdaLTM and revenueLTM for the tgt
-    tgt_raw_data.append(get_metrics(tgt,"tgt",valuationCompsDate,iex_api_key))
+    tgt_raw_data.append(get_metrics(targetSymbol,"tgt",valuationCompsDate,iex_api_key))
   
     #Specify the columns for the tgt dataframe (ebitdaLTM and revenueLTM)
     
@@ -164,7 +147,7 @@ def get_output(basket_of_comps, valuationId, tgt, desired_multiples, valuationCo
     #tgt_df will be a dataframe containing the raw_data(ebitda, revenue) of the tgt 
     
     comps_df = pd.DataFrame(comps_raw_data, columns = desired_multiples, index = basket_of_comps)
-    tgt_df = pd.DataFrame(tgt_raw_data, columns = desired_metrics, index=[tgt])
+    tgt_df = pd.DataFrame(tgt_raw_data, columns = desired_metrics, index=[targetSymbol])
     
     #multiples contains the avg, median, high and low output for each multiple
     #ev contains the av, median, high and low ev of the target
@@ -188,13 +171,17 @@ def get_output(basket_of_comps, valuationId, tgt, desired_multiples, valuationCo
     #    add_COMP(comps_df.index[i], comps_df.iloc[i]['evToEbitdaLTM'], comps_df.iloc[i]['evToRevenueLTM'],valuationId,iex_api_key)
     return output
 
-def retrieveTgt(userId, targetSymbol, iex_api_key):
-    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/TARGETS/"+userId+"/"+targetSymbol+"&token="+iex_api_key
-    r=requests.get(url).json()
-    tgt=r[0]['targetSymbol']
-    return tgt
 
-def retrieveValuationComps(valuationId, iex_api_key):
+####WE MIGHT NOT NEED THIS FUNCTION
+#def retrieveTgt(userId, targetSymbol, iex_api_key):
+#    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/TARGETS/"+userId+"/"+targetSymbol+"&token="+iex_api_key
+#    r=requests.get(url).json()
+#    tgt=r[0]['targetSymbol']
+#    return tgt
+###
+
+
+def retrieve_valuation_comps(valuationId, iex_api_key):
     #How to obtain all queries from API
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS/"+valuationId+"/?last=100&token="+iex_api_key
     r=requests.get(url).json()
@@ -208,18 +195,21 @@ def generate_valuation(userId, targetSymbol, desired_multiples, valuationTimeSer
     footballFieldId=userId+footballFieldTimeSeries
     valuationId=footballFieldId+valuationTimeSeries
 
-    #We obtain the tgt symbol:
-    tgt=retrieveTgt(userId, targetSymbol, iex_api_key)
-    #And the basket of comps:
-    #basket_of_comps=retrieveValuationComps(valuationId, iex_api_key)
-    #If this dataset VALUATIONS is empty, the firs compId will be 1. From then on, each compId will be the previous compId+1.
-    basket_of_comps=["KO"]
-    output=get_output(basket_of_comps, valuationId, tgt, desired_multiples,valuationCompsDate,iex_api_key)
+
+    #AT THIS MOMENT, WE HAVE TO DO THIS, LATER WE WILL DELETE THE FOLLOWINg 3 LINES OF CODE INVOLVING ADD_COMP:
+    #basket_of_comps=["KO", "TSLA"]
+    #for comp in basket_of_comps:
+    #    add_COMP(comp,valuationId,valuationCompsDate,iex_api_key)
+    
+    #We get the basket of comps:
+    basket_of_comps=retrieve_valuation_comps(valuationId, iex_api_key)
+    print (basket_of_comps)
+    output=get_output(basket_of_comps, valuationId, targetSymbol, desired_multiples,valuationCompsDate,iex_api_key)
     multiples=output[0]
     ev=output[1]
     
     
-    #update_VALUATION(footballFieldId, multiples, ev, valuationName,valuationCompsDate,iex_api_key)
+    update_VALUATION(footballFieldId, multiples, ev,valuationCompsDate,valuationTimeSeries,iex_api_key)
 
 def add_VALUATION(footballFieldId, iex_api_key):
     now = datetime.now()
@@ -250,13 +240,16 @@ def add_VALUATION(footballFieldId, iex_api_key):
 
     return r
 
-def update_VALUATION_NAME(footballFieldId,valuationTimeSeries,valuationName,iex_api_key):
-    get_url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
-    valuation=requests.get(get_url).json()
+def update_VALUATION_NAME(userId,footballFieldTimeSeries,valuationTimeSeries,valuationName,iex_api_key):
+    
+    footballFieldId=userId+footballFieldTimeSeries
+
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
+    valuation=requests.get(url).json()
     valuation[0]['valuationName']=valuationName
 
-    post_url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token=sk_29735f4ddf4a47efb27623b229dda54a"
-    r=requests.post(post_url, json=valuation)
+    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token=sk_29735f4ddf4a47efb27623b229dda54a"
+    r=requests.post(url, json=valuation)
     return r
 
 

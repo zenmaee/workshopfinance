@@ -18,7 +18,7 @@ const FootballField = ({ navigation }) => {
   const [userId, setUserId]=useState("")
   const [footballFieldName, setFootballFieldName]=useState("")
   const [footballFieldId, setFootballFieldId]=useState("")
-  const [targetId, setTargetId]=useState("")
+  const [targetSymbol, setTargetSymbol]=useState("")
   const [footballFieldOutput, setFootballFieldOutput]=useState("")
   const [footballFieldScale, setFootballFieldScale]=useState("")
   const [valuationId, setValuationId]=useState("")
@@ -131,20 +131,20 @@ const FootballField = ({ navigation }) => {
   }
 
 
-  const updateValuation= () => {
-    fetch('http://192.168.1.158:5000/valuations',{
+  const generateValuation= () => {
+    fetch('http://10.239.16.29:5000/valuations',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              basketOfComps:basketOfComps,
-              targetId:targetId,
-              userId:userId,
-              valuationName:valuationName,
-              footballFieldName:footballFieldName
-              
+              userId:"Tester3",
+              valuationName:"Changing name",
+              footballFieldTimeSeries:"FF Test",
+              valuationTimeSeries:"1676081515625045",
+              targetSymbol:targetSymbol,
+              valuationCompsDate:"02/10/2023"
             })}
         )
         .then(resp=>resp.text())
@@ -275,7 +275,7 @@ const FootballField = ({ navigation }) => {
         </View> 
         <View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
           <View style={{ alignItems: 'center' }}> 
-            <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }}onPress={() => updateValuationName()}>
+            <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }}onPress={() => generateValuation()}>
               <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Add Valuation</Text>
             </TouchableOpacity>
           </View>
@@ -288,8 +288,8 @@ const FootballField = ({ navigation }) => {
 
           <TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
           placeholder="Target Name or Ticker"
-          value={targetId}
-          onChangeText = {text=>setTargetId(text)} 
+          value={targetSymbol}
+          onChangeText = {text=>setTargetSymbol(text)} 
           keyboardType="default">
 
           </TextInput>

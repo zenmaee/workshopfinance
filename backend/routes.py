@@ -66,9 +66,8 @@ def update_valuation_names():
     valuationName=request.json['valuationName']
     footballFieldTimeSeries=request.json['footballFieldTimeSeries']
     valuationTimeSeries=request.json['valuationTimeSeries']
-    footballFieldId=userId+footballFieldTimeSeries
 
-    update_VALUATION_NAME(footballFieldId,valuationTimeSeries,valuationName,iex_api_key)
+    update_VALUATION_NAME(userId, footballFieldTimeSeries,valuationTimeSeries,valuationName,iex_api_key)
 
     return "Successful PUT"
 
@@ -76,15 +75,19 @@ def update_valuation_names():
 def generate_valuations():
     #When a user changes the valuation fields, the only one that will re-generate a new valuation is the asOfDate
     #This put will lead to a new valuation generation
-    valuationCompsDate=request.json['footballFieldId']
-    valuationId=request.json['valuationId']
-    targetId=request.json['targetId']
-    valuationTimeSeries=request.json['valuationTimeSeries']
+    userId=request.json['userId']
     footballFieldTimeSeries=request.json['footballFieldTimeSeries']
+    valuationTimeSeries=request.json['valuationTimeSeries']
+    footballFieldId=userId+footballFieldTimeSeries
+    valuationCompsDate=request.json['valuationCompsDate']
+    targetSymbol=request.json['targetSymbol']
+
+    desired_multiples=["evToEbitdaLTM", "evToRevenueLTM"]
     #Ver cómo coger valuationId
     #Ver cómo coger basketofcomps
-    generate_valuation(valuationId, targetId, ["evToEbitdaLTM", "evToRevenueLTM"], valuationTimeSeries, valuationCompsDate,iex_api_key,footballFieldTimeSeries)
-    return "Successful POST"
+    generate_valuation(userId, targetSymbol, desired_multiples, valuationTimeSeries, valuationCompsDate,iex_api_key, footballFieldTimeSeries)
+
+    return "Successful PUT"
 
 @app.route('/valuations', methods = ['GET'])
 
