@@ -29,6 +29,8 @@ const FootballField = ({ navigation }) => {
   const [valuationColor, setValuationColor]=useState("")
   const [valuationName, setValuationName]=useState("")
   const [compSymbol, setCompSymbol]=useState("")
+  const [footballFieldTimeSeries, setFootballFieldTimeSeries]=useState("")
+  const [valuationTimeSeries, setValuationTimeSeries]=useState("")
   const [selectedLanguage, setSelectedLanguage] = useState("js");
 
 
@@ -42,7 +44,7 @@ const FootballField = ({ navigation }) => {
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              footballFieldName:footballFieldName,
+              footballFieldTimeSeries:footballFieldTimeSeries,
               targetId:targetId})}
         )
         .then(resp=>resp.text())
@@ -112,7 +114,6 @@ const FootballField = ({ navigation }) => {
        
   }
   const addValuation= () => {
-    console.log("Hola")
     fetch('http://10.239.16.29:5000/valuations',{
             method:'POST',
             headers:{
@@ -120,7 +121,7 @@ const FootballField = ({ navigation }) => {
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              footballFieldName:"FF Test",
+              footballFieldTimeSeries:"FF Test",
               userId:"Tester3"
             })}
         )
@@ -144,6 +145,25 @@ const FootballField = ({ navigation }) => {
               valuationName:valuationName,
               footballFieldName:footballFieldName
               
+            })}
+        )
+        .then(resp=>resp.text())
+        .then(resp=>console.log(resp))
+       
+  }
+  
+  const updateValuationName= () => {
+    fetch('http://10.239.16.29:5000/valuations/names',{
+            method:'PUT',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              userId:"Tester3",
+              valuationName:"Changing name",
+              footballFieldTimeSeries:"FF Test",
+              valuationTimeSeries:"1676081515625045"
             })}
         )
         .then(resp=>resp.text())
@@ -255,7 +275,7 @@ const FootballField = ({ navigation }) => {
         </View> 
         <View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
           <View style={{ alignItems: 'center' }}> 
-            <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }}onPress={() => addValuation()}>
+            <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }}onPress={() => updateValuationName()}>
               <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Add Valuation</Text>
             </TouchableOpacity>
           </View>

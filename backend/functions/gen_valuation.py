@@ -203,10 +203,10 @@ def retrieveValuationComps(valuationId, iex_api_key):
         basket_of_comps.append(comp['compSymbol'])
     return basket_of_comps
 
-def generate_valuation(userId, targetSymbol, desired_multiples, valuationName, valuationCompsDate,iex_api_key, footballFieldName):
+def generate_valuation(userId, targetSymbol, desired_multiples, valuationTimeSeries, valuationCompsDate,iex_api_key, footballFieldTimeSeries):
     #We preprare the IDs:
-    footballFieldId=userId+footballFieldName
-    valuationId=footballFieldId+valuationName
+    footballFieldId=userId+footballFieldTimeSeries
+    valuationId=footballFieldId+valuationTimeSeries
 
     #We obtain the tgt symbol:
     tgt=retrieveTgt(userId, targetSymbol, iex_api_key)
@@ -219,7 +219,7 @@ def generate_valuation(userId, targetSymbol, desired_multiples, valuationName, v
     ev=output[1]
     
     
-    update_VALUATION(footballFieldId, multiples, ev, valuationName,valuationCompsDate,iex_api_key)
+    #update_VALUATION(footballFieldId, multiples, ev, valuationName,valuationCompsDate,iex_api_key)
 
 def add_VALUATION(footballFieldId, iex_api_key):
     now = datetime.now()
@@ -231,20 +231,32 @@ def add_VALUATION(footballFieldId, iex_api_key):
     url_valuation_name="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/?last=100&token="+iex_api_key
     resp = requests.get(url_valuation_name).json()
     valuationName="VALUATION "+str(len(resp)+1)
+    valuationTimeSeries=str(int(time()*1000000))
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
-    valuations=[
+    valuation=[
     {
         
         "footballFieldId":footballFieldId,
         "timeDateCreated":timeDateCreated,
         "valuationCompsDate":valuationCompsDate,
         "valuationName":valuationName,
+        "valuationTimeSeries":valuationTimeSeries,
         "valuationType":valuationType
+
     }]
 
     #POST into the VALUATIONS dataset
-    r = requests.post(url, json=valuations)
+    r = requests.post(url, json=valuation)
 
+    return r
+
+def update_VALUATION_NAME(footballFieldId,valuationTimeSeries,valuationName,iex_api_key):
+    get_url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
+    valuation=requests.get(get_url).json()
+    valuation[0]['valuationName']=valuationName
+
+    post_url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token=sk_29735f4ddf4a47efb27623b229dda54a"
+    r=requests.post(post_url, json=valuation)
     return r
 
 

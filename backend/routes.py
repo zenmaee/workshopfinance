@@ -21,7 +21,7 @@ from flask import current_app,jsonify,request
 from app import create_app, db
 from models import Users, users_schema
 from functions.user_identification import add_USERDATA
-from functions.gen_valuation import add_VALUATION, add_COMP ,update_VALUATION, generate_valuation
+from functions.gen_valuation import *
 # Create an application instance
 # Define a route to fetch the avaialable articles
 #getusers-not needed for now
@@ -51,9 +51,9 @@ def add_users():
 @app.route('/valuations', methods = ['POST'])
 def add_valuations():
     #First we get info from frontend
-    footballFieldName=request.json['footballFieldName']
+    footballFieldTimeSeries=request.json['footballFieldTimeSeries']
     userId=request.json['userId']
-    footballFieldId=userId+footballFieldName
+    footballFieldId=userId+footballFieldTimeSeries
     #Then we send it to the database
     add_VALUATION(footballFieldId,iex_api_key)
     return "Successful VALUATION POST"
@@ -62,10 +62,15 @@ def add_valuations():
 def update_valuation_names():
     
     #This UPDATE will only change the valuation name. No recalculation should be done
-    valuationCompsDate=request.json['footballFieldId']
-    valuationId=request.json['valuationId']
-    
-    return "Successful POST"
+    userId=request.json['userId']
+    valuationName=request.json['valuationName']
+    footballFieldTimeSeries=request.json['footballFieldTimeSeries']
+    valuationTimeSeries=request.json['valuationTimeSeries']
+    footballFieldId=userId+footballFieldTimeSeries
+
+    update_VALUATION_NAME(footballFieldId,valuationTimeSeries,valuationName,iex_api_key)
+
+    return "Successful PUT"
 
 @app.route('/valuations', methods = ['PUT'])
 def generate_valuations():
@@ -74,11 +79,11 @@ def generate_valuations():
     valuationCompsDate=request.json['footballFieldId']
     valuationId=request.json['valuationId']
     targetId=request.json['targetId']
-    valuationName=request.json['valuationName']
-    footballFieldName=request.json['footballFieldName']
+    valuationTimeSeries=request.json['valuationTimeSeries']
+    footballFieldTimeSeries=request.json['footballFieldTimeSeries']
     #Ver cómo coger valuationId
     #Ver cómo coger basketofcomps
-    generate_valuation(valuationId, targetId, ["evToEbitdaLTM", "evToRevenueLTM"], valuationName, valuationCompsDate,iex_api_key,footballFieldName)
+    generate_valuation(valuationId, targetId, ["evToEbitdaLTM", "evToRevenueLTM"], valuationTimeSeries, valuationCompsDate,iex_api_key,footballFieldTimeSeries)
     return "Successful POST"
 
 @app.route('/valuations', methods = ['GET'])
