@@ -89,7 +89,12 @@ def generate_valuations():
 
     return "Successful PUT"
 
-@app.route('/valuations', methods = ['GET'])
+@app.route('/valuations/<string:footballFieldId>', methods=['GET'])
+def retrieve_valuations(footballFieldId):
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"?last=100&token="+iex_api_key
+    resp = requests.get(url).json()[0]
+    return resp
+
 
 
 @app.route('/valuations', methods = ['DELETE'])

@@ -33,6 +33,8 @@ const FootballField = ({ navigation }) => {
   const [valuationTimeSeries, setValuationTimeSeries]=useState("")
   const [selectedLanguage, setSelectedLanguage] = useState("js");
 
+  setUserId("Tester3")
+  setFootballFieldTimeSeries("FF Test")
 
 
 
@@ -98,19 +100,72 @@ const FootballField = ({ navigation }) => {
         .then(resp=>console.log(resp))
        
   }
-  const retrieveValuation= () => {
-    fetch('http://192.168.1.158:5000/valuations',{
+  const retrieveValuations= () => {
+    let url= 'http://10.239.16.29:5000/valuations/'+userId+footballFieldTimeSeries
+    fetch(url,{
             method:'GET',
             headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-              footballFieldName:footballFieldName,
-              targetId:targetId})}
+            }}
         )
-        .then(resp=>resp.text())
+        .then(resp=>resp.json())
         .then(resp=>console.log(resp))
+        console.log("esto es lo que se consigue con este fetch")
+        /*for i in resp:
+            name=i['ValuationName']
+            if output='EV':
+              if metric='EV_E':
+                if stat="AV":
+                  valuationCenter=i['valuationEvAvEvEbitdaLTM']
+                else if stat="HIGH":
+                  valuationCenter=i['valuationEvHighEvEbitdaLTM']
+                else if stat="MED":
+                  valuationCenter=i['valuationEvAvEvEbitdaLTM']
+                else:
+                  valuationCenter=i['valuationEvAvEvEbitdaLTM']
+              else if metric='EV_R':
+                if stat="AV":
+                  valuationCenter=i['valuationEvAvEvRevLTM']
+                else if stat="HIGH":
+                  valuationCenter=i['valuationEvHighEvRevLTM']
+                else if stat="MED":
+                  valuationCenter=i['valuationEvAvEvRevLTM']
+                else:
+                  valuationCenter=i['valuationEvAvEvRevLTM'] 
+            else if output='MULT':
+              if metric='EV_E':
+                if stat="AV":
+                  valuationCenter=i['valuationMultAvEvEbitdaLTM']
+                else if stat="HIGH":
+                  valuationCenter=i['valuationMultHighEvEbitdaLTM']
+                else if stat="MED":
+                  valuationCenter=i['valuationMultAvEvEbitdaLTM']
+                else:
+                  valuationCenter=i['valuationMultAvEvEbitdaLTM']
+              else if metric='EV_R':
+                if stat="AV":
+                  valuationCenter=i['valuationMultAvEvRevLTM']
+                else if stat="HIGH":
+                  valuationCenter=i['valuationMultHighEvRevLTM']
+                else if stat="MED":
+                  valuationCenter=i['valuationMultAvEvRevLTM']
+                else:
+                  valuationCenter=i['valuationMultAvEvRevLTM']                          
+                 
+                
+                
+            minValuation=valuationCenter-valuationCenter*valuationSpread/100
+            maxValuation=valuationCenter-valuationCenter*valuationSpread/100
+            valuation=
+            {
+              name: valuationName,
+              color: "pink",
+              minValuation: minValuation, 
+              maxValuation: maxValuation,
+            }
+            valuations.append(valuation)*/
+
        
   }
   const addValuation= () => {
@@ -275,7 +330,7 @@ const FootballField = ({ navigation }) => {
         </View> 
         <View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
           <View style={{ alignItems: 'center' }}> 
-            <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }}onPress={() => generateValuation()}>
+            <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }}onPress={() => retrieveValuations()}>
               <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Add Valuation</Text>
             </TouchableOpacity>
           </View>
