@@ -128,4 +128,4 @@ def add_comps():
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
-    app.run(host='10.239.16.29', port=5000, debug=True) #changes every time we change wifi
+    app.run(port=5000, debug=True) #changes every time we change wifi

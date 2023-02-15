@@ -112,62 +112,65 @@ const FootballField = ({ navigation }) => {
         .then(resp=>resp.json())
         .then(resp=>console.log(resp))
         console.log("esto es lo que se consigue con este fetch")
-        /*for i in resp:
-            name=i['ValuationName']
-            if output='EV':
-              if metric='EV_E':
-                if stat="AV":
-                  valuationCenter=i['valuationEvAvEvEbitdaLTM']
-                else if stat="HIGH":
-                  valuationCenter=i['valuationEvHighEvEbitdaLTM']
-                else if stat="MED":
-                  valuationCenter=i['valuationEvAvEvEbitdaLTM']
-                else:
-                  valuationCenter=i['valuationEvAvEvEbitdaLTM']
-              else if metric='EV_R':
-                if stat="AV":
-                  valuationCenter=i['valuationEvAvEvRevLTM']
-                else if stat="HIGH":
-                  valuationCenter=i['valuationEvHighEvRevLTM']
-                else if stat="MED":
-                  valuationCenter=i['valuationEvAvEvRevLTM']
-                else:
-                  valuationCenter=i['valuationEvAvEvRevLTM'] 
-            else if output='MULT':
-              if metric='EV_E':
-                if stat="AV":
-                  valuationCenter=i['valuationMultAvEvEbitdaLTM']
-                else if stat="HIGH":
-                  valuationCenter=i['valuationMultHighEvEbitdaLTM']
-                else if stat="MED":
-                  valuationCenter=i['valuationMultAvEvEbitdaLTM']
-                else:
-                  valuationCenter=i['valuationMultAvEvEbitdaLTM']
-              else if metric='EV_R':
-                if stat="AV":
-                  valuationCenter=i['valuationMultAvEvRevLTM']
-                else if stat="HIGH":
-                  valuationCenter=i['valuationMultHighEvRevLTM']
-                else if stat="MED":
-                  valuationCenter=i['valuationMultAvEvRevLTM']
-                else:
-                  valuationCenter=i['valuationMultAvEvRevLTM']                          
+        /*let valuations=[]
+        for (let valuation of resp){
+            let valuationName=valuation['valuationName']
+            if (footballFiledOutput==='EV'){
+              if (metric==='EV_E'){
+                if (stat="AV"){
+                  valuationCenter=i['valuationEvAvEvEbitdaLTM']}
+                else if (stat==="HIGH"){
+                  valuationCenter=i['valuationEvHighEvEbitdaLTM']}
+                else if (stat==="MED"){
+                  valuationCenter=i['valuationEvAvEvEbitdaLTM']}
+                else{
+                  valuationCenter=i['valuationEvAvEvEbitdaLTM']}}
+              else if (metric==='EV_R'){
+                if (stat==="AV"){
+                  valuationCenter=i['valuationEvAvEvRevLTM']}
+                else if (stat==="HIGH"){
+                  valuationCenter=i['valuationEvHighEvRevLTM']}
+                else if (stat==="MED"){
+                  valuationCenter=i['valuationEvAvEvRevLTM']}
+                else{
+                  valuationCenter=i['valuationEvAvEvRevLTM']}
+              }
+
+            else if (output==='MULT'){
+              if (metric==='EV_E'){
+                if (stat==="AV"){
+                  valuationCenter=i['valuationMultAvEvEbitdaLTM']}
+                else if (stat==="HIGH"){
+                  valuationCenter=i['valuationMultHighEvEbitdaLTM']}
+                else if (stat==="MED"){
+                  valuationCenter=i['valuationMultAvEvEbitdaLTM']}
+                else{
+                  valuationCenter=i['valuationMultAvEvEbitdaLTM']}}
+              else if (metric==='EV_R'){
+                if (stat==="AV"){
+                  valuationCenter=i['valuationMultAvEvRevLTM']}
+                else if (stat==="HIGH"){
+                  valuationCenter=i['valuationMultHighEvRevLTM']}
+                else if (stat==="MED"){
+                  valuationCenter=i['valuationMultAvEvRevLTM']}
+                else{
+                  valuationCenter=i['valuationMultAvEvRevLTM']}}}                   
                  
                 
                 
-            minValuation=valuationCenter-valuationCenter*valuationSpread/100
-            maxValuation=valuationCenter-valuationCenter*valuationSpread/100
+            let minValuation=valuationCenter-valuationCenter*valuationSpread/100
+            let maxValuation=valuationCenter-valuationCenter*valuationSpread/100
             valuation=
             {
               name: valuationName,
-              color: "pink",
+              color: valuationColor,
               minValuation: minValuation, 
               maxValuation: maxValuation,
             }
-            valuations.append(valuation)*/
+            valuations.push(valuation)}
 
        
-  }
+  }*/}
   const addValuation= () => {
     fetch('http://10.239.16.29:5000/valuations',{
             method:'POST',
