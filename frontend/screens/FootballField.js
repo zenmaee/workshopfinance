@@ -31,10 +31,11 @@ const FootballField = ({ navigation }) => {
   const [compSymbol, setCompSymbol]=useState("")
   const [footballFieldTimeSeries, setFootballFieldTimeSeries]=useState("")
   const [valuationTimeSeries, setValuationTimeSeries]=useState("")
+  const [response, setResponse]=useState([])
+
   const [selectedLanguage, setSelectedLanguage] = useState("js");
 
-  setUserId("Tester3")
-  setFootballFieldTimeSeries("FF Test")
+  
 
 
 
@@ -100,77 +101,7 @@ const FootballField = ({ navigation }) => {
         .then(resp=>console.log(resp))
        
   }
-  const retrieveValuations= () => {
-    let url= 'http://10.239.16.29:5000/valuations/'+userId+footballFieldTimeSeries
-    fetch(url,{
-            method:'GET',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json'
-            }}
-        )
-        .then(resp=>resp.json())
-        .then(resp=>console.log(resp))
-        console.log("esto es lo que se consigue con este fetch")
-        /*let valuations=[]
-        for (let valuation of resp){
-            let valuationName=valuation['valuationName']
-            if (footballFiledOutput==='EV'){
-              if (metric==='EV_E'){
-                if (stat="AV"){
-                  valuationCenter=i['valuationEvAvEvEbitdaLTM']}
-                else if (stat==="HIGH"){
-                  valuationCenter=i['valuationEvHighEvEbitdaLTM']}
-                else if (stat==="MED"){
-                  valuationCenter=i['valuationEvAvEvEbitdaLTM']}
-                else{
-                  valuationCenter=i['valuationEvAvEvEbitdaLTM']}}
-              else if (metric==='EV_R'){
-                if (stat==="AV"){
-                  valuationCenter=i['valuationEvAvEvRevLTM']}
-                else if (stat==="HIGH"){
-                  valuationCenter=i['valuationEvHighEvRevLTM']}
-                else if (stat==="MED"){
-                  valuationCenter=i['valuationEvAvEvRevLTM']}
-                else{
-                  valuationCenter=i['valuationEvAvEvRevLTM']}
-              }
-
-            else if (output==='MULT'){
-              if (metric==='EV_E'){
-                if (stat==="AV"){
-                  valuationCenter=i['valuationMultAvEvEbitdaLTM']}
-                else if (stat==="HIGH"){
-                  valuationCenter=i['valuationMultHighEvEbitdaLTM']}
-                else if (stat==="MED"){
-                  valuationCenter=i['valuationMultAvEvEbitdaLTM']}
-                else{
-                  valuationCenter=i['valuationMultAvEvEbitdaLTM']}}
-              else if (metric==='EV_R'){
-                if (stat==="AV"){
-                  valuationCenter=i['valuationMultAvEvRevLTM']}
-                else if (stat==="HIGH"){
-                  valuationCenter=i['valuationMultHighEvRevLTM']}
-                else if (stat==="MED"){
-                  valuationCenter=i['valuationMultAvEvRevLTM']}
-                else{
-                  valuationCenter=i['valuationMultAvEvRevLTM']}}}                   
-                 
-                
-                
-            let minValuation=valuationCenter-valuationCenter*valuationSpread/100
-            let maxValuation=valuationCenter-valuationCenter*valuationSpread/100
-            valuation=
-            {
-              name: valuationName,
-              color: valuationColor,
-              minValuation: minValuation, 
-              maxValuation: maxValuation,
-            }
-            valuations.push(valuation)}
-
-       
-  }*/}
+  
   const addValuation= () => {
     fetch('http://10.239.16.29:5000/valuations',{
             method:'POST',
@@ -188,6 +119,85 @@ const FootballField = ({ navigation }) => {
 
   }
 
+  function retrieveValuations () {
+    let userId="Tester3"
+    let footballFieldTimeSeries="FF Test"
+    let url= 'http://10.239.16.29:5000/valuations/'+userId+footballFieldTimeSeries
+    console.log(url)
+    fetch(url,{
+            method:'GET',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            }}
+        )
+        .then(resp=>resp.json())
+        .then(data=>{
+          console.log("hola")
+          let valuations=[]
+          for (let valuation of data){
+              let valuationName=valuation['valuationName']
+              if (footballFiledOutput==='EV'){
+                if (metric==='EV_E'){
+                  if (stat="AV"){
+                    valuationCenter=i['valuationEvAvEvEbitdaLTM']}
+                  else if (stat==="HIGH"){
+                    valuationCenter=i['valuationEvHighEvEbitdaLTM']}
+                  else if (stat==="MED"){
+                    valuationCenter=i['valuationEvAvEvEbitdaLTM']}
+                  else{
+                    valuationCenter=i['valuationEvAvEvEbitdaLTM']}}
+                else if (metric==='EV_R'){
+                  if (stat==="AV"){
+                    valuationCenter=i['valuationEvAvEvRevLTM']}
+                  else if (stat==="HIGH"){
+                    valuationCenter=i['valuationEvHighEvRevLTM']}
+                  else if (stat==="MED"){
+                    valuationCenter=i['valuationEvAvEvRevLTM']}
+                  else{
+                    valuationCenter=i['valuationEvAvEvRevLTM']}
+                }
+  
+              else if (output==='MULT'){
+                if (metric==='EV_E'){
+                  if (stat==="AV"){
+                    valuationCenter=i['valuationMultAvEvEbitdaLTM']}
+                  else if (stat==="HIGH"){
+                    valuationCenter=i['valuationMultHighEvEbitdaLTM']}
+                  else if (stat==="MED"){
+                    valuationCenter=i['valuationMultAvEvEbitdaLTM']}
+                  else{
+                    valuationCenter=i['valuationMultAvEvEbitdaLTM']}}
+                else if (metric==='EV_R'){
+                  if (stat==="AV"){
+                    valuationCenter=i['valuationMultAvEvRevLTM']}
+                  else if (stat==="HIGH"){
+                    valuationCenter=i['valuationMultHighEvRevLTM']}
+                  else if (stat==="MED"){
+                    valuationCenter=i['valuationMultAvEvRevLTM']}
+                  else{
+                    valuationCenter=i['valuationMultAvEvRevLTM']}}}                   
+                   
+                  
+                  
+              let minValuation=valuationCenter-valuationCenter*valuationSpread/100
+              let maxValuation=valuationCenter-valuationCenter*valuationSpread/100
+              valuation=
+              {
+                name: valuationName,
+                color: valuationColor,
+                minValuation: minValuation, 
+                maxValuation: maxValuation,
+              }
+              valuations.push(valuation)}}
+        })
+        .catch(error => {
+          console.error("Error fetching data:", error);
+      });
+        
+
+       
+  }
 
   const generateValuation= () => {
     fetch('http://10.239.16.29:5000/valuations',{
@@ -354,9 +364,10 @@ const FootballField = ({ navigation }) => {
           <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Output</Text>
             <InlinePicker
-              selectedValue={selectedLanguage}
+              selectedValue={footballFieldOutput}
               onValueChange={(itemValue, itemIndex) =>
-                setSelectedLanguage(itemValue)}
+                setFootballFieldOutput(itemValue)}
+              
               options = {[
                 { label: "EV/Revenue (LTM)",
                   value: "EV_R"
@@ -365,7 +376,9 @@ const FootballField = ({ navigation }) => {
                   value: "EV_E"
                 },
               ]}/>
+          
           </View>
+          
           <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Scale</Text>
             <InlinePicker

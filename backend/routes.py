@@ -5,15 +5,15 @@ import sys
 #Function to install packages:
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package]) 
-install('flask')
-install('flask_sqlalchemy')
-install('flask_migrate')
-install('flask_marshmallow')
-install('flask_cors')
-install('pandas')
-install('requests')
-install('termcolor')
-install('pymysql')
+#install('flask')
+#install('flask_sqlalchemy')
+#install('flask_migrate')
+#install('flask_marshmallow')
+#install('flask_cors')
+#install('pandas')
+#install('requests')
+#install('termcolor')
+#install('pymysql')
 
 ##Installing libraries we need
 from flask import current_app,jsonify,request
@@ -89,10 +89,11 @@ def generate_valuations():
 
     return "Successful PUT"
 
-@app.route('/valuations/<string:footballFieldId>', methods=['GET'])
+@app.route('/valuations/<footballFieldId>', methods=['GET'])
 def retrieve_valuations(footballFieldId):
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"?last=100&token="+iex_api_key
-    resp = requests.get(url).json()[0]
+    resp = requests.get(url).json()
+    print("estoy aqui")
     return resp
 
 
@@ -128,4 +129,4 @@ def add_comps():
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
-    app.run(port=5000, debug=True) #changes every time we change wifi
+    app.run(host='10.239.16.29', port=5000, debug=True) #changes every time we change wifi
