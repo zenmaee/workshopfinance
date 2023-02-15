@@ -21,6 +21,7 @@ from flask import current_app,jsonify,request
 from app import create_app, db
 from models import Users, users_schema
 from functions.user_identification import add_USERDATA
+from functions.gen_valuation import *
 # Create an application instance
 # Define a route to fetch the avaialable articles
 #getusers-not needed for now
@@ -34,21 +35,77 @@ def get_users():
     results = users_schema.dump(all_users)
     return jsonify(results)
 
-
-#@app.route('/get/<id>/', methods = ['GET'])
-#def post_details(id):
-#    article = Articles.query.get(id)
-#    return article.schema.jsonify(article)
-
 @app.route('/users', methods = ['POST'])
 def add_users():
+    #First we get info from frontend
     firstName=request.json['firstName']
     lastName=request.json['lastName']
     email=request.json['email']
     password=request.json['password']
 
+    #Then we send it to the database
     add_USERDATA(firstName, lastName, email, password,iex_api_key)
-    return "Successful POST"
+
+    return "Successful USERDATA POST"
+
+@app.route('/valuations', methods = ['POST'])
+def add_valuations():
+    #First we get info from frontend
+    footballFieldTimeSeries=request.json['footballFieldTimeSeries']
+    userId=request.json['userId']
+    footballFieldId=userId+footballFieldTimeSeries
+    #Then we send it to the database
+    add_VALUATION(footballFieldId,iex_api_key)
+    return "Successful VALUATION POST"
+
+@app.route('/valuations/names', methods = ['PUT'])
+def update_valuation_names():
+    
+    #This UPDATE will only change the valuation name. No recalculation should be done
+    userId=request.json['userId']
+    valuationName=request.json['valuationName']
+    footballFieldTimeSeries=request.json['footballFieldTimeSeries']
+    valuationTimeSeries=request.json['valuationTimeSeries']
+
+    update_VALUATION_NAME(userId, footballFieldTimeSeries,valuationTimeSeries,valuationName,iex_api_key)
+
+    return "Successful PUT"
+
+@app.route('/valuations', methods = ['PUT'])
+def generate_valuations():
+    #When a user changes the valuation fields, the only one that will re-generate a new valuation is the asOfDate
+    #This put will lead to a new valuation generation
+    userId=request.json['userId']
+    footballFieldTimeSeries=request.json['footballFieldTimeSeries']
+    valuationTimeSeries=request.json['valuationTimeSeries']
+    footballFieldId=userId+footballFieldTimeSeries
+    valuationCompsDate=request.json['valuationCompsDate']
+    targetSymbol=request.json['targetSymbol']
+
+    desired_multiples=["evToEbitdaLTM", "evToRevenueLTM"]
+    #Ver cómo coger valuationId
+    #Ver cómo coger basketofcomps
+    generate_valuation(userId, targetSymbol, desired_multiples, valuationTimeSeries, valuationCompsDate,iex_api_key, footballFieldTimeSeries)
+
+    return "Successful PUT"
+
+@app.route('/valuations/<string:footballFieldId>', methods=['GET'])
+def retrieve_valuations(footballFieldId):
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"?last=100&token="+iex_api_key
+    resp = requests.get(url).json()[0]
+    return resp
+
+
+
+@app.route('/valuations', methods = ['DELETE'])
+
+@app.route('/comps', methods = ['POST'])
+def add_comps():
+    compSymbol=request.json['compSymbol']
+    valuationId=request.json['valuationId']
+    valuationCompsDate=request.json['valuationCompsDate']
+
+    add_COMP(compSymbol,valuationId,valuationCompsDate,iex_api_key)
 
 #@app.route('/update/<id>/', methods = ['PUT'])
 #def update_article(id):
@@ -71,4 +128,4 @@ def add_users():
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
-    app.run(host='10.239.197.141', port=5000, debug=True) #changes every time we change wifi
+    app.run(port=5000, debug=True) #changes every time we change wifi
