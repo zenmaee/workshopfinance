@@ -123,7 +123,6 @@ const FootballField = ({ navigation }) => {
     let userId = "Tester3";
     let footballFieldTimeSeries = "FF Test";
     let url = "http://10.239.16.29:5000/valuations/" + userId + footballFieldTimeSeries;
-    console.log(url);
     return fetch(url, {
       method: "GET",
       headers: {
@@ -133,10 +132,11 @@ const FootballField = ({ navigation }) => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log("hola");
         let valuations = [];
         let valuationCenter;
         let valuationColor="red"
+        let valuationSpread=10
+        
         for (let valuation of data) {
           let valuationName = valuation["valuationName"];
           if (output === "EV") {
@@ -184,9 +184,9 @@ const FootballField = ({ navigation }) => {
               }
             }
           }
-  
+        
           let minValuation = valuationCenter - valuationCenter * valuationSpread / 100;
-          let maxValuation = valuationCenter - valuationCenter * valuationSpread / 100;
+          let maxValuation = valuationCenter + valuationCenter * valuationSpread / 100;
           valuation = {
             name: valuationName,
             color: valuationColor,
@@ -208,17 +208,11 @@ const FootballField = ({ navigation }) => {
   
   useEffect(() => {
     async function getValuations() {
-      console.log("epay");
       let valuations = await retrieveValuations('EV', 'EV_E', 'AV');
-      console.log("?");
-      console.log(valuations);
       setValuations(valuations);
     }
     getValuations();
   }, []);
-
-  console.log("mira a ver ya esto")
-  console.log(valuations)
 
     const generateValuation= () => {
     fetch('http://10.239.16.29:5000/valuations',{
@@ -321,7 +315,7 @@ const FootballField = ({ navigation }) => {
     maxRange: 5_000_000_000,
   }
 
-  const valuations_=[{
+  /*const valuations=[{
     name: "Valuation #1 (EV/EBITDA) (LTM)",
     color: "pink",
     minValuation: 1_000_000_000, 
@@ -339,7 +333,7 @@ const FootballField = ({ navigation }) => {
     minValuation: 2_000_000_000, 
     maxValuation: 4_250_000_000,
   }, 
-  ]
+  ]*/
   
   const tableRange = table.maxRange - table.minRange;
   const pixelsPerDollar = (valuationWidth-20-20) / tableRange;
