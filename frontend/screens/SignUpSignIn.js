@@ -16,7 +16,7 @@ const SignUpSignIn = ({ navigation }) => {
               </TouchableOpacity>
           </View>
 
-          <Text style={[styles.buttonText, { textAlign: "center", marginVertical: 20 }]}>or</Text>
+          <Text style={[styles.buttonText, { textAlign: "center", marginVertical: 10 }]}>or</Text>
 
           <InputTextField 
             title="Email"
@@ -32,11 +32,11 @@ const SignUpSignIn = ({ navigation }) => {
           ></InputTextField>
 
           <TouchableOpacity>
-            <Text style={[styles.buttonText, { marginLeft: 130, fontWeight: "600" }]}>Forgot Password?</Text>
+            <Text style={[styles.buttonText, { marginLeft: 10, fontWeight: "600" }]}>Forgot Password?</Text>
           </TouchableOpacity>
           
           
-          <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('SignUp')}>
+          <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('HomeScreen')}>
               <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           
