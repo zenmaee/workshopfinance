@@ -7,7 +7,7 @@ const InlinePicker = ({ selectedValue, onValueChange, options }) => {
     <Picker
     selectedValue={selectedValue}
     onValueChange={onValueChange}
-    style={{ marginLeft: 20, backgroundColor: 'white', height: 200, width: 300 }}
+    style={{ marginLeft: 20, backgroundColor: 'white', height: 130, width: 300 }}
     >
     {options.map(option => <Picker.Item label={option.label} value={option.value}/>)}
   </Picker>
@@ -29,7 +29,10 @@ const FootballField = ({ navigation }) => {
   const [valuationColor, setValuationColor]=useState("")
   const [valuationName, setValuationName]=useState("")
   const [compSymbol, setCompSymbol]=useState("")
-  const [selectedLanguage, setSelectedLanguage] = useState("js");
+
+  {/* For Ignacio: */}
+  const [pickerOutput, setPickerOutput] = useState("js");
+  const [pickerScale, setPickerScale] = useState("js");
 
   const retrieveFootballField= () => {
     fetch('http://192.168.1.158:5000/footballfields',{
@@ -202,36 +205,46 @@ const FootballField = ({ navigation }) => {
   const valuationWidth = windowWidth-20;
   const valuationHeight = 20;
   const table = {
-    minRange: 1_000_000_000,
-    maxRange: 5_000_000_000,
+    minRange: 1_000,
+    maxRange: 5_000,
   }
   const valuations = [{
     name: "Valuation #1 (EV/EBITDA) (LTM)",
     color: "pink",
-    minValuation: 1_000_000_000, 
-    maxValuation: 3_250_000_000,
+    minValuation: 1_000, 
+    maxValuation: 3_250,
   }, 
   {
     name: "Valuation #2 (EV/EBITDA) (LTM)",
     color: "red",
-    minValuation: 3_000_000_000, 
-    maxValuation: 5_000_000_000,
+    minValuation: 3_000, 
+    maxValuation: 5_000,
   }, 
   {
     name: "Valuation #3 (EV/EBITDA) (LTM)",
     color: "blue",
-    minValuation: 2_000_000_000, 
-    maxValuation: 4_250_000_000,
+    minValuation: 2_000, 
+    maxValuation: 4_000,
   }, 
   ]
   
   const tableRange = table.maxRange - table.minRange;
+  const tableMean = (table.maxRange + table.minRange) / 2;
   const pixelsPerDollar = (valuationWidth-20-20) / tableRange;
 
   return (
     <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: '#000' }}>
-      <ScrollView>
-        <View style={{ backgroundColor: '#FFF', height: valuationWidth, width: valuationWidth, borderRadius: 10 }}>
+        <View style={{ backgroundColor: '#FFF', height: 0.4*(windowHeight), width: valuationWidth, borderRadius: 10 }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={{ marginTop: 10, marginLeft: 10 }}>footballFieldName</Text>
+            <Text style={{ marginTop: 10, marginRight: 10 }}>targetId</Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 10, marginRight: 10, marginTop: 10 }}>
+            <Text>{table.minRange}</Text>
+            <Text>{tableMean}</Text>
+            <Text>{table.maxRange}</Text>
+          </View>
+          <View style={{ backgroundColor: 'black', height: 1, width: valuationWidth - 40, marginLeft: 20, marginTop: 5 }}/>
           <ScrollView
             contentContainerStyle={{ 
               padding: 20
@@ -246,6 +259,7 @@ const FootballField = ({ navigation }) => {
               )
             })}
           </ScrollView>
+          <Text style={{ textAlign: 'right', marginBottom: 10, marginRight: 10, color: 'gray' }}>($ in {pickerScale})</Text>
         </View> 
         <View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
           <View style={{ alignItems: 'center' }}> 
@@ -270,9 +284,9 @@ const FootballField = ({ navigation }) => {
           <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Output</Text>
             <InlinePicker
-              selectedValue={selectedLanguage}
+              selectedValue={pickerOutput}
               onValueChange={(itemValue, itemIndex) =>
-                setSelectedLanguage(itemValue)}
+                setPickerOutput(itemValue)}
               options = {[
                 { label: "EV/Revenue (LTM)",
                   value: "EV_R"
@@ -285,9 +299,9 @@ const FootballField = ({ navigation }) => {
           <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Scale</Text>
             <InlinePicker
-              selectedValue={selectedLanguage}
+              selectedValue={pickerScale}
               onValueChange={(itemValue, itemIndex) =>
-                setSelectedLanguage(itemValue)}
+                setPickerScale(itemValue)}
               options = {[
                 { label: "EV/Revenue (LTM)",
                   value: "EV_R"
@@ -296,9 +310,6 @@ const FootballField = ({ navigation }) => {
                   value: "EV_E"
                 },
               ]}/>
-          </View>
-          <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ color: 'white' }}>As of Date</Text>
           </View>
         </View>
 
@@ -365,7 +376,6 @@ const FootballField = ({ navigation }) => {
               </TouchableOpacity>
             </View>
         </View>*/}
-      </ScrollView>
     </SafeAreaView>
   );
 }
