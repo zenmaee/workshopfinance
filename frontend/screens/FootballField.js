@@ -303,11 +303,11 @@ const FootballField = ({ navigation }) => {
               onValueChange={(itemValue, itemIndex) =>
                 setPickerScale(itemValue)}
               options = {[
-                { label: "EV/Revenue (LTM)",
-                  value: "EV_R"
+                { label: "Millions",
+                  value: "millions"
                 }, {
-                  label: "EV/EBITDA (LTM)",
-                  value: "EV_E"
+                  label: "Billions",
+                  value: "billions"
                 },
               ]}/>
           </View>
