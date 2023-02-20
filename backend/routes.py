@@ -89,18 +89,11 @@ def generate_valuations():
 
     return "Successful PUT"
 
-<<<<<<< HEAD
 @app.route('/valuations/<footballFieldId>', methods=['GET'])
 def retrieve_valuations(footballFieldId):
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"?last=100&token="+iex_api_key
     resp = requests.get(url).json()
     print("estoy aqui")
-=======
-@app.route('/valuations/<string:footballFieldId>', methods=['GET'])
-def retrieve_valuations(footballFieldId):
-    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"?last=100&token="+iex_api_key
-    resp = requests.get(url).json()[0]
->>>>>>> 459278dd9adf4070e6a3cdda65df49672a731c88
     return resp
 
 
