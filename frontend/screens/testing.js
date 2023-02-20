@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Button, ScrollView, Text, View, TextInput, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
@@ -7,7 +7,7 @@ const InlinePicker = ({ selectedValue, onValueChange, options }) => {
     <Picker
     selectedValue={selectedValue}
     onValueChange={onValueChange}
-    style={{ marginLeft: 20, backgroundColor: 'white', height: 200, width: 300 }}
+    style={{ marginLeft: 20, backgroundColor: 'white', height: 130, width: 300 }}
     >
     {options.map(option => <Picker.Item label={option.label} value={option.value}/>)}
   </Picker>
@@ -18,7 +18,7 @@ const FootballField = ({ navigation }) => {
   const [userId, setUserId]=useState("")
   const [footballFieldName, setFootballFieldName]=useState("")
   const [footballFieldId, setFootballFieldId]=useState("")
-  const [targetSymbol, setTargetSymbol]=useState("")
+  const [targetId, setTargetId]=useState("")
   const [footballFieldOutput, setFootballFieldOutput]=useState("")
   const [footballFieldScale, setFootballFieldScale]=useState("")
   const [valuationId, setValuationId]=useState("")
@@ -29,18 +29,10 @@ const FootballField = ({ navigation }) => {
   const [valuationColor, setValuationColor]=useState("")
   const [valuationName, setValuationName]=useState("")
   const [compSymbol, setCompSymbol]=useState("")
-  const [footballFieldTimeSeries, setFootballFieldTimeSeries]=useState("")
-  const [valuationTimeSeries, setValuationTimeSeries]=useState("")
-  const [response, setResponse]=useState([])
-  const [valuations, setValuations] = useState([]);
-  const [selectedLanguage, setSelectedLanguage] = useState("js");
 
-   {/* For Ignacio: */}
-   const [pickerOutput, setPickerOutput] = useState("js");
-   const [pickerScale, setPickerScale] = useState("js");
- 
-
-
+  {/* For Ignacio: */}
+  const [pickerOutput, setPickerOutput] = useState("js");
+  const [pickerScale, setPickerScale] = useState("js");
 
   const retrieveFootballField= () => {
     fetch('http://192.168.1.158:5000/footballfields',{
@@ -50,7 +42,7 @@ const FootballField = ({ navigation }) => {
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              footballFieldTimeSeries:footballFieldTimeSeries,
+              footballFieldName:footballFieldName,
               targetId:targetId})}
         )
         .then(resp=>resp.text())
@@ -104,153 +96,51 @@ const FootballField = ({ navigation }) => {
         .then(resp=>console.log(resp))
        
   }
-  
+  const retrieveValuation= () => {
+    fetch('http://192.168.1.158:5000/valuations',{
+            method:'GET',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              footballFieldName:footballFieldName,
+              targetId:targetId})}
+        )
+        .then(resp=>resp.text())
+        .then(resp=>console.log(resp))
+       
+  }
   const addValuation= () => {
-    fetch('http://10.239.16.29:5000/valuations',{
+    fetch('http://192.168.1.158:5000/valuations',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              footballFieldTimeSeries:"FF Test",
-              userId:"Tester3"
+              footballFieldId:footballFieldId,
+              userId:userId
             })}
         )
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
-
   }
 
-  function retrieveValuations(output, metric, stat) {
-    let userId = "Tester3";
-    let footballFieldTimeSeries = "FF Test";
-    
-    let url = "http:/10.239.98.171/valuations/" + userId + footballFieldTimeSeries;
-    return fetch(url, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        let valuations = [];
-        let valuationCenter;
-        let valuationColor="red"
-        let valuationSpread=10
-        
-        for (let valuation of data) {
-          let valuationName = valuation["valuationName"];
-          if (output === "EV") {
-            if (metric === "EV_E") {
-              if (stat === "AV") {
-                valuationCenter = valuation["valuationEvAvEvEbitdaLTM"];
-              } else if (stat === "HIGH") {
-                valuationCenter = valuation["valuationEvHighEvEbitdaLTM"];
-              } else if (stat === "MED") {
-                valuationCenter = valuation["valuationEvAvEvEbitdaLTM"];
-              } else {
-                valuationCenter = valuation["valuationEvAvEvEbitdaLTM"];
-              }
-            } else if (metric === "EV_R") {
-              if (stat === "AV") {
-                valuationCenter = valuation["valuationEvAvEvRevLTM"];
-              } else if (stat === "HIGH") {
-                valuationCenter = valuation["valuationEvHighEvRevLTM"];
-              } else if (stat === "MED") {
-                valuationCenter = valuation["valuationEvAvEvRevLTM"];
-              } else {
-                valuationCenter = valuation["valuationEvAvEvRevLTM"];
-              }
-            }
-          } else if (output === "MULT") {
-            if (metric === "EV_E") {
-              if (stat === "AV") {
-                valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
-              } else if (stat === "HIGH") {
-                valuationCenter = valuation["valuationMultHighEvEbitdaLTM"];
-              } else if (stat === "MED") {
-                valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
-              } else {
-                valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
-              }
-            } else if (metric === "EV_R") {
-              if (stat === "AV") {
-                valuationCenter = valuation["valuationMultAvEvRevLTM"];
-              } else if (stat === "HIGH") {
-                valuationCenter = valuation["valuationMultHighEvRevLTM"];
-              } else if (stat === "MED") {
-                valuationCenter = valuation["valuationMultAvEvRevLTM"];
-              } else {
-                valuationCenter = valuation["valuationMultAvEvRevLTM"];
-              }
-            }
-          }
-        
-          let minValuation = valuationCenter - valuationCenter * valuationSpread / 100;
-          let maxValuation = valuationCenter + valuationCenter * valuationSpread / 100;
-          valuation = {
-            name: valuationName,
-            color: valuationColor,
-            minValuation: minValuation,
-            maxValuation: maxValuation,
-          };
-          valuations.push(valuation);
-        }
-        console.log("valuations")
-        console.log(valuations)
-        return valuations;
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        return [];
-      });
-  }
 
-  
-  useEffect(() => {
-    async function getValuations() {
-      let valuations = await retrieveValuations('EV', 'EV_E', 'AV');
-      setValuations(valuations);
-    }
-    getValuations();
-  }, []);
-
-    const generateValuation= () => {
-    fetch('http://10.239.16.29:5000/valuations',{
+  const updateValuation= () => {
+    fetch('http://192.168.1.158:5000/valuations',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              userId:"Tester3",
-              valuationName:"Changing name",
-              footballFieldTimeSeries:"FF Test",
-              valuationTimeSeries:"1676081515625045",
-              targetSymbol:targetSymbol,
-              valuationCompsDate:"02/10/2023"
-            })}
-        )
-        .then(resp=>resp.text())
-        .then(resp=>console.log(resp))
-       
-  }
-  
-  const updateValuationName= () => {
-    fetch('http://10.239.16.29:5000/valuations/names',{
-            method:'PUT',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-              userId:"Tester3",
-              valuationName:"Changing name",
-              footballFieldTimeSeries:"FF Test",
-              valuationTimeSeries:"1676081515625045"
+              basketOfComps:basketOfComps,
+              targetId:targetId,
+              userId:userId,
+              valuationName:valuationName
+              
             })}
         )
         .then(resp=>resp.text())
@@ -293,7 +183,7 @@ const FootballField = ({ navigation }) => {
         
   }
 
-
+  
   const deleteComp= () => {
     fetch('http://192.168.1.158:5000/comps',{
             method:'DELETE',
@@ -315,39 +205,39 @@ const FootballField = ({ navigation }) => {
   const valuationWidth = windowWidth-20;
   const valuationHeight = 20;
   const table = {
-    minRange: 10,
-    maxRange: 50,
+    minRange: 1_000,
+    maxRange: 5_000,
   }
-
-  /*const valuations=[{
+  const valuations = [{
     name: "Valuation #1 (EV/EBITDA) (LTM)",
     color: "pink",
-    minValuation: 1_000_000_000, 
-    maxValuation: 3_250_000_000,
+    minValuation: 1_000, 
+    maxValuation: 3_250,
   }, 
   {
     name: "Valuation #2 (EV/EBITDA) (LTM)",
     color: "red",
-    minValuation: 3_000_000_000, 
-    maxValuation: 5_000_000_000,
+    minValuation: 3_000, 
+    maxValuation: 5_000,
   }, 
   {
     name: "Valuation #3 (EV/EBITDA) (LTM)",
     color: "blue",
-    minValuation: 2_000_000_000, 
-    maxValuation: 4_250_000_000,
+    minValuation: 2_000, 
+    maxValuation: 4_000,
   }, 
-  ]*/
+  ]
   
   const tableRange = table.maxRange - table.minRange;
   const tableMean = (table.maxRange + table.minRange) / 2;
   const pixelsPerDollar = (valuationWidth-20-20) / tableRange;
+
   return (
     <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: '#000' }}>
         <View style={{ backgroundColor: '#FFF', height: 0.4*(windowHeight), width: valuationWidth, borderRadius: 10 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={{ marginTop: 10, marginLeft: 10 }}>footballFieldName</Text>
-            <Text style={{ marginTop: 10, marginRight: 10 }}>targetSymbol</Text>
+            <Text style={{ marginTop: 10, marginRight: 10 }}>targetId</Text>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 10, marginRight: 10, marginTop: 10 }}>
             <Text>{table.minRange}</Text>
@@ -386,8 +276,8 @@ const FootballField = ({ navigation }) => {
 
           <TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
           placeholder="Target Name or Ticker"
-          value={targetSymbol}
-          onChangeText = {text=>setTargetSymbol(text)} 
+          value={targetId}
+          onChangeText = {text=>setTargetId(text)} 
           keyboardType="default">
           </TextInput>
 
