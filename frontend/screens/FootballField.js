@@ -42,11 +42,11 @@ const FootballField = ({ navigation }) => {
 
 
 
-   const retrieveFootballFieldName = async () => {
+   const retrieveFootballField = async () => {
     let userId = "Tester3";
     let footballFieldTimeSeries = "FF Test";
 
-    const url = 'http://10.239.98.171:5000/footballFields/names/'+userId+"/"+footballFieldTimeSeries;
+    const url = 'http://10.0.0.245:5000/footballFields/names/'+userId+"/"+footballFieldTimeSeries;
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -54,6 +54,7 @@ const FootballField = ({ navigation }) => {
         'Content-Type': 'application/json'
       }
     });
+    console.log("hola")
     const data = await response.json();
     console.log("data")
     console.log(data)
@@ -95,7 +96,7 @@ const FootballField = ({ navigation }) => {
     let userId = "Tester3";
     let footballFieldTimeSeries = "FF Test";
 
-    url="http://10.239.98.171:5000/footballFields/names/" + userId +"/"+ footballFieldTimeSeries;
+    url="http://10.0.0.245:5000/footballFields/names/" + userId +"/"+ footballFieldTimeSeries;
     fetch(url,{
             method:'PUT',
             headers:{
@@ -376,7 +377,7 @@ const FootballField = ({ navigation }) => {
     <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: '#000' }}>
         <View style={{ backgroundColor: '#FFF', height: 0.4*(windowHeight), width: valuationWidth, borderRadius: 10 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={{ marginTop: 10, marginLeft: 10 }}>{retrieveFootballFieldName()}</Text>
+          <Text style={{ marginTop: 10, marginLeft: 10 }}>footballFieldName</Text>
           <Text style={{ marginTop: 10, marginLeft: 10 }}>targetSymbol</Text>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 10, marginRight: 10, marginTop: 10 }}>
