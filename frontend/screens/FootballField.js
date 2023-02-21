@@ -126,7 +126,7 @@ const FootballField = ({ navigation }) => {
     let userId = "Tester3";
     let footballFieldTimeSeries = "FF Test";
     
-    let url = "http:/10.239.98.171/valuations/" + userId + footballFieldTimeSeries;
+    let url = "http://10.239.98.171:5000/valuations/" + userId + footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
@@ -315,9 +315,18 @@ const FootballField = ({ navigation }) => {
   const valuationWidth = windowWidth-20;
   const valuationHeight = 20;
   const table = {
-    minRange: 10,
-    maxRange: 50,
+    maxValuations: [],
+    minValuations: []
+  };
+  
+  for (const valuation of valuations) {
+    table.maxValuations.push(valuation.maxValuation);
+    table.minValuations.push(valuation.minValuation);
   }
+  
+  table.maxRange = Math.max(...table.maxValuations);
+  table.minRange = Math.min(...table.minValuations);
+  
 
   /*const valuations=[{
     name: "Valuation #1 (EV/EBITDA) (LTM)",
