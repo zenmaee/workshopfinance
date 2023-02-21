@@ -22,6 +22,8 @@ from app import create_app, db
 from models import Users, users_schema
 from functions.user_identification import add_USERDATA
 from functions.gen_valuation import *
+from functions.gen_footballfield import *
+
 # Create an application instance
 # Define a route to fetch the avaialable articles
 #getusers-not needed for now
@@ -107,6 +109,16 @@ def add_comps():
     valuationCompsDate=request.json['valuationCompsDate']
 
     add_COMP(compSymbol,valuationId,valuationCompsDate,iex_api_key)
+
+@app.route('/footballFields/names/<userId>/<footballFieldTimeSeries>', methods = ['PUT'])
+def update_ff_names(userId, footballFieldTimeSeries):
+    
+    #This UPDATE will only change the footballfield name. No recalculation should be done
+    footballFieldName=request.json['footballFieldName']
+
+    update_FF_NAME(userId, footballFieldTimeSeries,footballFieldName,iex_api_key)
+
+    return "Successful PUT"
 
 #@app.route('/update/<id>/', methods = ['PUT'])
 #def update_article(id):

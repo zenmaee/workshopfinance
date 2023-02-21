@@ -42,21 +42,24 @@ const FootballField = ({ navigation }) => {
 
 
 
-  const retrieveFootballField= () => {
-    fetch('http://192.168.1.158:5000/footballfields',{
-            method:'GET',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-              footballFieldTimeSeries:footballFieldTimeSeries,
-              targetId:targetId})}
-        )
-        .then(resp=>resp.text())
-        .then(resp=>console.log(resp))
-        
-  }
+   const retrieveFootballFieldName = async () => {
+    let userId = "Tester3";
+    let footballFieldTimeSeries = "FF Test";
+
+    const url = 'http://10.239.98.171:5000/footballFields/names/'+userId+"/"+footballFieldTimeSeries;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+    const data = await response.json();
+    console.log("data")
+    console.log(data)
+    return data[0].footballFieldName;
+  };
+
   const addFootballField= () => {
     fetch('http://192.168.1.158:5000/footballfields',{
             method:'POST',
@@ -86,7 +89,25 @@ const FootballField = ({ navigation }) => {
         )
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
-       
+  }
+
+  const updateFootballFieldName= () => {
+    let userId = "Tester3";
+    let footballFieldTimeSeries = "FF Test";
+
+    url="http://10.239.98.171:5000/footballFields/names/" + userId +"/"+ footballFieldTimeSeries;
+    fetch(url,{
+            method:'PUT',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              footballFieldName:footballFieldName
+              })}
+        )
+        .then(resp=>resp.text())
+        .then(resp=>console.log(resp))
   }
 
   const deleteFootballField= () => {
@@ -355,8 +376,8 @@ const FootballField = ({ navigation }) => {
     <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: '#000' }}>
         <View style={{ backgroundColor: '#FFF', height: 0.4*(windowHeight), width: valuationWidth, borderRadius: 10 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={{ marginTop: 10, marginLeft: 10 }}>footballFieldName</Text>
-            <Text style={{ marginTop: 10, marginRight: 10 }}>targetSymbol</Text>
+          <Text style={{ marginTop: 10, marginLeft: 10 }}>{retrieveFootballFieldName()}</Text>
+          <Text style={{ marginTop: 10, marginLeft: 10 }}>targetSymbol</Text>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 10, marginRight: 10, marginTop: 10 }}>
             <Text>{table.minRange}</Text>
@@ -389,7 +410,11 @@ const FootballField = ({ navigation }) => {
           <TextInput style={{ marginTop: 10, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
           placeholder="Football Field Name"
           value={footballFieldName}
-          onChangeText = {text=>setFootballFieldName(text)} 
+          onChangeText={(text) => {
+            setFootballFieldName(text);
+            updateFootballFieldName();
+          }}
+          
           keyboardType="default">
           </TextInput>
 

@@ -248,7 +248,7 @@ def update_VALUATION_NAME(userId,footballFieldTimeSeries,valuationTimeSeries,val
     valuation=requests.get(url).json()
     valuation[0]['valuationName']=valuationName
 
-    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token=sk_29735f4ddf4a47efb27623b229dda54a"
+    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
     r=requests.post(url, json=valuation)
     return r
 
