@@ -31,6 +31,7 @@ app = create_app()
 app.app_context().push()
 iex_api_key="sk_29735f4ddf4a47efb27623b229dda54a" #add security
 
+
 @app.route('/users', methods = ['GET'])
 def get_users():
     all_users = Users.query.all()
@@ -141,4 +142,4 @@ def update_ff_names(userId, footballFieldTimeSeries):
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
-    app.run(host='10.0.0.245', port=5000, debug=True) #changes every time we change wifi
+    app.run( port=5000, debug=True) #changes every time we change wifi
