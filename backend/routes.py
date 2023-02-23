@@ -22,12 +22,15 @@ from app import create_app, db
 from models import Users, users_schema
 from functions.user_identification import add_USERDATA
 from functions.gen_valuation import *
+from functions.gen_footballfield import *
+
 # Create an application instance
 # Define a route to fetch the avaialable articles
 #getusers-not needed for now
 app = create_app()
 app.app_context().push()
 iex_api_key="sk_29735f4ddf4a47efb27623b229dda54a" #add security
+
 
 @app.route('/users', methods = ['GET'])
 def get_users():
@@ -96,7 +99,11 @@ def retrieve_valuations(footballFieldId):
     print("estoy aqui")
     return resp
 
-
+@app.route('/footballfields/<userId>/<footballFieldTimeSeries>', methods=['GET'])
+def retrieve_footballfields(userId, footballFieldTimeSeries):
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS/"+userId+"/"+footballFieldTimeSeries+"?last=1&token="+iex_api_key
+    resp = requests.get(url).json()
+    return resp
 
 @app.route('/valuations', methods = ['DELETE'])
 
@@ -107,6 +114,16 @@ def add_comps():
     valuationCompsDate=request.json['valuationCompsDate']
 
     add_COMP(compSymbol,valuationId,valuationCompsDate,iex_api_key)
+
+@app.route('/footballFields/names/<userId>/<footballFieldTimeSeries>', methods = ['PUT'])
+def update_ff_names(userId, footballFieldTimeSeries):
+    
+    #This UPDATE will only change the footballfield name. No recalculation should be done
+    footballFieldName=request.json['footballFieldName']
+
+    update_FF_NAME(userId, footballFieldTimeSeries,footballFieldName,iex_api_key)
+    print("sucessful put")
+    return "Successful PUT"
 
 #@app.route('/update/<id>/', methods = ['PUT'])
 #def update_article(id):
@@ -129,4 +146,4 @@ def add_comps():
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
-    app.run(host='10.239.16.29', port=5000, debug=True) #changes every time we change wifi
+    app.run(host='10.239.99.22',port=5000, debug=True) #changes every time we change wifi

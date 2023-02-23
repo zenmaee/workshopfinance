@@ -109,7 +109,7 @@ def update_VALUATION(footballFieldId, multiples,ev, valuationCompsDate,valuation
     valuation[0]['valuationCompsDate']=valuationCompsDate
     
 
-    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token=sk_29735f4ddf4a47efb27623b229dda54a"
+    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
     r=requests.post(url, json=valuation)
 
     return r
@@ -190,16 +190,16 @@ def retrieve_valuation_comps(valuationId, iex_api_key):
         basket_of_comps.append(comp['compSymbol'])
     return basket_of_comps
 
-def generate_valuation(userId, targetSymbol, desired_multiples, valuationTimeSeries, valuationCompsDate,iex_api_key, footballFieldTimeSeries):
+def generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeSeries, valuationCompsDate,iex_api_key, footballFieldTimeSeries):
     #We preprare the IDs:
-    footballFieldId=userId+footballFieldTimeSeries
-    valuationId=footballFieldId+valuationTimeSeries
+    footballFieldId=targetId+"-"+footballFieldTimeSeries
+    valuationId=footballFieldId+"-"+valuationTimeSeries
 
 
     #AT THIS MOMENT, WE HAVE TO DO THIS, LATER WE WILL DELETE THE FOLLOWINg 3 LINES OF CODE INVOLVING ADD_COMP:
-    #basket_of_comps=["KO", "TSLA"]
-    #for comp in basket_of_comps:
-    #    add_COMP(comp,valuationId,valuationCompsDate,iex_api_key)
+    basket_of_comps=["KO", "TSLA"]
+    for comp in basket_of_comps:
+       add_COMP(comp,valuationId,valuationCompsDate,iex_api_key)
     
     #We get the basket of comps:
     basket_of_comps=retrieve_valuation_comps(valuationId, iex_api_key)
@@ -240,15 +240,15 @@ def add_VALUATION(footballFieldId, iex_api_key):
 
     return r
 
-def update_VALUATION_NAME(userId,footballFieldTimeSeries,valuationTimeSeries,valuationName,iex_api_key):
+def update_VALUATION_NAME(targetId,footballFieldTimeSeries,valuationTimeSeries,valuationName,iex_api_key):
     
-    footballFieldId=userId+footballFieldTimeSeries
+    footballFieldId=targetId+footballFieldTimeSeries
 
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
     valuation=requests.get(url).json()
     valuation[0]['valuationName']=valuationName
 
-    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token=sk_29735f4ddf4a47efb27623b229dda54a"
+    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
     r=requests.post(url, json=valuation)
     return r
 
