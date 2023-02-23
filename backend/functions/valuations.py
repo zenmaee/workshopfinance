@@ -11,7 +11,7 @@ now = datetime.now()
 print("time")
 print(time()*1000000)
 # Basket_of_comps and tgt will later be obtained from javascript user interaction
-basket_of_comps = ['KO', 'TSLA'] #List of comparables within a valuation
+basket_of_comps = ['NKE', 'DIS', ] #List of comparables within a valuation
 tgt = 'AAPL' #Target company. This value will be obtained from the FootballField object
 #asOfDate=YYYY-DD-MM OR today
 #This may change when we increase the scope
@@ -37,4 +37,5 @@ else:
     valuationCompsDate=asOfDate
 
 #add_USERDATA('Ignacio','lastName','email@email.com','password', iex_api_key)
-add_VALUATION(0,"0", "sk_29735f4ddf4a47efb27623b229dda54a")
+#add_VALUATION("Tester3FF-AAPL-TEST", "sk_29735f4ddf4a47efb27623b229dda54a")
+generate_valuation("Tester3FF-AAPL", "AAPL", desired_multiples, "1677170176364356", valuationCompsDate,iex_api_key, "TEST")

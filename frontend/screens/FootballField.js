@@ -19,8 +19,8 @@ const FootballField = ({ navigation }) => {
   const [footballFieldName, setFootballFieldName]=useState("")
   const [footballFieldId, setFootballFieldId]=useState("")
   const [targetSymbol, setTargetSymbol]=useState("")
-  const [footballFieldOutput, setFootballFieldOutput]=useState("")
-  const [footballFieldScale, setFootballFieldScale]=useState("")
+  const [footballFieldOutput, setFootballFieldOutput]=useState("EV")
+  const [footballFieldScale, setFootballFieldScale]=useState("billions")
   const [valuationId, setValuationId]=useState("")
   const [valuationCompsDate, setValuationCompsDate]=useState("")
   const [valuationMetric, setValuationMetric]=useState("")
@@ -35,16 +35,12 @@ const FootballField = ({ navigation }) => {
   const [valuations, setValuations] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState("js");
 
-   {/* For Ignacio: */}
-   const [pickerOutput, setPickerOutput] = useState("js");
-   const [pickerScale, setPickerScale] = useState("js");
- 
-
-   function retrieveFootballFieldName() {
-    let userId = "Tester3FF ";
+  
+   function retrieveFootballField() {
+    let targetId = "Tester3FF-AAPL";
     let footballFieldTimeSeries = "Test";
 
-    const url = 'http://10.239.99.22:5000/footballfields/'+userId+"/"+footballFieldTimeSeries;
+    const url = 'http://10.239.99.22:5000/footballfields/'+targetId+"/"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
@@ -56,7 +52,10 @@ const FootballField = ({ navigation }) => {
 
       .then((data) => {
         let footballFieldName=data[0].footballFieldName
-        return footballFieldName;
+        let targetId= data[0].targetId
+        let targetSymbol = targetId.split("-")[1];
+
+        return [footballFieldName, targetSymbol];
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -84,10 +83,10 @@ const FootballField = ({ navigation }) => {
 
 
   const updateFootballFieldName= () => {
-    let userId = "Tester3FF ";
+    let targetId = "Tester3FF-AAPL";
     let footballFieldTimeSeries = "Test";
     console.log("ha entrado")
-    let url="http://10.239.99.22:5000/footballFields/names/" + userId +"/"+ footballFieldTimeSeries;
+    let url="http://10.239.99.22:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
     fetch(url,{
             method:'PUT',
             headers:{
@@ -136,10 +135,11 @@ const FootballField = ({ navigation }) => {
   }
 
   function retrieveValuations(output, metric, stat) {
-    let userId = "Tester3";
-    let footballFieldTimeSeries = "FF Test";
-    
-    let url = "http://10.239.99.22:5000/valuations/" + userId + footballFieldTimeSeries;
+    let targetId = "Tester3FF-AAPL";
+    let footballFieldTimeSeries = "TEST";
+    console.log("output")
+    console.log(output)
+    let url = "http://10.239.99.22:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
@@ -225,18 +225,20 @@ const FootballField = ({ navigation }) => {
   
   useEffect(() => {
     async function getValuations() {
-      let valuations = await retrieveValuations('EV', 'EV_E', 'AV');
+      let valuations = await retrieveValuations(footballFieldOutput, 'EV_E', 'AV');
       setValuations(valuations);
     }
     getValuations();
   }, []);
 
   useEffect(() => {
-    async function getFootballFieldName() {
-      let footballFieldName = await retrieveFootballFieldName('EV', 'EV_E', 'AV');
-      setFootballFieldName(footballFieldName);
+    async function getFootballField() {
+      let footballField = await retrieveFootballField();
+      setFootballFieldName(footballField[0]);
+      setTargetSymbol(footballField[1]);
+
     }
-    getFootballFieldName();
+    getFootballField();
   }, []);
 
     const generateValuation= () => {
@@ -348,42 +350,37 @@ const FootballField = ({ navigation }) => {
   table.maxRange = Math.max(...table.maxValuations);
   table.minRange = Math.min(...table.minValuations);
   
-
-  /*const valuations=[{
-    name: "Valuation #1 (EV/EBITDA) (LTM)",
-    color: "pink",
-    minValuation: 1_000_000_000, 
-    maxValuation: 3_250_000_000,
-  }, 
-  {
-    name: "Valuation #2 (EV/EBITDA) (LTM)",
-    color: "red",
-    minValuation: 3_000_000_000, 
-    maxValuation: 5_000_000_000,
-  }, 
-  {
-    name: "Valuation #3 (EV/EBITDA) (LTM)",
-    color: "blue",
-    minValuation: 2_000_000_000, 
-    maxValuation: 4_250_000_000,
-  }, 
-  ]*/
-  
   const tableRange = table.maxRange - table.minRange;
   const tableMean = (table.maxRange + table.minRange) / 2;
   const pixelsPerDollar = (valuationWidth-20-20) / tableRange;
   return (
-    <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: '#000' }}>
+      <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: '#000' }}>
         <View style={{ backgroundColor: '#FFF', height: 0.4*(windowHeight), width: valuationWidth, borderRadius: 10 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={{ marginTop: 10, marginLeft: 10 }}>{footballFieldName}</Text>
-          <Text style={{ marginTop: 10, marginLeft: 10 }}>targetSymbol</Text>
+            <Text style={{ marginTop: 10, marginLeft: 10 }}>{footballFieldName}</Text>
+            <Text style={{ marginTop: 10, marginLeft: 10 }}>{targetSymbol}</Text>
           </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 10, marginRight: 10, marginTop: 10 }}>
-            <Text>{table.minRange}</Text>
-            <Text>{tableMean}</Text>
-            <Text>{table.maxRange}</Text>
-          </View>
+          {footballFieldOutput==="EV" ? (
+            footballFieldScale === "billions" ? (
+              <>
+                <Text>{"$"+(table.minRange/1000000000).toFixed(2)}</Text>
+                <Text>{"$"+(tableMean/1000000000).toFixed(2)}</Text>
+                <Text>{"$"+(table.maxRange/1000000000).toFixed(2)}</Text>
+              </>
+            ) : (
+              <>
+                <Text>{"$"+(table.minRange/1000000).toFixed(2)}</Text>
+                <Text>{"$"+(tableMean/1000000).toFixed(2)}</Text>
+                <Text>{"$"+(table.maxRange/1000000).toFixed(2)}</Text>
+              </>
+            )
+          ) : (
+            <>
+              <Text>{table.minRange}</Text>
+              <Text>{tableMean}</Text>
+              <Text>{table.maxRange}</Text>
+            </>
+          )}
           <View style={{ backgroundColor: 'black', height: 1, width: valuationWidth - 40, marginLeft: 20, marginTop: 5 }}/>
           <ScrollView
             contentContainerStyle={{ 
@@ -399,7 +396,9 @@ const FootballField = ({ navigation }) => {
               )
             })}
           </ScrollView>
-          <Text style={{ textAlign: 'right', marginBottom: 10, marginRight: 10, color: 'gray' }}>($ in {pickerScale})</Text>
+          {footballFieldOutput==="EV" && (
+            <Text style={{ textAlign: 'right', marginBottom: 10, marginRight: 10, color: 'gray' }}>($ in {footballFieldScale})</Text>
+          )}
         </View> 
         <View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
           <View style={{ alignItems: 'center' }}> 
@@ -408,31 +407,29 @@ const FootballField = ({ navigation }) => {
             </TouchableOpacity>
           </View>
           <TextInput style={{ marginTop: 10, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
-          placeholder="Football Field Name"
-          value={footballFieldName}
-          /*Not at onChangeText, but when we finish writing or click intro tab*/
-          onChangeText={(text) => {
-            setFootballFieldName(text);
-          }}
-          onSubmitEditing={updateFootballFieldName()}
-
-          
-          keyboardType="default">
-          </TextInput>
-
+            placeholder="Football Field Name"
+            value={footballFieldName}
+            onChangeText={(text) => {
+              setFootballFieldName(text);
+            }}
+            onSubmitEditing={updateFootballFieldName}
+            keyboardType="default"
+          />
           <TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
           placeholder="Target Name or Ticker"
           value={targetSymbol}
-          onChangeText = {text=>setTargetSymbol(text)} 
+          onChangeText={(text) => {
+            setFootballFieldName(text);
+          }}
           keyboardType="default">
           </TextInput>
 
           <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Output</Text>
             <InlinePicker
-              selectedValue={pickerOutput}
+              selectedValue={footballFieldOutput}
               onValueChange={(itemValue, itemIndex) =>
-                setPickerOutput(itemValue)}
+                setFootballFieldOutput(itemValue)}
               options = {[
                 { label: "Enterprise Value",
                   value: "EV"
@@ -445,9 +442,9 @@ const FootballField = ({ navigation }) => {
           <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Scale</Text>
             <InlinePicker
-              selectedValue={pickerScale}
+              selectedValue={footballFieldScale}
               onValueChange={(itemValue, itemIndex) =>
-                setPickerScale(itemValue)}
+                setFootballFieldScale(itemValue)}
               options = {[
                 { label: "Millions",
                   value: "millions"
