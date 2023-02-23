@@ -23,7 +23,8 @@ const FootballField = ({ navigation }) => {
   const [footballFieldScale, setFootballFieldScale]=useState("billions")
   const [valuationId, setValuationId]=useState("")
   const [valuationCompsDate, setValuationCompsDate]=useState("")
-  const [valuationMetric, setValuationMetric]=useState("")
+  const [footballFieldMetric, setFootballFieldMetric]=useState("EV_E")
+  const [footballFieldStat, setFootballFieldStat]=useState("AV")
   const [valuationStat, setValuationStat]=useState("")
   const [valuationSpread, setValuationSpread]=useState("")
   const [valuationColor, setValuationColor]=useState("")
@@ -134,11 +135,9 @@ const FootballField = ({ navigation }) => {
 
   }
 
-  function retrieveValuations(output, metric, stat) {
+  function retrieveValuations() {
     let targetId = "Tester3FF-AAPL";
     let footballFieldTimeSeries = "TEST";
-    console.log("output")
-    console.log(output)
     let url = "http://10.239.99.22:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
@@ -149,6 +148,17 @@ const FootballField = ({ navigation }) => {
     })
       .then((resp) => resp.json())
       .then((data) => {
+        return data})
+        
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        return [];
+        });}
+  
+    function valuationNumbers (data, output, metric, stat) {
+
+    
+    
         let valuations = [];
         let valuationCenter;
         let valuationColor="red"
@@ -215,18 +225,16 @@ const FootballField = ({ navigation }) => {
         console.log("valuations")
         console.log(valuations)
         return valuations;
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        return [];
-      });
-  }
+      }
+      
+  
 
   
   useEffect(() => {
     async function getValuations() {
-      let valuations = await retrieveValuations(footballFieldOutput, 'EV_E', 'AV');
+      let valuations = await retrieveValuations();
       setValuations(valuations);
+      valuationNumbers(valuations, footballFieldOutput, footballFieldMetric, footballFieldStat)
     }
     getValuations();
   }, []);
@@ -428,16 +436,16 @@ const FootballField = ({ navigation }) => {
             <Text style={{ color: 'white' }}>Output</Text>
             <InlinePicker
               selectedValue={footballFieldOutput}
-              onValueChange={(itemValue, itemIndex) =>
-                setFootballFieldOutput(itemValue)}
-              options = {[
-                { label: "Enterprise Value",
-                  value: "EV"
-                }, {
-                  label: "Multiples",
-                  value: "MULT"
-                },
-              ]}/>
+              onValueChange={(itemValue, itemIndex) => {
+                setFootballFieldOutput(itemValue);
+                valuationNumbers(valuations, footballFieldOutput, "EV_E", "AV");
+              }}
+              options={[    
+                { label: "Enterprise Value", value: "EV" },   
+                { label: "Multiples", value: "MULT" },
+                ]}
+            />
+
           </View>
           <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Scale</Text>
