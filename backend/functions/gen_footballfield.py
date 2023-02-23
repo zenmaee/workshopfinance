@@ -14,8 +14,10 @@ def update_FF_NAME(userId, footballFieldTimeSeries,footballFieldName,iex_api_key
     
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS/"+userId+"/"+footballFieldTimeSeries+"?token="+iex_api_key
     footballField=requests.get(url).json()
+    print("footballField")
+    print(footballField)
     footballField[0]['footballFieldName']=footballFieldName
-
-    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
+    print(footballField)
+    url="https://cloud.iexapis.com/v1/record/workshopfinance/FOOTBALLFIELDS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
     r=requests.post(url, json=footballField)
     return r

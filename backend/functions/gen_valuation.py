@@ -109,7 +109,7 @@ def update_VALUATION(footballFieldId, multiples,ev, valuationCompsDate,valuation
     valuation[0]['valuationCompsDate']=valuationCompsDate
     
 
-    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token=sk_29735f4ddf4a47efb27623b229dda54a"
+    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
     r=requests.post(url, json=valuation)
 
     return r

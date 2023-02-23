@@ -99,7 +99,11 @@ def retrieve_valuations(footballFieldId):
     print("estoy aqui")
     return resp
 
-
+@app.route('/footballfields/<userId>/<footballFieldTimeSeries>', methods=['GET'])
+def retrieve_footballfields(userId, footballFieldTimeSeries):
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS/"+userId+"/"+footballFieldTimeSeries+"?last=1&token="+iex_api_key
+    resp = requests.get(url).json()
+    return resp
 
 @app.route('/valuations', methods = ['DELETE'])
 
@@ -118,7 +122,7 @@ def update_ff_names(userId, footballFieldTimeSeries):
     footballFieldName=request.json['footballFieldName']
 
     update_FF_NAME(userId, footballFieldTimeSeries,footballFieldName,iex_api_key)
-
+    print("sucessful put")
     return "Successful PUT"
 
 #@app.route('/update/<id>/', methods = ['PUT'])
@@ -142,4 +146,4 @@ def update_ff_names(userId, footballFieldTimeSeries):
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
-    app.run( port=5000, debug=True) #changes every time we change wifi
+    app.run(host='10.239.99.22',port=5000, debug=True) #changes every time we change wifi
