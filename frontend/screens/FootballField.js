@@ -5,15 +5,9 @@ import {Picker} from '@react-native-picker/picker';
 const InlinePicker = ({ selectedValue, onValueChange, options }) => {
   return(
     <Picker
-<<<<<<< HEAD
-    selectedValue={selectedValue}
-    onValueChange={onValueChange}
-    style={{ marginLeft: 20, backgroundColor: 'white', height: 150, width: 300 }}
-=======
       selectedValue={selectedValue}
       onValueChange={onValueChange}
       style={{ marginLeft: 20, backgroundColor: 'white', height: 200, width: 300 }}
->>>>>>> 104ee85a861a7161891c2f4238c857d311c2e4ff
     >
       {options.map(option => <Picker.Item key={option.value} label={option.label} value={option.value}/>)}
     </Picker>
