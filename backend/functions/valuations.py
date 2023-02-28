@@ -1,5 +1,5 @@
 from datetime import datetime
-from gen_valuation import generate_valuation, add_VALUATION
+from gen_valuation import *
 from user_identification import add_USERDATA
 from time import time
 
@@ -11,7 +11,7 @@ now = datetime.now()
 print("time")
 print(time()*1000000)
 # Basket_of_comps and tgt will later be obtained from javascript user interaction
-basket_of_comps = ['NKE', 'DIS', ] #List of comparables within a valuation
+basket_of_comps = ['NKE', 'DIS' ] #List of comparables within a valuation
 tgt = 'AAPL' #Target company. This value will be obtained from the FootballField object
 #asOfDate=YYYY-DD-MM OR today
 #This may change when we increase the scope
@@ -37,5 +37,14 @@ else:
     valuationCompsDate=asOfDate
 
 #add_USERDATA('Ignacio','lastName','email@email.com','password', iex_api_key)
-#add_VALUATION("Tester3FF-AAPL-TEST", "sk_29735f4ddf4a47efb27623b229dda54a")
-generate_valuation("Tester3FF-AAPL", "AAPL", desired_multiples, "1677170176364356", valuationCompsDate,iex_api_key, "TEST")
+#VALUATION 1
+add_VALUATION("Tester3FF-AAPL-TEST", "sk_29735f4ddf4a47efb27623b229dda54a", "id1")
+generate_valuation("Tester3FF-AAPL", "AAPL", desired_multiples, "id1", valuationCompsDate,iex_api_key, "TEST")
+
+#VALUATION 2
+add_VALUATION("Tester3FF-AAPL-TEST", "sk_29735f4ddf4a47efb27623b229dda54a", "id2")
+generate_valuation("Tester3FF-AAPL", "AAPL", desired_multiples, "id2", valuationCompsDate,iex_api_key, "TEST")
+
+#VALUATION 3
+add_VALUATION("Tester3FF-AAPL-TEST", "sk_29735f4ddf4a47efb27623b229dda54a", "id3")
+generate_valuation("Tester3FF-AAPL", "AAPL", desired_multiples, "id3", valuationCompsDate,iex_api_key, "TEST")

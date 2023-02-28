@@ -5,14 +5,15 @@ import {Picker} from '@react-native-picker/picker';
 const InlinePicker = ({ selectedValue, onValueChange, options }) => {
   return(
     <Picker
-    selectedValue={selectedValue}
-    onValueChange={onValueChange}
-    style={{ marginLeft: 20, backgroundColor: 'white', height: 200, width: 300 }}
+      selectedValue={selectedValue}
+      onValueChange={onValueChange}
+      style={{ marginLeft: 20, backgroundColor: 'white', height: 200, width: 300 }}
     >
-    {options.map(option => <Picker.Item label={option.label} value={option.value}/>)}
-  </Picker>
+      {options.map(option => <Picker.Item key={option.value} label={option.label} value={option.value}/>)}
+    </Picker>
   );
 }
+
 
 const FootballField = ({ navigation }) => {
   const [userId, setUserId]=useState("")
@@ -41,7 +42,7 @@ const FootballField = ({ navigation }) => {
     let targetId = "Tester3FF-AAPL";
     let footballFieldTimeSeries = "Test";
 
-    const url = 'http://10.239.99.22:5000/footballfields/'+targetId+"/"+footballFieldTimeSeries;
+    const url = 'http://10.239.94.154:5000/footballfields/'+targetId+"/"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
@@ -87,7 +88,7 @@ const FootballField = ({ navigation }) => {
     let targetId = "Tester3FF-AAPL";
     let footballFieldTimeSeries = "Test";
     console.log("ha entrado")
-    let url="http://10.239.99.22:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
+    let url="http://10.239.94.154:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
     fetch(url,{
             method:'PUT',
             headers:{
@@ -119,7 +120,7 @@ const FootballField = ({ navigation }) => {
   }
   
   const addValuation= () => {
-    fetch('http://10.239.16.29:5000/valuations',{
+    fetch('http://10.239.94.154:5000/valuations',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -138,7 +139,7 @@ const FootballField = ({ navigation }) => {
   function retrieveValuations() {
     let targetId = "Tester3FF-AAPL";
     let footballFieldTimeSeries = "TEST";
-    let url = "http://10.239.99.22:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
+    let url = "http://10.239.94.154:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
@@ -222,8 +223,6 @@ const FootballField = ({ navigation }) => {
           };
           valuations.push(valuation);
         }
-        console.log("valuations")
-        console.log(valuations)
         return valuations;
       }
       
@@ -232,12 +231,14 @@ const FootballField = ({ navigation }) => {
   
   useEffect(() => {
     async function getValuations() {
-      let valuations = await retrieveValuations();
-      setValuations(valuations);
-      valuationNumbers(valuations, footballFieldOutput, footballFieldMetric, footballFieldStat)
+      let data = await retrieveValuations();
+      let val=valuationNumbers(data, footballFieldOutput, footballFieldMetric, footballFieldStat)
+      setValuations(val);
     }
     getValuations();
   }, []);
+
+
 
   useEffect(() => {
     async function getFootballField() {
@@ -250,7 +251,7 @@ const FootballField = ({ navigation }) => {
   }, []);
 
     const generateValuation= () => {
-    fetch('http://10.239.16.29:5000/valuations',{
+    fetch('http://10.239.94.154:5000/valuations',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -271,7 +272,7 @@ const FootballField = ({ navigation }) => {
   }
   
   const updateValuationName= () => {
-    fetch('http://10.239.16.29:5000/valuations/names',{
+    fetch('http://10.239.94.154:5000/valuations/names',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -438,7 +439,7 @@ const FootballField = ({ navigation }) => {
               selectedValue={footballFieldOutput}
               onValueChange={(itemValue, itemIndex) => {
                 setFootballFieldOutput(itemValue);
-                valuationNumbers(valuations, footballFieldOutput, "EV_E", "AV");
+                valuationNumbers(valuations, footballFieldOutput, footballFieldMetric, footballFieldStat);
               }}
               options={[    
                 { label: "Enterprise Value", value: "EV" },   
