@@ -146,4 +146,8 @@ def update_ff_names(userId, footballFieldTimeSeries):
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
+<<<<<<< HEAD
     app.run(host='10.239.132.151',port=5000, debug=True) #changes every time we change wifi
+=======
+    app.run(host='10.239.94.154',port=5000, debug=True) #changes every time we change wifi
+>>>>>>> 104ee85a861a7161891c2f4238c857d311c2e4ff

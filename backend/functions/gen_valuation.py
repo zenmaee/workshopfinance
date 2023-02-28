@@ -2,6 +2,8 @@ import pandas as pd
 import requests
 from time import time
 from datetime import datetime
+import random
+import time
 
 #FROM EACH COMP, WE NEED (priority 1):
 #enterprise value
@@ -184,10 +186,14 @@ def get_output(basket_of_comps, valuationId, targetSymbol, desired_multiples, va
 def retrieve_valuation_comps(valuationId, iex_api_key):
     #How to obtain all queries from API
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS/"+valuationId+"/?last=100&token="+iex_api_key
+    print(url)
     r=requests.get(url).json()
+    print(r)
     basket_of_comps=[]
     for comp in r:
+        print(comp)
         basket_of_comps.append(comp['compSymbol'])
+    print(basket_of_comps)
     return basket_of_comps
 
 def generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeSeries, valuationCompsDate,iex_api_key, footballFieldTimeSeries):
@@ -196,11 +202,15 @@ def generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeS
     valuationId=footballFieldId+"-"+valuationTimeSeries
 
 
-    #AT THIS MOMENT, WE HAVE TO DO THIS, LATER WE WILL DELETE THE FOLLOWINg 3 LINES OF CODE INVOLVING ADD_COMP:
-    basket_of_comps=["KO", "TSLA"]
-    for comp in basket_of_comps:
-       add_COMP(comp,valuationId,valuationCompsDate,iex_api_key)
-    
+    #AT THIS MOMENT, WE HAVE TO DO THIS, LATER WE WILL DELETE THE FOLLOWING 5 LINES OF CODE INVOLVING ADD_COMP:
+    #comps = ["KO", "TSLA", 'NKE', 'DIS', "MA", "PG", "GOOGL", "AMZN", "MRK", "JNJ", "META"]
+
+    #basket_of_comps = random.sample(comps, 2)
+    #for comp in basket_of_comps:
+    #   add_COMP(comp,valuationId,valuationCompsDate,iex_api_key)
+    #print(basket_of_comps)
+    #time.sleep(0.1)
+
     #We get the basket of comps:
     basket_of_comps=retrieve_valuation_comps(valuationId, iex_api_key)
     print (basket_of_comps)
@@ -211,7 +221,7 @@ def generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeS
     
     update_VALUATION(footballFieldId, multiples, ev,valuationCompsDate,valuationTimeSeries,iex_api_key)
 
-def add_VALUATION(footballFieldId, iex_api_key):
+def add_VALUATION(footballFieldId, iex_api_key, valuationTimeSeries):
     now = datetime.now()
     timeDateCreated = now.strftime("%m/%d/%Y %H:%M:%S")# timeDateCreated value has to be fixed, can not be editted. It contains the
     timeDateCreated = timeDateCreated[:6]+timeDateCreated[8:-3] #time and date of when the valuation was generated for the first time
@@ -221,7 +231,8 @@ def add_VALUATION(footballFieldId, iex_api_key):
     url_valuation_name="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/?last=100&token="+iex_api_key
     resp = requests.get(url_valuation_name).json()
     valuationName="VALUATION "+str(len(resp)+1)
-    valuationTimeSeries=str(int(time()*1000000))
+    #After prototype session, discomment this:
+    #valuationTimeSeries=str(int(time()*1000000))
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
     valuation=[
     {
