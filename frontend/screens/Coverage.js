@@ -1,27 +1,43 @@
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Button, Image } from 'react-native';
-import { useState } from 'react';
+import React, {useState, useEffect} from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Card, Title, Paragraph, TextInput } from 'react-native-paper'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 
 function TabFootballField() {
-  const [FootballFields, setFootballFields] = useState([
-
-    {
-      name: "zen's football field",
-      state: "public",
-    },
-    {
-      name: "ignacio's football field",
-      state: "public",
-    },
-    {
-      name: "suyash's football field",
-      state: "public",
-    },
+  const [FootballFields, setFootballFields] = useState([])
+  const [userId, setUserId] = useState("")
   
-  ])
+
+  function retrieveFootballFields() {
+    let targetId = "Tester3FF-AAPL";
+    let footballFieldTimeSeries = "Test";
+
+    const url = 'http://10.239.94.154:5000/footballfields/'+targetId+"/"+footballFieldTimeSeries;
+    return fetch(url, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+
+      .then((data) => {
+        let footballFieldName=data[0].footballFieldName
+        let targetId= data[0].targetId
+        let targetSymbol = targetId.split("-")[1];
+
+        return [footballFieldName, targetSymbol];
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        return [];
+      });
+  }
+
+
   
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
@@ -62,47 +78,63 @@ function TabFootballField() {
 
 function TabTargets() {
   const [showControls, setShowControls] = useState (false);
-  const [FootballFields, setFootballFields] = useState([
+  const [targets, setTargets] = useState([])
+  const [userId, setUserId] = useState("")
 
-    {
-      name: "zen's football field",
-      state: "public",
-    },
-    {
-      name: "ignacio's football field",
-      state: "public",
-    },
-    {
-      name: "suyash's football field",
-      state: "public",
-    },
-  
-  ])
 
-  function AddtoArray({ name, sector, subsector, revenue, ebitda }) {
-    const newFootballFields = FootballFields.concat([
 
-      {
-        name,
-        state: "public",
-      }
+  function retrieveTargets() {
+    
+    const url = 'http://10.239.94.154:5000/targets/'+"f3273dd18d95bc19d51d3e6356e4a679e6f13824497272a270e7bb540b0abb9d"
+    return fetch(url, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        return data})
+        
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        return [];
+        });}
 
-    ])
-    setFootballFields(newFootballFields)
-  }
+        useEffect(() => {
+          async function getTargets() {
+            let targets = await retrieveTargets();
+            setTargets(targets);
+          }
+          getTargets();
+        }, []);
+
+  //function AddtoArray({ name, sector, subsector, revenue, ebitda }) {
+  //  const newFootballFields = FootballFields.concat([
+
+  //    {
+  //      name,
+  //      state: "public",
+  //    }
+
+  //  ])
+  //  setFootballFields(newFootballFields)
+  //}
 
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
       <View style={styles.scrollview}>
           <ScrollView contentContainerStyle={styles.scrollview} keyboardDismissMode='on-drag'>
             {
-              FootballFields.map(field => {
+              targets.map(field => {
                 return (
                   <TouchableOpacity style={styles.cardList}>
                     <Card>
                       <Card.Content>
-                        <Title>{field.name}</Title>
-                        <Paragraph>Company Type: {field.state}</Paragraph>
+                        <Title>{field.targetName}</Title>
+                        <Paragraph>{field.type}</Paragraph>
+                        <Paragraph>{field.targetSymbol}</Paragraph>
                       </Card.Content>
                     </Card>
                   </TouchableOpacity>

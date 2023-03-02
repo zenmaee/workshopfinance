@@ -233,6 +233,7 @@ const FootballField = ({ navigation }) => {
     async function getValuations() {
       let data = await retrieveValuations();
       let val=valuationNumbers(data, footballFieldOutput, footballFieldMetric, footballFieldStat)
+      console.log(val)
       setValuations(val);
     }
     getValuations();
