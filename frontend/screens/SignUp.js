@@ -1,31 +1,37 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Image, Text, View, TextInput, SafeAreaView, TouchableOpacity } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
 
 const SignUp = ({ navigation }) => {
-  const [firstName, setFirstName]=useState("")
-  const [lastName, setLastName]=useState("")
-  const [email, setEmail]=useState("")
-  const [password, setPassword]=useState("")
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const addUsers= () => {
-    fetch('http://192.168.1.158:5000/users',{
-            method:'POST',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-              firstName:firstName, 
-              lastName:lastName, 
-              email:email, 
-              password:password})}
-        )
-        .then(resp=>resp.text())
-        .then(resp=>console.log(resp))
-        
-      
-  }
+  const addUsers = () => {
+    fetch('http://10.239.94.154:5000/users', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password
+      })
+    })
+      .then(resp => resp.text())
+      .then(resp => {
+        console.log(resp);
+        if (resp === "Successful USERDATA POST") {
+          navigation.navigate('Coverage');
+        }
+      })
+  };
+
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -87,6 +93,7 @@ const SignUp = ({ navigation }) => {
               <TextInput
                 //placeholder={this.placeholder}
                 //secureTextEntry={this.isSecure}
+                placeholder="Email"
                 style={styles.input}
                 value={password}
                 onChangeText = {text=>setPassword(text)} 

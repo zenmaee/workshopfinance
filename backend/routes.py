@@ -20,7 +20,7 @@ from flask import current_app,jsonify,request
 #Importing from my one modules/packages
 from app import create_app, db
 from models import Users, users_schema
-from functions.user_identification import add_USERDATA
+from functions.user_identification import *
 from functions.gen_valuation import *
 from functions.gen_footballfield import *
 
@@ -50,6 +50,17 @@ def add_users():
     add_USERDATA(firstName, lastName, email, password,iex_api_key)
 
     return "Successful USERDATA POST"
+
+@app.route('/users/<email>', methods = ['POST'])
+def sign_ins(email):
+    #First we get info from frontend
+
+    password=request.json['password']
+    print("hola?")
+    #Then we send it to the database
+    r=sign_in(email, password,iex_api_key)
+
+    return r
 
 @app.route('/valuations', methods = ['POST'])
 def add_valuations():
@@ -124,6 +135,12 @@ def update_ff_names(userId, footballFieldTimeSeries):
     update_FF_NAME(userId, footballFieldTimeSeries,footballFieldName,iex_api_key)
     print("sucessful put")
     return "Successful PUT"
+
+@app.route('/targets/<userId>/', methods=['GET'])
+def retrieve_targets(userId):
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/TARGETS/"+userId+"?last=100&token="+iex_api_key
+    resp = requests.get(url).json()
+    return resp
 
 #@app.route('/update/<id>/', methods = ['PUT'])
 #def update_article(id):

@@ -10,6 +10,10 @@ def add_USERDATA(firstName,lastName,email,password, iex_api_key):
   emailHash = hashlib.sha256(email_lower.encode('utf-8')).hexdigest()
   url_to_check = "https://cloud.iexapis.com/v1/data/WORKSHOPFINANCE/USERDATA/"+emailHash+"?&token="+iex_api_key
   exists = len(requests.get(url_to_check).json())
+  print("email add")
+  print(email)
+  print("emailHash add")
+  print(emailHash)
   if ( exists != 0 ):
     return "Email Exists"
   
@@ -29,16 +33,21 @@ def add_USERDATA(firstName,lastName,email,password, iex_api_key):
   return r
 
 
-def signIn(email,password,iex_api_key):
+def sign_in(email,password,iex_api_key):
   email_lower = email.lower()
   emailHash = hashlib.sha256(email_lower.encode('utf-8')).hexdigest()
+  print("email")
+  print(email)
+  print("emailHash")
+  print(emailHash)
+
   url_to_check = "https://cloud.iexapis.com/v1/data/WORKSHOPFINANCE/USERDATA/"+emailHash+"?&token="+iex_api_key
   resp = requests.get(url_to_check).json()
   if ( len(resp) == 0 ):
     return "User Does Not Exist"  
   db_password = resp[0]['password']  
-  passwordHash = hashlib.sha256(password.encode('utf-8')).hexdigest()
-  if(db_password == passwordHash ):
-    return "correct password"
+  password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+  if(db_password == password_hash ):
+    return "Correct password"
   else:
     return "Incorrect Password"  

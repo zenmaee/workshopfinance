@@ -1,8 +1,49 @@
-import React from 'react';
-import { StyleSheet, Image, Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
+import React, {useState} from 'react';
+import { StyleSheet, Image, Text, View, SafeAreaView, TouchableOpacity, TextInput } from 'react-native';
 import InputTextField from '../components/InputTextField';
+import { SHA256 } from 'react-native-crypto-js';
+
 
 const SignUpSignIn = ({ navigation }) => {
+  const [email, setEmail]=useState("")
+  const [password, setPassword]=useState("")
+  
+  function signIn() {
+
+    console.log("email")
+    console.log(email)
+    const url = 'http://10.239.94.154:5000/users/'+email
+    return fetch(url, {
+      method:'POST',
+      headers:{
+          'Accept':'application/json',
+          'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        password:password})} //ADD SECURITY. I DONT LIKE TO SEND PASSWORD TO LOCAL HOST
+      )
+      .then(resp=>resp.text())
+      .then(resp => {
+        console.log(resp);
+        if (resp === "Correct password") {
+          navigation.navigate('Coverage');
+        }
+        else if (resp === "Incorrect password") {
+          console.log(resp);
+        ;
+        }
+        else{
+          console.log(resp);
+        }
+      })
+
+
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        return [];
+      });
+  }
+
   return (
     <SafeAreaView style={styles.container}>
           <Image style={styles.wfLogo} resizeMode="contain" source={require('./logo_dark.png')}/>
@@ -18,25 +59,35 @@ const SignUpSignIn = ({ navigation }) => {
 
           <Text style={[styles.buttonText, { textAlign: "center", marginVertical: 10 }]}>or</Text>
 
-          <InputTextField 
-            title="Email"
-            placeholder="Enter your email"
-            // value={userid}
-            ></InputTextField> 
-          <InputTextField 
-            style={{ marginTop: 10, marginBottom: 10}}
-            placeholder="Enter your password" 
-            title="Password"
-            // value={password}
-            isSecure={true}
-          ></InputTextField>
+          <View>
+              <Text style={styles.inputTitle}>Email</Text>
+              <TextInput
+                style={styles.input}
+                value={email}
+                onChangeText = {text=>setEmail(text)} 
+                keyboardType="default"
+                ></TextInput>
+              <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+          </View> 
+
+          <View style={{ marginTop: 10}}>
+              <Text style={styles.inputTitle}>Password</Text>
+              <TextInput
+                style={styles.input}
+                value={password}
+                onChangeText = {text=>setPassword(text)} 
+                keyboardType="default"
+                ></TextInput>
+              <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+          </View> 
+
 
           <TouchableOpacity>
             <Text style={[styles.buttonText, { marginLeft: 10, fontWeight: "600" }]}>Forgot Password?</Text>
           </TouchableOpacity>
           
           
-          <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('HomeScreen')}>
+          <TouchableOpacity style={styles.buttons} onPress={() => signIn()}>
               <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           
@@ -55,6 +106,16 @@ const SignUpSignIn = ({ navigation }) => {
 export default SignUpSignIn;
 
 const styles = StyleSheet.create({
+  inputTitle: {
+    color: "#FFF", 
+    fontSize: 14
+    },
+    input: {
+        paddingVertical: 12,
+        color: "#FFF", 
+        fontSize: 14, 
+        fontFamily: "Avenir Next"
+    },
     container: {
       flex: 1,
       backgroundColor: '#000',
