@@ -94,7 +94,7 @@ function TabTargets() {
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
       <View style={styles.scrollview}>
-          <ScrollView contentContainerStyle={styles.scrollview} keyboardDismissMode='on-drag'>
+          <ScrollView contentContainerStyle={styles.scrollview_target} keyboardDismissMode='on-drag'>
             {
               FootballFields.map(field => {
                 return (
@@ -104,6 +104,9 @@ function TabTargets() {
                         <Title>{field.name}</Title>
                         <Paragraph>Company Type: {field.state}</Paragraph>
                       </Card.Content>
+                      <Card.Actions>
+                          <Button title="+ Football Field"/>
+                      </Card.Actions>
                     </Card>
                   </TouchableOpacity>
                 )
@@ -292,6 +295,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  scrollview_target: {
+    alignItems: 'center',
+    height: 400,
+    width: 400
   },
   scrollview: {
     alignItems: 'center',
