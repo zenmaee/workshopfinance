@@ -17,7 +17,7 @@ cors = CORS()
 def create_app():
     """Application-factory pattern"""
     app = Flask(__name__)
-    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:@localhost/workshopfinance"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:@localhost/workshopfinance"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     # Initialize extensions

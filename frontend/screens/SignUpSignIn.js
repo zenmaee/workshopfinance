@@ -12,7 +12,7 @@ const SignUpSignIn = ({ navigation }) => {
 
     console.log("email")
     console.log(email)
-    const url = 'http://10.239.94.154:5000/users/'+email
+    const url = 'http://10.239.28.78:5000/users/'+email
     return fetch(url, {
       method:'POST',
       headers:{

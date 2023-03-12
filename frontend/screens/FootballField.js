@@ -42,7 +42,7 @@ const FootballField = ({ navigation }) => {
     let targetId = "Tester3FF-AAPL";
     let footballFieldTimeSeries = "Test";
 
-    const url = 'http://10.239.94.154:5000/footballfields/'+targetId+"/"+footballFieldTimeSeries;
+    const url = 'http://10.239.28.78:5000/footballfields/'+targetId+"/"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
@@ -67,7 +67,7 @@ const FootballField = ({ navigation }) => {
 
 
   const addFootballField= () => {
-    fetch('http://192.168.1.158:5000/footballfields',{
+    fetch('http://10.239.28.78:5000/footballfields',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -88,7 +88,7 @@ const FootballField = ({ navigation }) => {
     let targetId = "Tester3FF-AAPL";
     let footballFieldTimeSeries = "Test";
     console.log("ha entrado")
-    let url="http://10.239.94.154:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
+    let url="http://10.239.28.78:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
     fetch(url,{
             method:'PUT',
             headers:{
@@ -120,7 +120,7 @@ const FootballField = ({ navigation }) => {
   }
   
   const addValuation= () => {
-    fetch('http://10.239.94.154:5000/valuations',{
+    fetch('http://10.239.28.78:5000/valuations',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -139,7 +139,7 @@ const FootballField = ({ navigation }) => {
   function retrieveValuations() {
     let targetId = "Tester3FF-AAPL";
     let footballFieldTimeSeries = "TEST";
-    let url = "http://10.239.94.154:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
+    let url = "http://10.239.28.78:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
@@ -252,7 +252,7 @@ const FootballField = ({ navigation }) => {
   }, []);
 
     const generateValuation= () => {
-    fetch('http://10.239.94.154:5000/valuations',{
+    fetch('http://10.239.28.78:5000/valuations',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -366,42 +366,50 @@ const FootballField = ({ navigation }) => {
   return (
       <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: '#000' }}>
         <View style={{ backgroundColor: '#FFF', height: 0.4*(windowHeight), width: valuationWidth, borderRadius: 10 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 10 }}>
             <Text style={{ marginTop: 10, marginLeft: 10 }}>{footballFieldName}</Text>
-            <Text style={{ marginTop: 10, marginLeft: 10 }}>{targetSymbol}</Text>
+            <Text style={{ marginTop: 10 }}>{targetSymbol}</Text>
           </View>
           {footballFieldOutput==="EV" ? (
             footballFieldScale === "billions" ? (
               <>
-                <Text>{"$"+(table.minRange/1000000000).toFixed(2)}</Text>
-                <Text>{"$"+(tableMean/1000000000).toFixed(2)}</Text>
-                <Text>{"$"+(table.maxRange/1000000000).toFixed(2)}</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 20 }}>
+                  <Text>{"$"+(table.minRange/1000000000).toFixed(2)}</Text>
+                  <Text>{"$"+(tableMean/1000000000).toFixed(2)}</Text>
+                  <Text>{"$"+(table.maxRange/1000000000).toFixed(2)}</Text>
+                </View>
               </>
             ) : (
               <>
-                <Text>{"$"+(table.minRange/1000000).toFixed(2)}</Text>
-                <Text>{"$"+(tableMean/1000000).toFixed(2)}</Text>
-                <Text>{"$"+(table.maxRange/1000000).toFixed(2)}</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 20 }}>
+                  <Text>{"$"+(table.minRange/1000000).toFixed(2)}</Text>
+                  <Text>{"$"+(tableMean/1000000).toFixed(2)}</Text>
+                  <Text>{"$"+(table.maxRange/1000000).toFixed(2)}</Text>
+                </View>
               </>
             )
           ) : (
             <>
-              <Text>{table.minRange}</Text>
-              <Text>{tableMean}</Text>
-              <Text>{table.maxRange}</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 20 }}>
+                <Text>{table.minRange}</Text>
+                <Text>{tableMean}</Text>
+                <Text>{table.maxRange}</Text>
+              </View>
             </>
           )}
           <View style={{ backgroundColor: 'black', height: 1, width: valuationWidth - 40, marginLeft: 20, marginTop: 5 }}/>
           <ScrollView
             contentContainerStyle={{ 
-              padding: 20
+              padding: 20 
             }}
           >
             { valuations.map(( valuation ) => {
               return (
-              <> 
-                <Text>{valuation.name}</Text>
-                <View style={{ marginStart: (valuation.minValuation - table.minRange)*pixelsPerDollar, marginTop: 10, backgroundColor: valuation.color, height: valuationHeight, width: (valuation.maxValuation - valuation.minValuation) * pixelsPerDollar }}></View>
+              <>
+                <View style={{ marginTop: 5 }}>
+                  <Text>{valuation.name}</Text>
+                  <View style={{ marginStart: (valuation.minValuation - table.minRange)*pixelsPerDollar, backgroundColor: valuation.color, height: valuationHeight, width: (valuation.maxValuation - valuation.minValuation) * pixelsPerDollar, marginTop: 5 }}></View>
+                </View>
               </>
               )
             })}
