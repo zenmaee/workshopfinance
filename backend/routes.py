@@ -140,6 +140,8 @@ def update_ff_names(userId, footballFieldTimeSeries):
 def retrieve_targets(userId):
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/TARGETS/"+userId+"?last=100&token="+iex_api_key
     resp = requests.get(url).json()
+    print("hola")
+    print(url)
     return resp
 
 #@app.route('/update/<id>/', methods = ['PUT'])

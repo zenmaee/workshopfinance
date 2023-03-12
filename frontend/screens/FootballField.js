@@ -42,7 +42,7 @@ const FootballField = ({ navigation }) => {
     let targetId = "Tester3FF-AAPL";
     let footballFieldTimeSeries = "Test";
 
-    const url = 'http://10.239.28.78:5000/footballfields/'+targetId+"/"+footballFieldTimeSeries;
+    const url = 'http://192.168.1.56:5000/footballfields/'+targetId+"/"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
@@ -67,7 +67,7 @@ const FootballField = ({ navigation }) => {
 
 
   const addFootballField= () => {
-    fetch('http://10.239.28.78:5000/footballfields',{
+    fetch('http://192.168.1.56:5000/footballfields',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -88,7 +88,7 @@ const FootballField = ({ navigation }) => {
     let targetId = "Tester3FF-AAPL";
     let footballFieldTimeSeries = "Test";
     console.log("ha entrado")
-    let url="http://10.239.28.78:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
+    let url="http://192.168.1.56:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
     fetch(url,{
             method:'PUT',
             headers:{
@@ -104,7 +104,7 @@ const FootballField = ({ navigation }) => {
   }
 
   const deleteFootballField= () => {
-    fetch('http://192.168.1.158:5000/footballfields',{
+    fetch('http://192.168.1.56:5000/footballfields',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -120,7 +120,7 @@ const FootballField = ({ navigation }) => {
   }
   
   const addValuation= () => {
-    fetch('http://10.239.28.78:5000/valuations',{
+    fetch('http://192.168.1.56:5000/valuations',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -139,7 +139,7 @@ const FootballField = ({ navigation }) => {
   function retrieveValuations() {
     let targetId = "Tester3FF-AAPL";
     let footballFieldTimeSeries = "TEST";
-    let url = "http://10.239.28.78:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
+    let url = "http://192.168.1.56:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
@@ -252,7 +252,7 @@ const FootballField = ({ navigation }) => {
   }, []);
 
     const generateValuation= () => {
-    fetch('http://10.239.28.78:5000/valuations',{
+    fetch('http://192.168.1.56:5000/valuations',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -273,7 +273,7 @@ const FootballField = ({ navigation }) => {
   }
   
   const updateValuationName= () => {
-    fetch('http://10.239.94.154:5000/valuations/names',{
+    fetch('http://192.168.1.56:5000/valuations/names',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -293,7 +293,7 @@ const FootballField = ({ navigation }) => {
 
 
   const deleteValuation= () => {
-    fetch('http://192.168.1.158:5000/valuations',{
+    fetch('http://192.168.1.56:5000/valuations',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -310,7 +310,7 @@ const FootballField = ({ navigation }) => {
 
 
   const addComp= () => {
-    fetch('http://192.168.1.158:5000/comps',{
+    fetch('http://192.168.1.56:5000/comps',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -328,7 +328,7 @@ const FootballField = ({ navigation }) => {
 
 
   const deleteComp= () => {
-    fetch('http://192.168.1.158:5000/comps',{
+    fetch('http://192.168.1.56:5000/comps',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',

@@ -14,7 +14,7 @@ function TabFootballField() {
     let targetId = "Tester3FF-AAPL";
     let footballFieldTimeSeries = "Test";
 
-    const url = 'http://10.239.94.154:5000/footballfields/'+targetId+"/"+footballFieldTimeSeries;
+    const url = 'http://192.168.1.56:5000/footballfields/'+targetId+"/"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
@@ -85,7 +85,7 @@ function TabTargets() {
 
   function retrieveTargets() {
     
-    const url = 'http://10.239.94.154:5000/targets/'+"f3273dd18d95bc19d51d3e6356e4a679e6f13824497272a270e7bb540b0abb9d"
+    const url = 'http://192.168.1.56:5000/targets/'+"f3273dd18d95bc19d51d3e6356e4a679e6f13824497272a270e7bb540b0abb9d"
     return fetch(url, {
       method: "GET",
       headers: {

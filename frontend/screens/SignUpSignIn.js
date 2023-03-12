@@ -12,7 +12,7 @@ const SignUpSignIn = ({ navigation }) => {
 
     console.log("email")
     console.log(email)
-    const url = 'http://10.239.28.78:5000/users/'+email
+    const url = 'http://192.168.1.56:5000/users/'+email
     return fetch(url, {
       method:'POST',
       headers:{
@@ -26,7 +26,7 @@ const SignUpSignIn = ({ navigation }) => {
       .then(resp => {
         console.log(resp);
         if (resp === "Correct password") {
-          navigation.navigate('Coverage');
+          navigation.navigate('Coverage', { email: email });
         }
         else if (resp === "Incorrect password") {
           console.log(resp);
