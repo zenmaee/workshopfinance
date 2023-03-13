@@ -56,7 +56,6 @@ def sign_ins(email):
     #First we get info from frontend
 
     password=request.json['password']
-    print("hola?")
     #Then we send it to the database
     r=sign_in(email, password,iex_api_key)
 
@@ -127,12 +126,12 @@ def add_comps():
     add_COMP(compSymbol,valuationId,valuationCompsDate,iex_api_key)
 
 @app.route('/footballFields/names/<userId>/<footballFieldTimeSeries>', methods = ['PUT'])
-def update_ff_names(userId, footballFieldTimeSeries):
+def update_ff_names(targetId, footballFieldTimeSeries):
     
     #This UPDATE will only change the footballfield name. No recalculation should be done
     footballFieldName=request.json['footballFieldName']
 
-    update_FF_NAME(userId, footballFieldTimeSeries,footballFieldName,iex_api_key)
+    update_FF_NAME(targetId, footballFieldTimeSeries,footballFieldName,iex_api_key)
     print("sucessful put")
     return "Successful PUT"
 
@@ -143,6 +142,20 @@ def retrieve_targets(userId):
     print("hola")
     print(url)
     return resp
+
+@app.route('/footballFields', methods=['POST'])
+def add_footballfields():
+
+    targetSymbol=request.json['targetSymbol']
+    userId=request.json['userId']
+    footballFieldType=request.json['footballFieldType']
+
+    targetId=userId+"-"+targetSymbol
+    #Then we send it to the database
+    r = add_FOOTBALLFIELD(targetId,footballFieldType,iex_api_key)
+    if r.status_code==200:
+
+        return "SUCCESFUL FF POST"
 
 #@app.route('/update/<id>/', methods = ['PUT'])
 #def update_article(id):
