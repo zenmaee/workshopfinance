@@ -64,26 +64,7 @@ const FootballField = ({ navigation }) => {
         return [];
       });
   }
-
-
-  const addFootballField= () => {
-    fetch('http://192.168.1.56:5000/footballfields',{
-            method:'POST',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-              footballFieldName:footballFieldName,
-              targetId:targetId})}
-        )
-        .then(resp=>resp.text())
-        .then(resp=>console.log(resp))
-        
-  }
-
-
-
+  
   const updateFootballFieldName= () => {
     let targetId = "Tester3FF-AAPL";
     let footballFieldTimeSeries = "Test";

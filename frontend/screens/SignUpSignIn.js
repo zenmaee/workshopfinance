@@ -24,16 +24,18 @@ const SignUpSignIn = ({ navigation }) => {
       )
       .then(resp=>resp.text())
       .then(resp => {
-        console.log(resp);
-        if (resp === "Correct password") {
-          navigation.navigate('Coverage', { email: email });
-        }
-        else if (resp === "Incorrect password") {
+        if (resp === "Incorrect password") {
           console.log(resp);
         ;
         }
-        else{
+        else if (resp==="User Does Not Exist"){
+          
           console.log(resp);
+        }
+        else {
+          console.log("next stop cov")
+          navigation.navigate('Coverage', { userId: resp})
+          //navigation.navigate('Coverage', { userId: resp});
         }
       })
 

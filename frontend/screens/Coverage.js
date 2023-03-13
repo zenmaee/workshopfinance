@@ -5,10 +5,13 @@ import { Card, Title, Paragraph, TextInput } from 'react-native-paper'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 
-function TabFootballField() {
-  const [FootballFields, setFootballFields] = useState([])
-  const [userId, setUserId] = useState("")
+
+const Tab = createMaterialTopTabNavigator();
+const Coverage = ({ route, navigation }) => {
+  const { userId } = route.params; // Get the email from the params object
   
+  function TabFootballField(userId) {
+    const [FootballFields, setFootballFields] = useState([])
 
   function retrieveFootballFields() {
     let targetId = "Tester3FF-AAPL";
@@ -68,7 +71,7 @@ function TabFootballField() {
               <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About')}>
+            <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { userId: userId})}>
               <Text style={styles.buttonText_1}>Profile</Text>
             </TouchableOpacity>
       </View>
@@ -76,16 +79,39 @@ function TabFootballField() {
   );
 }
 
+
 function TabTargets() {
   const [showControls, setShowControls] = useState (false);
   const [targets, setTargets] = useState([])
-  const [userId, setUserId] = useState("")
 
+  const addFootballField= (type, symbol) => {
+    fetch('http://192.168.1.56:5000/footballFields',{
+            method:'POST',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              targetSymbol:symbol,
+              userId:userId,
+              footballFieldType:type})}
+        )
+        .then(resp=>resp.text())
+        .then(resp => {
+          if (resp === "SUCCESFUL FF POST") {
+            navigation.navigate('FootballField')
+            //navigation.navigate('Coverage', { userId: resp});
+          }
+        })
+        
+        
 
+        
+  }
 
   function retrieveTargets() {
     
-    const url = 'http://192.168.1.56:5000/targets/'+"f3273dd18d95bc19d51d3e6356e4a679e6f13824497272a270e7bb540b0abb9d"
+    const url = 'http://192.168.1.56:5000/targets/'+userId
     return fetch(url, {
       method: "GET",
       headers: {
@@ -110,17 +136,6 @@ function TabTargets() {
           getTargets();
         }, []);
 
-  //function AddtoArray({ name, sector, subsector, revenue, ebitda }) {
-  //  const newFootballFields = FootballFields.concat([
-
-  //    {
-  //      name,
-  //      state: "public",
-  //    }
-
-  //  ])
-  //  setFootballFields(newFootballFields)
-  //}
 
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
@@ -136,6 +151,9 @@ function TabTargets() {
                         <Paragraph>{field.type}</Paragraph>
                         <Paragraph>{field.targetSymbol}</Paragraph>
                       </Card.Content>
+                      <Card.Actions>
+                          <Button title="+ Football Field" onPress={() => {addFootballField(field.type, field.targetSymbol)}}/>
+                      </Card.Actions>
                     </Card>
                   </TouchableOpacity>
                 )
@@ -160,64 +178,6 @@ function TabTargets() {
     </SafeAreaView>
   );
 }
-
-function TabScreens() {
-  const [FootballFields, setFootballFields] = useState([
-
-    {
-      name: "zen's football field",
-      state: "public",
-    },
-    {
-      name: "ignacio's football field",
-      state: "public",
-    },
-    {
-      name: "suyash's football field",
-      state: "public",
-    },
-  
-  ])
-
-  return (
-    <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
-      <View style={styles.scrollview}>
-          <ScrollView contentContainerStyle={styles.scrollview} keyboardDismissMode='on-drag'>
-            {
-              FootballFields.map(field => {
-                return (
-                  <TouchableOpacity style={styles.cardList}>
-                    <Card>
-                      <Card.Content>
-                        <Title>{field.name}</Title>
-                        <Paragraph>Company Type: {field.state}</Paragraph>
-                      </Card.Content>
-                    </Card>
-                  </TouchableOpacity>
-                )
-              })
-            }
-          </ScrollView>
-      </View>
-      <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
-            <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
-              <Text style={styles.buttonText_1}>Coverage</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField')}>
-              <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About')}>
-              <Text style={styles.buttonText_1}>Profile</Text>
-            </TouchableOpacity>
-      </View>
-    </SafeAreaView>
-  );
-}
-
-const Tab = createMaterialTopTabNavigator();
-
 function MainTabs() {
   return (
     <Tab.Navigator
@@ -232,17 +192,11 @@ function MainTabs() {
             name="Football Fields" 
             component={TabFootballField} 
           />
-          <Tab.Screen 
-            name="Targets" 
-            component={TabTargets}
-          />
-          <Tab.Screen 
-            name="Screens" 
-            component={TabScreens} 
-          />
+
     </Tab.Navigator>
   );
 }
+
 
 function Controls({ onClose, onAddCard }) {
   const [targetName, setTargetName] = useState ("");
@@ -310,13 +264,36 @@ function Controls({ onClose, onAddCard }) {
   );
 }
 
-export default function Coverage({ navigation, ...props }) {
+function MainTabs() {
   return (
+    <Tab.Navigator
+      initialRouteName="Football Fields"
+      screenOptions={{
+        contentContainerStyle: { flex: 1 },
+        tabBarLabelStyle: { fontSize: 12, color: '#FFF' },
+        tabBarItemStyle: { width: 145 },
+        tabBarStyle: { backgroundColor: '#000' },
+      }}>
+          <Tab.Screen 
+            name="Football Fields" 
+            component={TabFootballField} 
+          />
+          <Tab.Screen 
+            name="Targets" 
+            component={TabTargets}
+          />
+    </Tab.Navigator>
+  );
+}
+
+return (
     <NavigationContainer independent={true} style={styles.container}>
         <MainTabs/>
     </NavigationContainer>
   );
 }
+
+export default Coverage;
 
 const styles = StyleSheet.create({
   container: {
