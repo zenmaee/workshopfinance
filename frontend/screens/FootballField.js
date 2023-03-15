@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from 'react';
-import { StyleSheet, Button, ScrollView, Text, View, TextInput, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
+import React, {useState} from 'react';
+import { StyleSheet, Button, ScrollView, Text, View, TextInput, SafeAreaView, TouchableOpacity, Dimensions, Image } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
 const InlinePicker = ({ selectedValue, onValueChange, options }) => {
   return(
     <Picker
-      selectedValue={selectedValue}
-      onValueChange={onValueChange}
-      style={{ marginLeft: 20, backgroundColor: 'white', height: 200, width: 300 }}
+    selectedValue={selectedValue}
+    onValueChange={onValueChange}
+    style={{ marginLeft: 20, backgroundColor: 'white', height: 130, width: 300 }}
     >
       {options.map(option => <Picker.Item key={option.value} label={option.label} value={option.value}/>)}
     </Picker>
@@ -38,6 +38,158 @@ const FootballField = ({ route, navigation }) => {
   const [response, setResponse]=useState([])
   const [valuations, setValuations] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState("js");
+  const [pickerOutput, setPickerOutput] = useState("js");
+  const [pickerScale, setPickerScale] = useState("js");
+  const [showValuationControls, setShowValuationControls] = useState(false);
+
+  function ValuationControls({ onClose }) {
+    return(
+          <View style={{ margin: 0, height: 200, width: 400, borderWidth: 1 }}>
+              <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={{ color: 'white' }}>Add Comp</Text>
+                <TextInput style={{ marginTop: 5, margin: 10, height: 40, width: 200, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
+                  placeholder="Company Name or Ticker">
+                </TextInput>
+                <TouchableOpacity
+                  title="Add Comp">
+                  <Image style={{ height: 40, width: 40, borderRadius: 4, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+                </TouchableOpacity>
+              </View>
+              <View style={{ marginTop: 10, flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={{ color: 'white' }}>Metric</Text>
+                <InlinePicker
+                  selectedValue={pickerOutput}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setPickerOutput(itemValue)}
+                  options = {[
+                    { label: "EV/Revenue (LTM)",
+                      value: "EV_R"
+                    }, {
+                      label: "EV/EBITDA (LTM)",
+                      value: "EV_E"
+                    },
+                  ]}/>
+              </View>
+              <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={{ color: 'white' }}>Output</Text>
+                <InlinePicker
+                  selectedValue={pickerOutput}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setPickerOutput(itemValue)}
+                  options = {[
+                    { label: "Mean",
+                      value: "Mean"
+                    }, {
+                      label: "Median",
+                      value: "Median"
+                    },
+                  ]}/>
+              </View>
+              <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={{ color: 'white' }}>Spread</Text>
+                <TouchableOpacity
+                  title="Decrease Spread">
+                  <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./minus_sign.png')}/>
+                </TouchableOpacity>
+                <Text style={{ backgroundColor: 'white', fontSize: 15 }}>10%</Text>
+                <TouchableOpacity
+                  title="Increase Spread">
+                  <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_sign.png')}/>
+                </TouchableOpacity>
+              </View>
+              <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={{ color: 'white' }}>Color</Text>
+                <TouchableOpacity
+                  title="Blue">
+                  <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./blue_color.png')}/>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  title="Green">
+                  <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./green_color.png')}/>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  title="Orange">
+                  <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./orange_color.png')}/>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  title="Yellow">
+                  <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./yellow_color.png')}/>
+                </TouchableOpacity>
+              </View>
+              <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity 
+                onPress={() => {
+                  onClose()
+                }}>
+                  <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Back to Football Field Controls</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{ backgroundColor: 'red', padding: 5, borderRadius: 5 }}>
+                  <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Delete</Text>
+                </TouchableOpacity>
+              </View>
+          </View>
+    );
+  }
+  
+  function FootballFieldControls({ onAdd }) {
+    return(
+          <View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
+            <View style={{ alignItems: 'center' }}> 
+              <TouchableOpacity 
+              style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }} 
+              onPress={() => {
+                onAdd()
+              }}>
+                <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Add Valuation</Text>
+              </TouchableOpacity>
+            </View>
+            <TextInput style={{ marginTop: 10, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
+            placeholder="Football Field Name"
+            value={footballFieldName}
+            onChangeText = {text=>setFootballFieldName(text)} 
+            keyboardType="default">
+            </TextInput>
+  
+            <TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
+            placeholder="Target Name or Ticker"
+            value={targetId}
+            onChangeText = {text=>setTargetId(text)} 
+            keyboardType="default">
+            </TextInput>
+  
+            <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ color: 'white' }}>Output</Text>
+              <InlinePicker
+                selectedValue={pickerOutput}
+                onValueChange={(itemValue, itemIndex) =>
+                  setPickerOutput(itemValue)}
+                options = {[
+                  { label: "EV/Revenue (LTM)",
+                    value: "EV_R"
+                  }, {
+                    label: "EV/EBITDA (LTM)",
+                    value: "EV_E"
+                  },
+                ]}/>
+            </View>
+            <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ color: 'white' }}>Scale</Text>
+              <InlinePicker
+                selectedValue={pickerScale}
+                onValueChange={(itemValue, itemIndex) =>
+                  setPickerScale(itemValue)}
+                options = {[
+                  { label: "Millions",
+                    value: "millions"
+                  }, {
+                    label: "Billions",
+                    value: "billions"
+                  },
+                ]}/>
+            </View>
+          </View>
+    );
+  }
 
   
   function retrieveFootballField() {
@@ -449,70 +601,13 @@ const FootballField = ({ route, navigation }) => {
               ]}/>
           </View>
         </View>
-
-        {/*<TouchableOpacity style={styles.buttons} onPress={() => addFootballField()}>
-                <Text style={styles.buttonText}>Add Football Field</Text>
-        </TouchableOpacity>*/}
-
-
-
-          {/*<View style={{ margin: 10, height: 200, width: 400, borderWidth: 1 }}>
+        {showValuationControls ? <ValuationControls onClose={() => {setShowValuationControls(false)}}/>:<FootballFieldControls onAdd={() => {setShowValuationControls(true)}}/>}
+        {/* <View style={{ margin: 0, height: 200, width: 400, borderWidth: 1 }}>
             <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ color: 'white' }}>Add Comp</Text>
-              <TextInput style={{ marginTop: 5, margin: 10, height: 40, width: 200, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
-                placeholder="Company Name or Ticker">
-              </TextInput>
-              <TouchableOpacity
-                title="Add Comp">
-                <Image style={{ height: 40, width: 40, borderRadius: 4, marginLeft: 5 }} source={require('./plus_icon.png')}/>
-              </TouchableOpacity>
+              <Text style={{ color: 'black', backgroundColor: 'light-gray', borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>Comp (Ticker)</Text>
+              <Text style={{ color: 'black', backgroundColor: 'light-gray', borderTopLeftRadius: 10, borderTopRightRadius: 10  }}> Multiple</Text>
             </View>
-            <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ color: 'white' }}>Metric</Text>
-            </View>
-            <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ color: 'white' }}>Stat</Text>
-            </View>
-            <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ color: 'white' }}>Spread</Text>
-              <TouchableOpacity
-                title="Decrease Spread">
-                <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./minus_sign.png')}/>
-              </TouchableOpacity>
-              <Text style={{ backgroundColor: 'white', fontSize: 15 }}>10%</Text>
-              <TouchableOpacity
-                title="Increase Spread">
-                <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_sign.png')}/>
-              </TouchableOpacity>
-            </View>
-            <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ color: 'white' }}>Color</Text>
-              <TouchableOpacity
-                title="Blue">
-                <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./blue_color.png')}/>
-              </TouchableOpacity>
-              <TouchableOpacity
-                title="Green">
-                <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./green_color.png')}/>
-              </TouchableOpacity>
-              <TouchableOpacity
-                title="Orange">
-                <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./orange_color.png')}/>
-              </TouchableOpacity>
-              <TouchableOpacity
-                title="Yellow">
-                <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./yellow_color.png')}/>
-              </TouchableOpacity>
-            </View>
-            <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-              <TouchableOpacity>
-                <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Back to Football Field Controls</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={{ backgroundColor: 'red', padding: 5, borderRadius: 5 }}>
-                <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Delete</Text>
-              </TouchableOpacity>
-            </View>
-        </View>*/}
+        </View> */}
     </SafeAreaView>
   );
 }
