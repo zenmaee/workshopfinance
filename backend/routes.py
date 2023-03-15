@@ -109,6 +109,12 @@ def retrieve_valuations(footballFieldId):
     print("estoy aqui")
     return resp
 
+@app.route('/footballfields', methods=['GET'])
+def retrieve_new_footballfields():
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS/?last=1&token="+iex_api_key
+    resp = requests.get(url).json()
+    return resp
+
 @app.route('/footballfields/<userId>/<footballFieldTimeSeries>', methods=['GET'])
 def retrieve_footballfields(userId, footballFieldTimeSeries):
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS/"+userId+"/"+footballFieldTimeSeries+"?last=1&token="+iex_api_key
@@ -125,14 +131,13 @@ def add_comps():
 
     add_COMP(compSymbol,valuationId,valuationCompsDate,iex_api_key)
 
-@app.route('/footballFields/names/<userId>/<footballFieldTimeSeries>', methods = ['PUT'])
+@app.route('/footballFields/names/<targetId>/<footballFieldTimeSeries>', methods = ['PUT'])
 def update_ff_names(targetId, footballFieldTimeSeries):
     
     #This UPDATE will only change the footballfield name. No recalculation should be done
     footballFieldName=request.json['footballFieldName']
 
     update_FF_NAME(targetId, footballFieldTimeSeries,footballFieldName,iex_api_key)
-    print("sucessful put")
     return "Successful PUT"
 
 @app.route('/targets/<userId>/', methods=['GET'])
@@ -149,10 +154,11 @@ def add_footballfields():
     targetSymbol=request.json['targetSymbol']
     userId=request.json['userId']
     footballFieldType=request.json['footballFieldType']
+    footballFieldTimeSeries = request.json['footballFieldTimeSeries']
 
     targetId=userId+"-"+targetSymbol
     #Then we send it to the database
-    r = add_FOOTBALLFIELD(targetId,footballFieldType,iex_api_key)
+    r = add_FOOTBALLFIELD(targetId,footballFieldType,footballFieldTimeSeries,iex_api_key)
     if r.status_code==200:
 
         return "SUCCESFUL FF POST"
@@ -178,4 +184,4 @@ def add_footballfields():
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
-    app.run(host='192.168.1.56',port=5000, debug=True) #changes every time we change wifi
+    app.run(host='10.239.106.85',port=5000, debug=True) #changes every time we change wifi

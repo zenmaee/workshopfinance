@@ -15,7 +15,10 @@ const InlinePicker = ({ selectedValue, onValueChange, options }) => {
 }
 
 
-const FootballField = ({ navigation }) => {
+const FootballField = ({ route, navigation }) => {
+  console.log(route.params); 
+  const { newFootballField, targetId, footballFieldTimeSeries} = route.params; //newFootballField=1 will be a recently created one. If this =0, it is an old one
+
   const [userId, setUserId]=useState("")
   const [footballFieldName, setFootballFieldName]=useState("")
   const [footballFieldId, setFootballFieldId]=useState("")
@@ -31,18 +34,14 @@ const FootballField = ({ navigation }) => {
   const [valuationColor, setValuationColor]=useState("")
   const [valuationName, setValuationName]=useState("")
   const [compSymbol, setCompSymbol]=useState("")
-  const [footballFieldTimeSeries, setFootballFieldTimeSeries]=useState("")
   const [valuationTimeSeries, setValuationTimeSeries]=useState("")
   const [response, setResponse]=useState([])
   const [valuations, setValuations] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState("js");
 
   
-   function retrieveFootballField() {
-    let targetId = "Tester3FF-AAPL";
-    let footballFieldTimeSeries = "Test";
-
-    const url = 'http://192.168.1.56:5000/footballfields/'+targetId+"/"+footballFieldTimeSeries;
+  function retrieveFootballField() {
+    const url = 'http://10.239.106.85:5000/footballfields/'+targetId+'/'+footballFieldTimeSeries;  
     return fetch(url, {
       method: "GET",
       headers: {
@@ -51,13 +50,16 @@ const FootballField = ({ navigation }) => {
       },
     })
       .then((resp) => resp.json())
-
       .then((data) => {
-        let footballFieldName=data[0].footballFieldName
-        let targetId= data[0].targetId
-        let targetSymbol = targetId.split("-")[1];
-
-        return [footballFieldName, targetSymbol];
+        console.log("Response data:", data);
+        if (data && data.length > 0) {
+          const footballFieldName = data[0].footballFieldName;
+          const targetId = data[0].targetId;
+          const targetSymbol = targetId.split("-")[1];
+          return [footballFieldName, targetSymbol];
+        } else {
+          throw new Error("Invalid response data");
+        }
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -66,10 +68,7 @@ const FootballField = ({ navigation }) => {
   }
   
   const updateFootballFieldName= () => {
-    let targetId = "Tester3FF-AAPL";
-    let footballFieldTimeSeries = "Test";
-    console.log("ha entrado")
-    let url="http://192.168.1.56:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
+    let url="http://10.239.106.85:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
     fetch(url,{
             method:'PUT',
             headers:{
@@ -85,7 +84,7 @@ const FootballField = ({ navigation }) => {
   }
 
   const deleteFootballField= () => {
-    fetch('http://192.168.1.56:5000/footballfields',{
+    fetch('http://10.239.106.85:5000/footballfields',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -101,7 +100,7 @@ const FootballField = ({ navigation }) => {
   }
   
   const addValuation= () => {
-    fetch('http://192.168.1.56:5000/valuations',{
+    fetch('http://10.239.106.85:5000/valuations',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -118,9 +117,8 @@ const FootballField = ({ navigation }) => {
   }
 
   function retrieveValuations() {
-    let targetId = "Tester3FF-AAPL";
-    let footballFieldTimeSeries = "TEST";
-    let url = "http://192.168.1.56:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
+    
+    let url = "http://10.239.106.85:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
@@ -233,7 +231,7 @@ const FootballField = ({ navigation }) => {
   }, []);
 
     const generateValuation= () => {
-    fetch('http://192.168.1.56:5000/valuations',{
+    fetch('http://10.239.106.85:5000/valuations',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -254,7 +252,7 @@ const FootballField = ({ navigation }) => {
   }
   
   const updateValuationName= () => {
-    fetch('http://192.168.1.56:5000/valuations/names',{
+    fetch('http://10.239.106.85:5000/valuations/names',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -274,7 +272,7 @@ const FootballField = ({ navigation }) => {
 
 
   const deleteValuation= () => {
-    fetch('http://192.168.1.56:5000/valuations',{
+    fetch('http://10.239.106.85:5000/valuations',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -291,7 +289,7 @@ const FootballField = ({ navigation }) => {
 
 
   const addComp= () => {
-    fetch('http://192.168.1.56:5000/comps',{
+    fetch('http://10.239.106.85:5000/comps',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -309,7 +307,7 @@ const FootballField = ({ navigation }) => {
 
 
   const deleteComp= () => {
-    fetch('http://192.168.1.56:5000/comps',{
+    fetch('http://10.239.106.85:5000/comps',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -344,6 +342,7 @@ const FootballField = ({ navigation }) => {
   const tableRange = table.maxRange - table.minRange;
   const tableMean = (table.maxRange + table.minRange) / 2;
   const pixelsPerDollar = (valuationWidth-20-20) / tableRange;
+
   return (
       <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: '#000' }}>
         <View style={{ backgroundColor: '#FFF', height: 0.4*(windowHeight), width: valuationWidth, borderRadius: 10 }}>
@@ -351,32 +350,28 @@ const FootballField = ({ navigation }) => {
             <Text style={{ marginTop: 10, marginLeft: 10 }}>{footballFieldName}</Text>
             <Text style={{ marginTop: 10 }}>{targetSymbol}</Text>
           </View>
-          {footballFieldOutput==="EV" ? (
-            footballFieldScale === "billions" ? (
-              <>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 20 }}>
-                  <Text>{"$"+(table.minRange/1000000000).toFixed(2)}</Text>
-                  <Text>{"$"+(tableMean/1000000000).toFixed(2)}</Text>
-                  <Text>{"$"+(table.maxRange/1000000000).toFixed(2)}</Text>
+          {table.maxValuations.length > 0 && (
+            footballFieldOutput === "EV" ? (
+              footballFieldScale === "billions" ? (
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth - 40, marginStart: 20 }}>
+                  <Text>{"$" + (table.minRange / 1000000000).toFixed(2)}</Text>
+                  <Text>{"$" + (tableMean / 1000000000).toFixed(2)}</Text>
+                  <Text>{"$" + (table.maxRange / 1000000000).toFixed(2)}</Text>
                 </View>
-              </>
+              ) : (
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth - 40, marginStart: 20 }}>
+                  <Text>{"$" + (table.minRange / 1000000).toFixed(2)}</Text>
+                  <Text>{"$" + (tableMean / 1000000).toFixed(2)}</Text>
+                  <Text>{"$" + (table.maxRange / 1000000).toFixed(2)}</Text>
+                </View>
+              )
             ) : (
-              <>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 20 }}>
-                  <Text>{"$"+(table.minRange/1000000).toFixed(2)}</Text>
-                  <Text>{"$"+(tableMean/1000000).toFixed(2)}</Text>
-                  <Text>{"$"+(table.maxRange/1000000).toFixed(2)}</Text>
-                </View>
-              </>
-            )
-          ) : (
-            <>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 20 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth - 40, marginStart: 20 }}>
                 <Text>{table.minRange}</Text>
                 <Text>{tableMean}</Text>
                 <Text>{table.maxRange}</Text>
               </View>
-            </>
+            )
           )}
           <View style={{ backgroundColor: 'black', height: 1, width: valuationWidth - 40, marginLeft: 20, marginTop: 5 }}/>
           <ScrollView

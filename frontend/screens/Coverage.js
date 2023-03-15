@@ -9,83 +9,85 @@ import { NavigationContainer } from '@react-navigation/native';
 const Tab = createMaterialTopTabNavigator();
 const Coverage = ({ route, navigation }) => {
   const { userId } = route.params; // Get the email from the params object
-  
+
   function TabFootballField(userId) {
     const [FootballFields, setFootballFields] = useState([])
 
-  function retrieveFootballFields() {
-    let targetId = "Tester3FF-AAPL";
-    let footballFieldTimeSeries = "Test";
+    function retrieveFootballFields() {
+      let targetId = "Tester3FF-AAPL";
+      let footballFieldTimeSeries = "Test";
 
-    const url = 'http://192.168.1.56:5000/footballfields/'+targetId+"/"+footballFieldTimeSeries;
-    return fetch(url, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((resp) => resp.json())
+      const url = 'http://10.239.106.85:5000/footballfields/'+targetId+"/"+footballFieldTimeSeries;
+      return fetch(url, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        })
+        .then((resp) => resp.json())
 
-      .then((data) => {
-        let footballFieldName=data[0].footballFieldName
-        let targetId= data[0].targetId
-        let targetSymbol = targetId.split("-")[1];
+        .then((data) => {
+          let footballFieldName=data[0].footballFieldName
+          let targetId= data[0].targetId
+          let targetSymbol = targetId.split("-")[1];
 
-        return [footballFieldName, targetSymbol];
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        return [];
-      });
-  }
+          return [footballFieldName, targetSymbol];
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          return [];
+        });
+    }
 
 
   
-  return (
-    <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
-      <View style={styles.scrollview}>
-          <ScrollView contentContainerStyle={styles.scrollview} keyboardDismissMode='on-drag'>
-            {
-              FootballFields.map(field => {
-                return (
-                  <TouchableOpacity style={styles.cardList}>
-                    <Card>
-                      <Card.Content>
-                        <Title>{field.name}</Title>
-                        <Paragraph>Company Type: {field.state}</Paragraph>
-                      </Card.Content>
-                    </Card>
-                  </TouchableOpacity>
-                )
-              })
-            }
-          </ScrollView>
-      </View>
-      <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
-            <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
-              <Text style={styles.buttonText_1}>Coverage</Text>
-            </TouchableOpacity>
+    return (
+      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
+        <View style={styles.scrollview}>
+            <ScrollView contentContainerStyle={styles.scrollview} keyboardDismissMode='on-drag'>
+              {
+                FootballFields.map(field => {
+                  return (
+                    <TouchableOpacity style={styles.cardList}>
+                      <Card>
+                        <Card.Content>
+                          <Title>{field.name}</Title>
+                          <Paragraph>Company Type: {field.state}</Paragraph>
+                        </Card.Content>
+                      </Card>
+                    </TouchableOpacity>
+                  )
+                })
+              }
+            </ScrollView>
+        </View>
+        <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
+              <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
+                <Text style={styles.buttonText_1}>Coverage</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField')}>
-              <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { newFootballField: 0})}>
+                <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
+              </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { userId: userId})}>
-              <Text style={styles.buttonText_1}>Profile</Text>
-            </TouchableOpacity>
-      </View>
-    </SafeAreaView>
-  );
-}
+              <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { userId: userId})}>
+                <Text style={styles.buttonText_1}>Profile</Text>
+              </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+      );
+    }
 
 
-function TabTargets() {
-  const [showControls, setShowControls] = useState (false);
-  const [targets, setTargets] = useState([])
+  function TabTargets() {
+    const [showControls, setShowControls] = useState (false);
+    const [targets, setTargets] = useState([])
+
 
   const addFootballField= (type, symbol) => {
-    fetch('http://192.168.1.56:5000/footballFields',{
+    const footballFieldTimeSeries = Math.floor(Date.now() * 1000).toString();
+    fetch('http://10.239.106.85:5000/footballFields',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -94,12 +96,15 @@ function TabTargets() {
             body:JSON.stringify({
               targetSymbol:symbol,
               userId:userId,
-              footballFieldType:type})}
+              footballFieldType:type,
+              footballFieldTimeSeries:footballFieldTimeSeries
+            })}
         )
         .then(resp=>resp.text())
         .then(resp => {
           if (resp === "SUCCESFUL FF POST") {
-            navigation.navigate('FootballField')
+            let targetId=userId+"-"+symbol
+            navigation.navigate('FootballField', { newFootballField: 1, targetId:targetId, footballFieldTimeSeries:footballFieldTimeSeries})
             //navigation.navigate('Coverage', { userId: resp});
           }
         })
@@ -111,7 +116,7 @@ function TabTargets() {
 
   function retrieveTargets() {
     
-    const url = 'http://192.168.1.56:5000/targets/'+userId
+    const url = 'http://10.239.106.85:5000/targets/'+userId
     return fetch(url, {
       method: "GET",
       headers: {
@@ -167,7 +172,7 @@ function TabTargets() {
               <Text style={styles.buttonText_1}>Coverage</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField')}>
+            <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { newFootballField: 1})}>
               <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
             </TouchableOpacity>
 
@@ -178,24 +183,7 @@ function TabTargets() {
     </SafeAreaView>
   );
 }
-function MainTabs() {
-  return (
-    <Tab.Navigator
-      initialRouteName="Football Fields"
-      screenOptions={{
-        contentContainerStyle: { flex: 1 },
-        tabBarLabelStyle: { fontSize: 12, color: '#FFF' },
-        tabBarItemStyle: { width: 145 },
-        tabBarStyle: { backgroundColor: '#000' },
-      }}>
-          <Tab.Screen 
-            name="Football Fields" 
-            component={TabFootballField} 
-          />
 
-    </Tab.Navigator>
-  );
-}
 
 
 function Controls({ onClose, onAddCard }) {

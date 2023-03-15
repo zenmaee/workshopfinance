@@ -10,7 +10,7 @@ from time import time
 #add_FOOTBALLFIELD
 #deleting Valuations in FootballField
 
-def add_FOOTBALLFIELD(targetId,footballFieldType,iex_api_key):
+def add_FOOTBALLFIELD(targetId,footballFieldType,footballFieldTimeSeries,iex_api_key):
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS/"+targetId+"/?last=100&token="+iex_api_key
     resp = requests.get(url).json()
     print("targetId")
@@ -20,7 +20,7 @@ def add_FOOTBALLFIELD(targetId,footballFieldType,iex_api_key):
     now = datetime.now()
     timeDateCreated = now.strftime("%m/%d/%Y %H:%M:%S")# timeDateCreated value has to be fixed, can not be editted. It contains the
     timeDateCreated = timeDateCreated[:6]+timeDateCreated[8:-3] #time and date of when the valuation was generated for the first time
-    footballFieldTimeSeries=str(int(time()*1000000))
+    #footballFieldTimeSeries=str(int(time()*1000000))
 
     url= "https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS?&token="+iex_api_key
 
@@ -41,10 +41,7 @@ def update_FF_NAME(targetId, footballFieldTimeSeries,footballFieldName,iex_api_k
     
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS/"+targetId+"/"+footballFieldTimeSeries+"?token="+iex_api_key
     footballField=requests.get(url).json()
-    print("footballField")
-    print(footballField)
     footballField[0]['footballFieldName']=footballFieldName
-    print(footballField)
     url="https://cloud.iexapis.com/v1/record/workshopfinance/FOOTBALLFIELDS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
     r=requests.post(url, json=footballField)
     return r
