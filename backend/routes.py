@@ -109,6 +109,11 @@ def retrieve_valuations(footballFieldId):
     print("estoy aqui")
     return resp
 
+@app.route('/footballfields/<targetId>/', methods=['GET'])
+def retrieve_footballfields_bytarget(targetId):
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS/"+targetId+"?last=3&token="+iex_api_key
+    resp = requests.get(url).json()
+    return resp
 
 @app.route('/footballfields/<targetId>/<footballFieldTimeSeries>', methods=['GET'])
 def retrieve_footballfields(targetId, footballFieldTimeSeries):

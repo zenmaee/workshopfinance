@@ -16,12 +16,10 @@ const InlinePicker = ({ selectedValue, onValueChange, options }) => {
 
 const FootballField = ({ route, navigation }) => {
   console.log(route.params); 
-  const { newFootballField, targetId, footballFieldTimeSeries} = route.params; //newFootballField=1 will be a recently created one. If this =0, it is an old one
-
-  const [userId, setUserId]=useState("")
-  const [footballFieldName, setFootballFieldName]=useState("")
+  const {targetId, footballFieldName,footballFieldTimeSeries} = route.params; //newFootballField=1 will be a recently created one. If this =0, it is an old one
+  const targetSymbol = targetId.split("-")[1]
+  
   const [footballFieldId, setFootballFieldId]=useState("")
-  const [targetSymbol, setTargetSymbol]=useState("")
   const [footballFieldOutput, setFootballFieldOutput]=useState("EV")
   const [footballFieldScale, setFootballFieldScale]=useState("billions")
   const [valuationId, setValuationId]=useState("")
@@ -190,6 +188,8 @@ const FootballField = ({ route, navigation }) => {
     </View>
   </View>  );
   }
+
+  /*
   function retrieveFootballField() {
     const url = 'http://10.239.106.85:5000/footballfields/'+targetId+'/'+footballFieldTimeSeries;  
     return fetch(url, {
@@ -215,7 +215,7 @@ const FootballField = ({ route, navigation }) => {
         console.error("Error fetching data:", error);
         return [];
       });
-  }
+  }*/
   
   const updateFootballFieldName= () => {
     let url="http://10.239.106.85:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
@@ -369,7 +369,7 @@ const FootballField = ({ route, navigation }) => {
   }, []);
 
 
-
+  /*
   useEffect(() => {
     async function getFootballField() {
       let footballField = await retrieveFootballField();
@@ -378,7 +378,7 @@ const FootballField = ({ route, navigation }) => {
 
     }
     getFootballField();
-  }, []);
+  }, []);*/
 
     const generateValuation= () => {
     fetch('http://10.239.106.85:5000/valuations',{

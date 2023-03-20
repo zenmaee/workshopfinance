@@ -8,6 +8,32 @@ const SignUpSignIn = ({ navigation }) => {
   const [email, setEmail]=useState("")
   const [password, setPassword]=useState("")
   
+  function retrieveTargets(userId) {
+    
+    const url = 'http://10.239.106.85:5000/targets/'+userId+'/'
+    console.log(url)
+    return fetch(url, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        navigation.navigate('Coverage', {
+          userId: userId,
+          targets: data,
+        })
+
+        return data})
+        
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        return [];
+        });}
+  
+  
   function signIn() {
 
     console.log("email")
@@ -34,7 +60,7 @@ const SignUpSignIn = ({ navigation }) => {
         }
         else {
           console.log("next stop cov")
-          navigation.navigate('Coverage', { userId: resp})
+          retrieveTargets(resp)
           //navigation.navigate('Coverage', { userId: resp});
         }
       })

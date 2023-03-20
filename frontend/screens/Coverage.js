@@ -4,90 +4,103 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Card, Title, Paragraph, TextInput } from 'react-native-paper'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { NavigationContainer } from '@react-navigation/native';
+import { TouchableWithoutFeedback } from 'react-native';
 
 
 const Tab = createMaterialTopTabNavigator();
 const Coverage = ({ route, navigation }) => {
-  const { userId } = route.params; // Get the email from the params object
+  const { userId, targets } = route.params;
 
-  function TabFootballField(userId) {
+
+  function TabFootballField() {
     const [footballFields, setFootballFields] = useState([])
 
-    function retrieveFootballFields(targets) {
-
-      for target in targets:
-        targetId=userId+"-"+target.targeetSymbol
-        const url = 'http://10.239.106.85:5000/footballfields/'+targetId
+    function retrieveFootballFields(targetId) {
+      //let ffLists=[]
+      //change routes: only showing last ff 
+        const url = "http://10.239.106.85:5000/footballfields/" + targetId + "/";
+        console.log(url)
         return fetch(url, {
           method: "GET",
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
-          })
+        })
           .then((resp) => resp.json())
           .then((data) => {
-            return data})
             
+
+            return data})
+        
           .catch((error) => {
             console.error("Error fetching data:", error);
             return [];
             });}
-    
+        
           useEffect(() => {
               async function getFootballFields() {
-                let ffs = await retrieveFootballFields();
-                footballFields.append(ffs)
-              }
-              getFootballFields();
+              let ffsLists = []
+                for (const target of targets) {
+                  console.log("target:")
+                  console.log(target)
+                  const targetId = userId + "-" + target.targetSymbol;
+                  let ffs = await retrieveFootballFields(targetId);
+                  for (const ff of ffs){
+                    ffsLists.push(ff)
+                  }
+                }
+              setFootballFields(ffsLists)
+            
+          }
+              getFootballFields()
             }, []);
-    
-    
 
+            console.log(footballFields)
 
-  
-    return (
-      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
-        <View style={styles.scrollview}>
-            <ScrollView contentContainerStyle={styles.scrollview} keyboardDismissMode='on-drag'>
-              {
-                footballFields.map(field => {
-                  return (
-                    <TouchableOpacity style={styles.cardList}>
-                      <Card>
-                        <Card.Content>
-                          <Title>{field.footballFieldName}</Title>
-                          <Paragraph>Company Type: {field.footballFieldType}</Paragraph>
-                          <Paragraph>Created Date: {field.timeDateCreated}</Paragraph>
-                        </Card.Content>
-                      </Card>
-                    </TouchableOpacity>
-                  )
-                })
-              }
-            </ScrollView>
-        </View>
-        <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
-              <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
-                <Text style={styles.buttonText_1}>Coverage</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { newFootballField: 0})}>
-                <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { userId: userId})}>
-                <Text style={styles.buttonText_1}>Profile</Text>
-              </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-      );
+            return (
+              <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
+                <View style={styles.scrollview}>
+                    <ScrollView contentContainerStyle={styles.scrollview} keyboardDismissMode='on-drag'>
+                      {
+                        footballFields.map(field => {
+                          return (
+                            <TouchableWithoutFeedback onPress={() => navigation.navigate('FootballField', { targetId: field.targetId, footballFieldName: field.footballFieldName, footballFieldTimeSeries:field.footballFieldTimeSeries,})}>
+                              <View style={styles.cardList}>
+                                <Card>
+                                  <Card.Content>
+                                    <Title>{field.footballFieldName}</Title>
+                                    <Paragraph>Company Type: {field.footballFieldType}</Paragraph>
+                                    <Paragraph>Created Date: {field.timeDateCreated}</Paragraph>
+                                  </Card.Content>
+                                </Card>
+                              </View>
+                            </TouchableWithoutFeedback>
+                          )
+                        })
+                      }
+                    </ScrollView>
+                </View>
+                <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
+                      <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
+                        <Text style={styles.buttonText_1}>Coverage</Text>
+                      </TouchableOpacity>
+            
+                      <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { newFootballField: 0})}>
+                        <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
+                      </TouchableOpacity>
+            
+                      <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { userId: userId})}>
+                        <Text style={styles.buttonText_1}>Profile</Text>
+                      </TouchableOpacity>
+                </View>
+              </SafeAreaView>
+            );
     }
 
 
   function TabTargets() {
     const [showControls, setShowControls] = useState (false);
-    const [targets, setTargets] = useState([])
 
 
   const addFootballField= (type, symbol) => {
@@ -112,40 +125,8 @@ const Coverage = ({ route, navigation }) => {
             navigation.navigate('FootballField', { newFootballField: 1, targetId:targetId, footballFieldTimeSeries:footballFieldTimeSeries})
             //navigation.navigate('Coverage', { userId: resp});
           }
-        })
-        
-        
-
-        
+        })     
   }
-
-  function retrieveTargets() {
-    
-    const url = 'http://10.239.106.85:5000/targets/'+userId
-    return fetch(url, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        return data})
-        
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        return [];
-        });}
-
-        useEffect(() => {
-          async function getTargets() {
-            let targets = await retrieveTargets();
-            setTargets(targets);
-            retrieveFootballFields(targets)
-          }
-          getTargets();
-        }, []);
 
 
   return (
@@ -261,7 +242,7 @@ function Controls({ onClose, onAddCard }) {
 function MainTabs() {
   return (
     <Tab.Navigator
-      initialRouteName="Football Fields"
+      initialRouteName="Targets"
       screenOptions={{
         contentContainerStyle: { flex: 1 },
         tabBarLabelStyle: { fontSize: 12, color: '#FFF' },
