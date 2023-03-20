@@ -11,34 +11,38 @@ const Coverage = ({ route, navigation }) => {
   const { userId } = route.params; // Get the email from the params object
 
   function TabFootballField(userId) {
-    const [FootballFields, setFootballFields] = useState([])
+    const [footballFields, setFootballFields] = useState([])
 
-    function retrieveFootballFields() {
-      let targetId = "Tester3FF-AAPL";
-      let footballFieldTimeSeries = "Test";
+    function retrieveFootballFields(targets) {
 
-      const url = 'http://10.239.106.85:5000/footballfields/'+targetId+"/"+footballFieldTimeSeries;
-      return fetch(url, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        })
-        .then((resp) => resp.json())
-
-        .then((data) => {
-          let footballFieldName=data[0].footballFieldName
-          let targetId= data[0].targetId
-          let targetSymbol = targetId.split("-")[1];
-
-          return [footballFieldName, targetSymbol];
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          return [];
-        });
-    }
+      for target in targets:
+        targetId=userId+"-"+target.targeetSymbol
+        const url = 'http://10.239.106.85:5000/footballfields/'+targetId
+        return fetch(url, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          })
+          .then((resp) => resp.json())
+          .then((data) => {
+            return data})
+            
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            return [];
+            });}
+    
+          useEffect(() => {
+              async function getFootballFields() {
+                let ffs = await retrieveFootballFields();
+                footballFields.append(ffs)
+              }
+              getFootballFields();
+            }, []);
+    
+    
 
 
   
@@ -47,13 +51,14 @@ const Coverage = ({ route, navigation }) => {
         <View style={styles.scrollview}>
             <ScrollView contentContainerStyle={styles.scrollview} keyboardDismissMode='on-drag'>
               {
-                FootballFields.map(field => {
+                footballFields.map(field => {
                   return (
                     <TouchableOpacity style={styles.cardList}>
                       <Card>
                         <Card.Content>
-                          <Title>{field.name}</Title>
-                          <Paragraph>Company Type: {field.state}</Paragraph>
+                          <Title>{field.footballFieldName}</Title>
+                          <Paragraph>Company Type: {field.footballFieldType}</Paragraph>
+                          <Paragraph>Created Date: {field.timeDateCreated}</Paragraph>
                         </Card.Content>
                       </Card>
                     </TouchableOpacity>
@@ -137,6 +142,7 @@ const Coverage = ({ route, navigation }) => {
           async function getTargets() {
             let targets = await retrieveTargets();
             setTargets(targets);
+            retrieveFootballFields(targets)
           }
           getTargets();
         }, []);
