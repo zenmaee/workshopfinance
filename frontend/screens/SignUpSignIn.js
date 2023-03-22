@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import { StyleSheet, Image, Text, View, SafeAreaView, TouchableOpacity, TextInput } from 'react-native';
 import InputTextField from '../components/InputTextField';
-import { SHA256 } from 'react-native-crypto-js';
 
 
 const SignUpSignIn = ({ navigation }) => {
