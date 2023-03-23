@@ -9,7 +9,7 @@ const SignUp = ({ navigation }) => {
   const [password, setPassword] = useState("");
 
   const addUsers = () => {
-    fetch('http://10.239.106.85:5000/users', {
+    fetch('http://10.239.55.109:5000/users', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

@@ -18,7 +18,7 @@ const Coverage = ({ route, navigation }) => {
     function retrieveFootballFields(targetId) {
       //let ffLists=[]
       //change routes: only showing last ff 
-        const url = "http://10.239.106.85:5000/footballfields/" + targetId + "/";
+        const url = "http://10.239.55.109:5000/footballfields/" + targetId + "/";
         console.log(url)
         return fetch(url, {
           method: "GET",

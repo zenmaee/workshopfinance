@@ -2,16 +2,19 @@ import React from 'react';
 import { StyleSheet, Image, Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ route, navigation }) => {
+  const { userId, targets } = route.params;
+  //getLatestFF()
+
   return (
     <SafeAreaView style={styles.container}>
           <Image style={styles.wfLogo} resizeMode="contain" source={require('./logo_dark.png')}/>
 
-          <TouchableOpacity style={styles.buttons_1} onPress={() => navigation.navigate('FootballField')}>
-              <Text style={styles.buttonText_1}>Draw Football Field</Text>
+          <TouchableOpacity style={styles.buttons_1} onPress={() => getLatestFF()}>
+              <Text style={styles.buttonText_1}>Open Most Recent Football Field</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttons_2} onPress={() => navigation.navigate('Coverage')}>
+          <TouchableOpacity style={styles.buttons_2} onPress={() => navigation.navigate('Coverage', { userId: userId, targets: targets })}>
               <Text style={styles.buttonText_2}>Open Coverage List</Text>
           </TouchableOpacity>
 
