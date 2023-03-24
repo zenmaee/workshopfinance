@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import { StyleSheet, Image, Text, View, SafeAreaView, TouchableOpacity, TextInput } from 'react-native';
 import InputTextField from '../components/InputTextField';
-import { SHA256 } from 'react-native-crypto-js';
 
 
 const SignUpSignIn = ({ navigation }) => {
@@ -10,7 +9,7 @@ const SignUpSignIn = ({ navigation }) => {
   
   function retrieveTargets(userId) {
     
-    const url = 'http://10.239.106.85:5000/targets/'+userId+'/'
+    const url = 'http://10.239.55.109:5000/targets/'+userId+'/'
     console.log(url)
     return fetch(url, {
       method: "GET",
@@ -21,7 +20,7 @@ const SignUpSignIn = ({ navigation }) => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        navigation.navigate('Coverage', {
+        navigation.navigate('HomeScreen', {
           userId: userId,
           targets: data,
         })
@@ -38,7 +37,7 @@ const SignUpSignIn = ({ navigation }) => {
 
     console.log("email")
     console.log(email)
-    const url = 'http://10.239.106.85:5000/users/'+email
+    const url = 'http://10.239.55.109:5000/users/'+email
     return fetch(url, {
       method:'POST',
       headers:{

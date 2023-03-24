@@ -218,7 +218,7 @@ const FootballField = ({ route, navigation }) => {
   }*/
   
   const updateFootballFieldName= () => {
-    let url="http://10.239.106.85:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
+    let url="http://10.239.55.109:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
     fetch(url,{
             method:'PUT',
             headers:{
@@ -268,7 +268,7 @@ const FootballField = ({ route, navigation }) => {
 
   function retrieveValuations() {
     
-    let url = "http://10.239.106.85:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
+    let url = "http://10.239.55.109:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
