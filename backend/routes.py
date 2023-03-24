@@ -34,9 +34,10 @@ iex_api_key="sk_29735f4ddf4a47efb27623b229dda54a" #add security
 
 @app.route('/users', methods = ['GET'])
 def get_users():
-    all_users = Users.query.all()
-    results = users_schema.dump(all_users)
-    return jsonify(results)
+    url="https://cloud.iexapis.com/v1/data/WORKSHOPFINANCE/USERDATA/58abd882fba88d5d5d5f86aa60c1f825480353c496d0ebecb74760fc69001380?&token=sk_29735f4ddf4a47efb27623b229dda54a"
+    resp = requests.get(url).json()
+    print("estoy aqui")
+    return resp 
 
 @app.route('/users', methods = ['POST'])
 def add_users():
@@ -47,9 +48,12 @@ def add_users():
     password=request.json['password']
 
     #Then we send it to the database
-    add_USERDATA(firstName, lastName, email, password,iex_api_key)
-
-    return "Successful USERDATA POST"
+    r=add_USERDATA(firstName, lastName, email, password,iex_api_key)
+    print(r)
+    if r=="Email Exists":
+        return r
+    else:
+        return  "Successful USERDATA POST"
 
 @app.route('/users/<email>', methods = ['POST'])
 def sign_ins(email):
@@ -182,4 +186,4 @@ def add_footballfields():
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
-    app.run(host='10.239.55.109',port=5000, debug=True) #changes every time we change wifi
+    app.run(host='10.239.101.190',port=5000, debug=True) #changes every time we change wifi

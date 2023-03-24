@@ -9,16 +9,19 @@ import { TouchableWithoutFeedback } from 'react-native';
 
 const Tab = createMaterialTopTabNavigator();
 const Coverage = ({ route, navigation }) => {
-  const { userId, targets } = route.params;
+  const { footballFields, latestFF, targets, name, email } = route.params;
+  console.log("latestFF")
+
+  console.log(latestFF)
 
 
   function TabFootballField() {
-    const [footballFields, setFootballFields] = useState([])
+/*    const [footballFields, setFootballFields] = useState([])
 
     function retrieveFootballFields(targetId) {
       //let ffLists=[]
       //change routes: only showing last ff 
-        const url = "http://10.239.55.109:5000/footballfields/" + targetId + "/";
+        const url = "http://10.239.101.190:5000/footballfields/" + targetId + "/";
         console.log(url)
         return fetch(url, {
           method: "GET",
@@ -54,7 +57,7 @@ const Coverage = ({ route, navigation }) => {
             
           }
               getFootballFields()
-            }, []);
+            }, []);*/
 
             console.log(footballFields)
 
@@ -86,11 +89,11 @@ const Coverage = ({ route, navigation }) => {
                         <Text style={styles.buttonText_1}>Coverage</Text>
                       </TouchableOpacity>
             
-                      <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { newFootballField: 0})}>
+                      <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { targetId: latestFF.targetId, footballFieldName:latestFF.footballFieldName,footballFieldTimeSeries:latestFF.footballFieldTimeSeries})}>
                         <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
                       </TouchableOpacity>
             
-                      <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { userId: userId})}>
+                      <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { name: name , email: email})}>
                         <Text style={styles.buttonText_1}>Profile</Text>
                       </TouchableOpacity>
                 </View>
@@ -105,7 +108,7 @@ const Coverage = ({ route, navigation }) => {
 
   const addFootballField= (type, symbol) => {
     const footballFieldTimeSeries = Math.floor(Date.now() * 1000).toString();
-    fetch('http://10.239.106.85:5000/footballFields',{
+    fetch('http://10.239.101.190:5000/footballFields',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -159,12 +162,12 @@ const Coverage = ({ route, navigation }) => {
               <Text style={styles.buttonText_1}>Coverage</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { newFootballField: 1})}>
+            <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { targetId: latestFF.targetId, footballFieldName:latestFF.footballFieldName,footballFieldTimeSeries:latestFF.footballFieldTimeSeries})}>
               <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About')}>
-              <Text style={styles.buttonText_1}>Profile</Text>
+            <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { name: name , email: email})}>
+                <Text style={styles.buttonText_1}>Profile</Text>
             </TouchableOpacity>
       </View>
     </SafeAreaView>

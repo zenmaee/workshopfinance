@@ -1,24 +1,81 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Image, Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 
 const HomeScreen = ({ route, navigation }) => {
-  const { userId, targets } = route.params;
-  //getLatestFF()
+  const { userName, userEmail, userId, targets } = route.params;
+  const [footballFields, setFootballFields] = useState([])
+  const [latestFootballField, setLatestFootballField] = useState([])
 
+
+  function retrieveFootballFields(targetId) {
+    //let ffLists=[]
+    //change routes: only showing last ff 
+      const url = "http://10.239.101.190:5000/footballfields/" + targetId + "/";
+      console.log(url)
+      return fetch(url, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          
+
+          return data})
+      
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          return [];
+          });}
+      
+        useEffect(() => {
+            async function getFootballFields() {
+            let ffsLists = []
+              for (const target of targets) {
+                console.log("target:")
+                console.log(target)
+                const targetId = userId + "-" + target.targetSymbol;
+                let ffs = await retrieveFootballFields(targetId);
+                for (const ff of ffs){
+                  ffsLists.push(ff)
+                }
+              }
+            setFootballFields(ffsLists)
+          
+        }
+            getFootballFields()
+            getLatestFF(footballFields)
+          }, []);
+
+          function getLatestFF(footballFields) {
+            let latestFF = footballFields[0]; // initialize with the first element
+            for (let i = 1; i < footballFields.length; i++) {
+              const currentFF = footballFields[i];
+              if (new Date(currentFF.timeDateCreated) > new Date(latestFF.timeDateCreated)) {
+                latestFF = currentFF;
+              }
+            }
+            setLatestFootballField(latestFF);
+            console.log("latestFF1")
+            console.log(latestFootballField)
+          }
+          
   return (
     <SafeAreaView style={styles.container}>
           <Image style={styles.wfLogo} resizeMode="contain" source={require('./logo_dark.png')}/>
 
-          <TouchableOpacity style={styles.buttons_1} onPress={() => getLatestFF()}>
+          <TouchableOpacity style={styles.buttons_1} onPress={() => navigation.navigate('FootballField', {targetId: latestFootballField.targetId,footballFieldName: latestFootballField.footballFieldName,footballFieldTimeSeries: latestFootballField.footballFieldTimeSeries})}>
               <Text style={styles.buttonText_1}>Open Most Recent Football Field</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttons_2} onPress={() => navigation.navigate('Coverage', { userId: userId, targets: targets })}>
+          <TouchableOpacity style={styles.buttons_2} onPress={() => navigation.navigate('Coverage', { footballFields: footballFields , latestFF: latestFootballField, targets: targets, name: userName , email: userEmail})}>
               <Text style={styles.buttonText_2}>Open Coverage List</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttons_2} onPress={() => navigation.navigate('Profile_About')}>
+          <TouchableOpacity style={styles.buttons_2} onPress={() => navigation.navigate('Profile_About', { name: userName , email: userEmail})}>
               <Text style={styles.buttonText_2}>User Profile</Text>
           </TouchableOpacity>
     </SafeAreaView>

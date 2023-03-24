@@ -2,7 +2,9 @@ import { StyleSheet, SafeAreaView, View, Text } from 'react-native';
 import EmailAddressValue from "../components/EmailAddressValue";
 import NameValue from "../components/NameValue";
 
-export default function Profile_About({ navigation }) {
+const Profile_About = ({ route, navigation }) => {
+  const {name, email } = route.params;
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ padding: 10, marginTop: 10 }}>
@@ -11,12 +13,12 @@ export default function Profile_About({ navigation }) {
         </View>
         <View>
           <View style={{ flexDirection: "row", marginTop: 5 }}>
-            <Text style={{ color: '#FFF' }}>Name</Text>
-            <NameValue/>
+            <Text style={{ color: '#FFF' }}>Name: </Text>
+            <Text style={styles.nameValue}>{name}</Text>
           </View>
           <View style={{ flexDirection: "row", marginTop: 5 }}>
-            <Text style={{ color: '#FFF' }}>Email Address</Text>
-            <EmailAddressValue/>
+            <Text style={{ color: '#FFF' }}>Email Address: </Text>
+            <Text style={styles.emailAddressValue}>{email}</Text>
           </View>
         </View>
         <View style={{ marginTop: 10 }}>
@@ -30,10 +32,31 @@ export default function Profile_About({ navigation }) {
     </SafeAreaView>
   );
 }
+export default Profile_About;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000',
   },
+  nameValue: {
+    position: "absolute",
+    top: 51,
+    left: 126,
+    fontSize: 12,
+    lineHeight: 18,
+    fontFamily: "Avenir Next",
+    color: "#fff",
+    textAlign: "left",
+  },
+  emailAddressValue: {
+    position: "absolute",
+    top: 81,
+    left: 126,
+    fontSize: 12,
+    lineHeight: 18,
+    fontFamily: "Avenir Next",
+    color: "#fff",
+    textAlign: "left",
+  }
 });
