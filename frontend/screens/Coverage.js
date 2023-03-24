@@ -9,10 +9,8 @@ import { TouchableWithoutFeedback } from 'react-native';
 
 const Tab = createMaterialTopTabNavigator();
 const Coverage = ({ route, navigation }) => {
-  const { footballFields, latestFF, targets, name, email } = route.params;
-  console.log("latestFF")
+  const { footballFields, latestFF, targets, name, email, userId} = route.params;
 
-  console.log(latestFF)
 
 
   function TabFootballField() {
@@ -156,7 +154,7 @@ const Coverage = ({ route, navigation }) => {
             }
           </ScrollView>
       </View>
-      {showControls ? <Controls onClose={() => { setShowControls(false)}} onAddCard={ AddtoArray }/>:<Button title="New Target" onPress={() => { setShowControls(true)}}/>}
+      {showControls ? <Controls onClose={() => { setShowControls(false)}}/>:<Button title="New Target" onPress={() => { setShowControls(true)}}/>}
       <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
             <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
               <Text style={styles.buttonText_1}>Coverage</Text>
@@ -176,12 +174,36 @@ const Coverage = ({ route, navigation }) => {
 
 
 
-function Controls({ onClose, onAddCard }) {
+function Controls({ onClose}) {
   const [targetName, setTargetName] = useState ("");
   const [sectorName, setSectorName] = useState ("");
   const [subsectorName, setSubsectorName] = useState ("");
   const [revenueVal, setRevenueVal] = useState (0);
   const [ebitdaVal, setEbitdaVal] = useState (0);
+
+  function addPrivateTarget(targetName, sectorName, subsectorName, revenueVal,ebitdaVal){
+    fetch('http://10.239.101.190:5000/targets/private',{
+            method:'POST',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              targetName:targetName,
+              sectorName:sectorName,
+              subsectorName:subsectorName,
+              targetRevenueLTM:revenueVal,
+              targetEbitdaLTM:ebitdaVal,
+              userId:userId
+            })}
+        )
+        .then(resp=>resp.text())
+        /*.then(resp => {
+          if (resp === "SUCCESFUL TARGET POST") {
+            targets.push({---new target-})
+          }
+        }) */
+  }
 
   return (
     <View styles={styles.controls}>
@@ -225,7 +247,7 @@ function Controls({ onClose, onAddCard }) {
         <TouchableOpacity 
           title="Add New Target"
           onPress={() => {
-            onAddCard({ name: targetName, sector: sectorName, subsector: subsectorName, revenue: revenueVal, ebitda: ebitdaVal })
+            addPrivateTarget(targetName, sectorName, subsectorName, revenueVal,ebitdaVal)
           }}>
             <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
         </TouchableOpacity>

@@ -44,10 +44,11 @@ const HomeScreen = ({ route, navigation }) => {
                 }
               }
             setFootballFields(ffsLists)
+            getLatestFF(footballFields)
+
           
         }
             getFootballFields()
-            getLatestFF(footballFields)
           }, []);
 
           function getLatestFF(footballFields) {
@@ -71,7 +72,7 @@ const HomeScreen = ({ route, navigation }) => {
               <Text style={styles.buttonText_1}>Open Most Recent Football Field</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttons_2} onPress={() => navigation.navigate('Coverage', { footballFields: footballFields , latestFF: latestFootballField, targets: targets, name: userName , email: userEmail})}>
+          <TouchableOpacity style={styles.buttons_2} onPress={() => navigation.navigate('Coverage', { footballFields: footballFields , latestFF: latestFootballField, targets: targets, name: userName , email: userEmail, userId: userId})}>
               <Text style={styles.buttonText_2}>Open Coverage List</Text>
           </TouchableOpacity>
 

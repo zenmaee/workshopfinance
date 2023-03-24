@@ -144,6 +144,20 @@ def update_ff_names(targetId, footballFieldTimeSeries):
     update_FF_NAME(targetId, footballFieldTimeSeries,footballFieldName,iex_api_key)
     return "Successful PUT"
 
+@app.route('/targets/<type>', methods=['POST'])
+def add_targets(type):
+    userId=request.json['userId']
+    targetName=request.json['targetName']
+    sectorName=request.json['sectorName']
+    subsectorName=request.json['subsectorName']
+    targetRevenueLTM=request.json['revenueVal']
+    targetEbitdaLTM=request.json['ebitdaVal']
+
+    
+
+    #if type=="Private":
+    #    add_TARGET()
+
 @app.route('/targets/<userId>/', methods=['GET'])
 def retrieve_targets(userId):
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/TARGETS/"+userId+"?last=100&token="+iex_api_key
