@@ -106,7 +106,7 @@ const Coverage = ({ route, navigation }) => {
 
   const addFootballField= (type, symbol) => {
     const footballFieldTimeSeries = Math.floor(Date.now() * 1000).toString();
-    fetch('http://10.239.13.230:5000/footballFields',{
+    fetch('http://10.239.242.79:5000/footballFields',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -184,7 +184,7 @@ function Controls({ onClose}) {
   const [ebitdaVal, setEbitdaVal] = useState (0);
 
   function addPrivateTarget(targetName, sectorName, subsectorName, revenueVal,ebitdaVal){
-    fetch('http://10.239.101.190:5000/targets/private',{
+    fetch('http://10.239.242.79:5000/targets/private',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
