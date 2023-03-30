@@ -19,11 +19,7 @@ const Coverage = ({ route, navigation }) => {
     function retrieveFootballFields(targetId) {
       //let ffLists=[]
       //change routes: only showing last ff 
-<<<<<<< HEAD
         const url = "http://10.239.13.230:5000/footballfields/" + targetId + "/";
-=======
-        const url = "http://10.239.101.190:5000/footballfields/" + targetId + "/";
->>>>>>> main
         console.log(url)
         return fetch(url, {
           method: "GET",
@@ -110,11 +106,7 @@ const Coverage = ({ route, navigation }) => {
 
   const addFootballField= (type, symbol) => {
     const footballFieldTimeSeries = Math.floor(Date.now() * 1000).toString();
-<<<<<<< HEAD
     fetch('http://10.239.13.230:5000/footballFields',{
-=======
-    fetch('http://10.239.101.190:5000/footballFields',{
->>>>>>> main
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -162,13 +154,9 @@ const Coverage = ({ route, navigation }) => {
             }
           </ScrollView>
       </View>
-<<<<<<< HEAD
       <View style={styles.viewcontrols}>
         {showControls ? <Controls onClose={() => { setShowControls(false)}} onAddCard={ AddtoArray }/>:<Button title="New Target" onPress={() => { setShowControls(true)}}/>}
       </View>
-=======
-      {showControls ? <Controls onClose={() => { setShowControls(false)}}/>:<Button title="New Target" onPress={() => { setShowControls(true)}}/>}
->>>>>>> main
       <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
             <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
               <Text style={styles.buttonText_1}>Coverage</Text>

@@ -218,11 +218,7 @@ const FootballField = ({ route, navigation }) => {
   }*/
   
   const updateFootballFieldName= () => {
-<<<<<<< HEAD
     let url="http://10.239.13.230:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
-=======
-    let url="http://10.239.101.190:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
->>>>>>> main
     fetch(url,{
             method:'PUT',
             headers:{
@@ -238,11 +234,7 @@ const FootballField = ({ route, navigation }) => {
   }
 
   const deleteFootballField= () => {
-<<<<<<< HEAD
     fetch('http://10.239.13.230:5000/footballfields',{
-=======
-    fetch('http://10.239.101.190:5000/footballfields',{
->>>>>>> main
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -258,11 +250,7 @@ const FootballField = ({ route, navigation }) => {
   }
   
   const addValuation= () => {
-<<<<<<< HEAD
     fetch('http://10.239.13.230:5000/valuations',{
-=======
-    fetch('http://10.239.101.190:5000/valuations',{
->>>>>>> main
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -280,11 +268,7 @@ const FootballField = ({ route, navigation }) => {
 
   function retrieveValuations() {
     
-<<<<<<< HEAD
     let url = "http://10.239.13.230:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
-=======
-    let url = "http://10.239.101.190:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
->>>>>>> main
     return fetch(url, {
       method: "GET",
       headers: {
@@ -397,11 +381,7 @@ const FootballField = ({ route, navigation }) => {
   }, []);*/
 
     const generateValuation= () => {
-<<<<<<< HEAD
     fetch('http://10.239.13.230:5000/valuations',{
-=======
-    fetch('http://10.239.101.190:5000/valuations',{
->>>>>>> main
             method:'PUT',
             headers:{
                 'Accept':'application/json',
