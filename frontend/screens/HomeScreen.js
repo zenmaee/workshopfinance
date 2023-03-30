@@ -72,7 +72,8 @@ const styles = StyleSheet.create({
     },
     buttonText_1: {
         fontFamily: "Avenir Next", 
-        color: "#FFF"
+        color: "#FFF",
+        textAlign: "center"
     },
     buttonText_2: {
         fontFamily: "Avenir Next", 

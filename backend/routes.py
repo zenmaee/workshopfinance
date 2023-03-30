@@ -182,4 +182,4 @@ def add_footballfields():
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
-    app.run(host='10.239.55.109',port=5000, debug=True) #changes every time we change wifi
+    app.run(host='10.239.13.230',port=5000, debug=True) #changes every time we change wifi
