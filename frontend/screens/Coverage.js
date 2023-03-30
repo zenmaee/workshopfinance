@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Button, Image, Dimensions } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Card, Title, Paragraph, TextInput } from 'react-native-paper'
@@ -9,16 +9,21 @@ import { TouchableWithoutFeedback } from 'react-native';
 
 const Tab = createMaterialTopTabNavigator();
 const Coverage = ({ route, navigation }) => {
-  const { userId, targets } = route.params;
+  const { footballFields, latestFF, targets, name, email, userId} = route.params;
+
 
 
   function TabFootballField() {
-    const [footballFields, setFootballFields] = useState([])
+/*    const [footballFields, setFootballFields] = useState([])
 
     function retrieveFootballFields(targetId) {
       //let ffLists=[]
       //change routes: only showing last ff 
-        const url = "http://10.239.55.109:5000/footballfields/" + targetId + "/";
+<<<<<<< HEAD
+        const url = "http://10.239.13.230:5000/footballfields/" + targetId + "/";
+=======
+        const url = "http://10.239.101.190:5000/footballfields/" + targetId + "/";
+>>>>>>> main
         console.log(url)
         return fetch(url, {
           method: "GET",
@@ -54,13 +59,13 @@ const Coverage = ({ route, navigation }) => {
             
           }
               getFootballFields()
-            }, []);
+            }, []);*/
 
             console.log(footballFields)
 
             return (
-              <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
-                <View style={styles.scrollview}>
+              <SafeAreaView style={{ flex: 2, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
+                <View style={styles.arrayview}>
                     <ScrollView contentContainerStyle={styles.scrollview} keyboardDismissMode='on-drag'>
                       {
                         footballFields.map(field => {
@@ -86,11 +91,11 @@ const Coverage = ({ route, navigation }) => {
                         <Text style={styles.buttonText_1}>Coverage</Text>
                       </TouchableOpacity>
             
-                      <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { newFootballField: 0})}>
+                      <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { targetId: latestFF.targetId, footballFieldName:latestFF.footballFieldName,footballFieldTimeSeries:latestFF.footballFieldTimeSeries})}>
                         <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
                       </TouchableOpacity>
             
-                      <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { userId: userId})}>
+                      <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { name: name , email: email})}>
                         <Text style={styles.buttonText_1}>Profile</Text>
                       </TouchableOpacity>
                 </View>
@@ -105,7 +110,11 @@ const Coverage = ({ route, navigation }) => {
 
   const addFootballField= (type, symbol) => {
     const footballFieldTimeSeries = Math.floor(Date.now() * 1000).toString();
-    fetch('http://10.239.106.85:5000/footballFields',{
+<<<<<<< HEAD
+    fetch('http://10.239.13.230:5000/footballFields',{
+=======
+    fetch('http://10.239.101.190:5000/footballFields',{
+>>>>>>> main
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -131,8 +140,8 @@ const Coverage = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
-      <View style={styles.scrollview}>
-          <ScrollView contentContainerStyle={styles.scrollview} keyboardDismissMode='on-drag'>
+      <View style={styles.arrayview}>
+          <ScrollView contentContainerStyle={styles.scrollview} /*keyboardDismissMode='on-drag'*/>
             {
               targets.map(field => {
                 return (
@@ -153,18 +162,24 @@ const Coverage = ({ route, navigation }) => {
             }
           </ScrollView>
       </View>
-      {showControls ? <Controls onClose={() => { setShowControls(false)}} onAddCard={ AddtoArray }/>:<Button title="New Target" onPress={() => { setShowControls(true)}}/>}
+<<<<<<< HEAD
+      <View style={styles.viewcontrols}>
+        {showControls ? <Controls onClose={() => { setShowControls(false)}} onAddCard={ AddtoArray }/>:<Button title="New Target" onPress={() => { setShowControls(true)}}/>}
+      </View>
+=======
+      {showControls ? <Controls onClose={() => { setShowControls(false)}}/>:<Button title="New Target" onPress={() => { setShowControls(true)}}/>}
+>>>>>>> main
       <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
             <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
               <Text style={styles.buttonText_1}>Coverage</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { newFootballField: 1})}>
+            <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { targetId: latestFF.targetId, footballFieldName:latestFF.footballFieldName,footballFieldTimeSeries:latestFF.footballFieldTimeSeries})}>
               <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About')}>
-              <Text style={styles.buttonText_1}>Profile</Text>
+            <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { name: name , email: email})}>
+                <Text style={styles.buttonText_1}>Profile</Text>
             </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -173,12 +188,36 @@ const Coverage = ({ route, navigation }) => {
 
 
 
-function Controls({ onClose, onAddCard }) {
+function Controls({ onClose}) {
   const [targetName, setTargetName] = useState ("");
   const [sectorName, setSectorName] = useState ("");
   const [subsectorName, setSubsectorName] = useState ("");
   const [revenueVal, setRevenueVal] = useState (0);
   const [ebitdaVal, setEbitdaVal] = useState (0);
+
+  function addPrivateTarget(targetName, sectorName, subsectorName, revenueVal,ebitdaVal){
+    fetch('http://10.239.101.190:5000/targets/private',{
+            method:'POST',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              targetName:targetName,
+              sectorName:sectorName,
+              subsectorName:subsectorName,
+              targetRevenueLTM:revenueVal,
+              targetEbitdaLTM:ebitdaVal,
+              userId:userId
+            })}
+        )
+        .then(resp=>resp.text())
+        /*.then(resp => {
+          if (resp === "SUCCESFUL TARGET POST") {
+            targets.push({---new target-})
+          }
+        }) */
+  }
 
   return (
     <View styles={styles.controls}>
@@ -222,7 +261,7 @@ function Controls({ onClose, onAddCard }) {
         <TouchableOpacity 
           title="Add New Target"
           onPress={() => {
-            onAddCard({ name: targetName, sector: sectorName, subsector: subsectorName, revenue: revenueVal, ebitda: ebitdaVal })
+            addPrivateTarget(targetName, sectorName, subsectorName, revenueVal,ebitdaVal)
           }}>
             <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
         </TouchableOpacity>
@@ -240,13 +279,15 @@ function Controls({ onClose, onAddCard }) {
 }
 
 function MainTabs() {
+  const windowWidth = Dimensions.get('window').width;
+
   return (
     <Tab.Navigator
       initialRouteName="Targets"
       screenOptions={{
         contentContainerStyle: { flex: 1 },
         tabBarLabelStyle: { fontSize: 12, color: '#FFF' },
-        tabBarItemStyle: { width: 145 },
+        tabBarItemStyle: { width:  windowWidth/2 },
         tabBarStyle: { backgroundColor: '#000' },
       }}>
           <Tab.Screen 
@@ -277,23 +318,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  arrayview: {
+    marginTop: 5,
+    flex: 1
+  },
   scrollview: {
     alignItems: 'center',
-    height: 300,
-    width: 400
+    height: Dimensions.get('window').height / 2.5,
+    width: Dimensions.get('window').width * 0.95
   },
   cardList: {
     flex: 1,
-    height: 95,
+    height: Dimensions.get('window').height / 8,
     width: 400
   },
   bottomButtons: {
     position: 'absolute',
     bottom: 30
   },
+  viewcontrols: {
+    flex: 1,
+    height: Dimensions.get('window').height / 2.5,
+    width: Dimensions.get('window').width * 0.95,
+  },
   controls: {
-    height: 200,
-    width: 400,
+    height: Dimensions.get('window').height / 2.5,
+    width: Dimensions.get('window').width * 0.95,
     borderWidth: 1,
     borderColor: '#FFF',
     backgroundColor: '#FFF'

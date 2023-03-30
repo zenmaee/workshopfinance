@@ -1,15 +1,68 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Image, Text, View, TextInput, SafeAreaView, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+
 
 const SignUp = ({ navigation }) => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [firstName, setFirstName]=useState("")
+  const [lastName, setLastName]=useState("")
+  const [email, setEmail]=useState("")
+  const [checkValidEmail, setCheckValidEmail]=useState(false)
+  const [password, setPassword]=useState("")
+  //const [seePassword, setSeePassword] = useState(true);
+
+  const handleCheckEmail = text => {
+    let re = /\S+@\S+\.\S+/;
+    let regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+
+    setEmail(text);
+    if (re.test(text) || regex.test(text)) {
+      setCheckValidEmail(false);
+    } else {
+      setCheckValidEmail(true);
+    }
+  };
+
+  const checkPasswordValidity = value => {
+    const isNonWhiteSpace = /^\S*$/;
+    if (!isNonWhiteSpace.test(value)) {
+      return 'Password must not contain Whitespaces.';
+    }
+
+    const isContainsUppercase = /^(?=.*[A-Z]).*$/;
+    if (!isContainsUppercase.test(value)) {
+      return 'Password must have at least one Uppercase Character.';
+    }
+
+    const isContainsLowercase = /^(?=.*[a-z]).*$/;
+    if (!isContainsLowercase.test(value)) {
+      return 'Password must have at least one Lowercase Character.';
+    }
+
+    const isContainsNumber = /^(?=.*[0-9]).*$/;
+    if (!isContainsNumber.test(value)) {
+      return 'Password must contain at least one Digit.';
+    }
+
+    const isValidLength = /^.{8,16}$/;
+    if (!isValidLength.test(value)) {
+      return 'Password must be 8-16 Characters Long.';
+    }
+
+    // const isContainsSymbol =
+    //   /^(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).*$/;
+    // if (!isContainsSymbol.test(value)) {
+    //   return 'Password must contain at least one Special Symbol.';
+    // }
+
+    return null;
+  };
 
   const addUsers = () => {
-    fetch('http://10.239.55.109:5000/users', {
+<<<<<<< HEAD
+    fetch('http://10.239.13.230:5000/users', {
+=======
+    fetch('http://10.239.101.190:5000/users', {
+>>>>>>> main
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -18,7 +71,7 @@ const SignUp = ({ navigation }) => {
       body: JSON.stringify({
         firstName: firstName,
         lastName: lastName,
-        email: email,
+        email: email.toLocaleLowerCase(),
         password: password
       })
     })
@@ -26,12 +79,31 @@ const SignUp = ({ navigation }) => {
       .then(resp => {
         console.log(resp);
         if (resp === "Successful USERDATA POST") {
-          navigation.navigate('Coverage');
+          navigation.navigate('SignUpSignIn');
         }
       })
   };
 
-
+  const handleLogin = () => {
+    const checkPassword = checkPasswordValidity(password);
+    if (!checkPassword) {
+      addUsers()
+      /*
+        .then(result => {
+          if (result.status == 200) {
+            //addUsers();
+            //AsyncStorage.setItem('AccessToken', result.data.token);
+            //navigation.replace('Home');
+          }
+        })
+      
+        .catch(err => {
+          console.error(err);
+        });*/
+    } else {
+      alert(checkPassword);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -69,11 +141,17 @@ const SignUp = ({ navigation }) => {
                 //secureTextEntry={this.isSecure}
                 style={styles.input}
                 value={email}
-                onChangeText = {text=>setEmail(text)} 
+                onChangeText={text => handleCheckEmail(text)}
+                //onChangeText = {text=>setEmail(text)} 
                 keyboardType="default"
                 ></TextInput>
               <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
             </View>
+            {checkValidEmail ? (
+              <Text style={styles.textFailed}>Wrong format email</Text>
+              ) : (
+              <Text style={styles.textFailed}> </Text>
+            )}
 
             <View style={{ marginTop: 1, marginBottom: 1}} >
               <Text style={styles.inputTitle}>Enter password</Text>
@@ -93,7 +171,6 @@ const SignUp = ({ navigation }) => {
               <TextInput
                 //placeholder={this.placeholder}
                 //secureTextEntry={this.isSecure}
-                placeholder="Email"
                 style={styles.input}
                 value={password}
                 onChangeText = {text=>setPassword(text)} 
@@ -102,9 +179,24 @@ const SignUp = ({ navigation }) => {
               <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
             </View>
 
+          {/*
           <TouchableOpacity style={styles.buttons} onPress={() => addUsers()}>
               <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
+          */}
+
+          {email == '' || password == '' || checkValidEmail == true ? (
+          <TouchableOpacity
+            disabled
+            style={styles.buttonDisable}
+            onPress={handleLogin}>
+            <Text style={styles.text}>Sign Up</Text>
+          </TouchableOpacity>
+          ) : (
+          <TouchableOpacity style={styles.buttons} onPress={handleLogin}>
+            <Text style={styles.text}>Sign Up</Text>
+          </TouchableOpacity>
+         )}
     </SafeAreaView>
   );
 }
@@ -132,6 +224,21 @@ const styles = StyleSheet.create({
         shadowRadius: 10,
         elevation: 5
     },
+    buttonDisable: {
+      fontSize: 16,
+      borderRadius: 4, 
+      marginTop: 30, 
+      paddingVertical: 7,
+      paddingHorizontal: 20,
+      alignItems: "center", 
+      backgroundColor:'grey',
+      justifyContent: "center",
+      shadowColor: "rgba(171, 180, 189, 0.35)",
+      shadowOffset: { width: 0, height: 0 },
+      shadowOpacity: 0.5,
+      shadowRadius: 10,
+      elevation: 5
+    },
     wfLogo: {
       top: 55,
       height: 100,
@@ -156,7 +263,9 @@ const styles = StyleSheet.create({
       color: "#FFF", 
       fontSize: 14, 
       fontFamily: "Avenir Next"
-    }
+    },
+    textFailed: {
+      alignSelf: 'flex-end',
+      color: 'red',
+    },
 });
-
-
