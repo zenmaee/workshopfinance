@@ -7,9 +7,21 @@ const SignUpSignIn = ({ navigation }) => {
   const [email, setEmail]=useState("")
   const [password, setPassword]=useState("")
   
+<<<<<<< HEAD
   function retrieveTargets(userId) {
     
     const url = 'http://10.239.13.230:5000/targets/'+userId+'/'
+=======
+  function retrieveTargets(resp) {
+    console.log(resp)
+    console.log(typeof resp)
+
+    const userId=resp[0]
+    const userName=resp[1]
+    const userEmail=resp[2]
+
+    const url = 'http://10.239.101.190:5000/targets/'+userId+'/'
+>>>>>>> main
     console.log(url)
     return fetch(url, {
       method: "GET",
@@ -21,6 +33,8 @@ const SignUpSignIn = ({ navigation }) => {
       .then((resp) => resp.json())
       .then((data) => {
         navigation.navigate('HomeScreen', {
+          userName: userName,
+          userEmail: userEmail,
           userId: userId,
           targets: data,
         })
@@ -33,8 +47,9 @@ const SignUpSignIn = ({ navigation }) => {
         });}
   
   
-  function signIn() {
+        function signIn() {
 
+<<<<<<< HEAD
     console.log("email")
     console.log(email)
     const url = 'http://10.239.13.230:5000/users/'+email
@@ -52,24 +67,44 @@ const SignUpSignIn = ({ navigation }) => {
         if (resp === "Incorrect password") {
           console.log(resp);
         ;
+=======
+          console.log("email")
+          console.log(email)
+          const url = 'http://10.239.101.190:5000/users/'+email
+          return fetch(url, {
+            method:'POST',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              password:password})} //ADD SECURITY. I DONT LIKE TO SEND PASSWORD TO LOCAL HOST
+            )
+            
+            .then(resp => {
+              if (resp === "Incorrect password") {
+                console.log(resp);
+              ;
+              }
+              else if (resp==="User Does Not Exist"){
+                
+                console.log(resp);
+              }
+              else {
+                console.log("next stop cov")
+                console.log(resp.value)
+                return resp.json() // Convert the response to JSON
+              }
+            })
+            .then(json => {
+              retrieveTargets(json); // Pass the JSON response to the retrieveTargets function
+            })
+            .catch((error) => {
+              console.error("Error fetching data:", error);
+              return [];
+            });
+>>>>>>> main
         }
-        else if (resp==="User Does Not Exist"){
-          
-          console.log(resp);
-        }
-        else {
-          console.log("next stop cov")
-          retrieveTargets(resp)
-          //navigation.navigate('Coverage', { userId: resp});
-        }
-      })
-
-
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        return [];
-      });
-  }
 
   return (
     <SafeAreaView style={styles.container}>
