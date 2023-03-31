@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Button, ScrollView, Text, View, TextInput, SafeAreaView, TouchableOpacity, Dimensions, Image } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
+import DropDownPicker from 'react-native-dropdown-picker'
 
 const InlinePicker = ({ selectedValue, onValueChange, options }) => {
   return(
@@ -20,7 +21,14 @@ const FootballField = ({ route, navigation }) => {
   const targetSymbol = targetId.split("-")[1]
   
   const [footballFieldId, setFootballFieldId]=useState("")
-  const [footballFieldOutput, setFootballFieldOutput]=useState("EV")
+
+  // const [footballFieldOutput, setFootballFieldOutput]=useState("EV") // Picker value
+  const [footballFieldOutput, setFootballFieldOutput]=useState(null)
+  const [outputItems, setOutputItems]=useState([
+    {label: 'EV', value: 'EV'},
+    {label: 'Multiples', value: 'MULT'}
+  ])
+
   const [footballFieldScale, setFootballFieldScale]=useState("billions")
   const [valuationId, setValuationId]=useState("")
   const [valuationCompsDate, setValuationCompsDate]=useState("")
@@ -34,11 +42,10 @@ const FootballField = ({ route, navigation }) => {
   const [valuationTimeSeries, setValuationTimeSeries]=useState("")
   const [response, setResponse]=useState([])
   const [valuations, setValuations] = useState([]);
-  const [selectedLanguage, setSelectedLanguage] = useState("js");
   const [showValuationControls, setShowValuationControls] = useState(false);
 
   function searchTicker(input) {
-    return fetch('http://10.239.242.79:5000/ticker/' + input, {
+    return fetch('http://10.239.251.136:5000/ticker/' + input, { 
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -222,7 +229,7 @@ const FootballField = ({ route, navigation }) => {
 
     <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
       <Text style={{ color: 'white' }}>Output</Text>
-      <InlinePicker
+      {/* <InlinePicker
         selectedValue={footballFieldOutput}
         onValueChange={(itemValue, itemIndex) => {
           setFootballFieldOutput(itemValue);
@@ -232,6 +239,12 @@ const FootballField = ({ route, navigation }) => {
           { label: "Enterprise Value", value: "EV" },   
           { label: "Multiples", value: "MULT" },
           ]}
+      /> */}
+      <DropDownPicker
+        value={footballFieldOutput}
+        setValue={setFootballFieldOutput}
+        items={outputItems}
+        setItems={setOutputItems}
       />
 
     </View>
@@ -282,7 +295,7 @@ const FootballField = ({ route, navigation }) => {
   }*/
   
   const updateFootballFieldName= () => {
-    let url="http://10.239.242.79:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
+    let url="http://10.239.251.136:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
     fetch(url,{
             method:'PUT',
             headers:{
@@ -298,7 +311,7 @@ const FootballField = ({ route, navigation }) => {
   }
 
   const deleteFootballField= () => {
-    fetch('http://10.239.242.79:5000/footballfields',{
+    fetch('http://10.0.0.187:5000/footballfields',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -332,7 +345,7 @@ const FootballField = ({ route, navigation }) => {
 
   function retrieveValuations() {
     
-    let url = "http://10.239.242.79:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
+    let url = "http://10.239.251.136:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
@@ -503,7 +516,7 @@ const FootballField = ({ route, navigation }) => {
 
 
   function addComp (valuationId, compSymbol, )  {
-    fetch('http://10.239.242.79:5000/comps',{
+    fetch('http://10.239.251.136:5000/comps',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -520,7 +533,7 @@ const FootballField = ({ route, navigation }) => {
 
 
   const deleteComp= () => {
-    fetch('http://10.239.242.79:5000/comps',{
+    fetch('http://10.239.251.136:5000/comps',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',

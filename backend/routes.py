@@ -73,7 +73,7 @@ def add_valuations():
     userId=request.json['userId']
     footballFieldId=userId+footballFieldTimeSeries
     #Then we send it to the database
-    add_VALUATION(footballFieldId,iex_api_key)
+    add_VALUATION(footballFieldId, iex_api_key)
     return "Successful VALUATION POST"
 
 @app.route('/valuations/names', methods = ['PUT'])
@@ -103,7 +103,7 @@ def generate_valuations():
     desired_multiples=["evToEbitdaLTM", "evToRevenueLTM"]
     #Ver cómo coger valuationId
     #Ver cómo coger basketofcomps
-    generate_valuation(userId, targetSymbol, desired_multiples, valuationTimeSeries, valuationCompsDate,iex_api_key, footballFieldTimeSeries)
+    generate_valuation(userId, targetSymbol, desired_multiples, valuationTimeSeries, iex_api_key, footballFieldTimeSeries)
 
     return "Successful PUT"
 
@@ -218,4 +218,4 @@ def search_ticker(input):
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
-    app.run(host='10.239.242.79',port=5000, debug=True) #changes every time we change wifi
+    app.run(host='10.239.251.136',port=5000, debug=True) #changes every time we change wifi
