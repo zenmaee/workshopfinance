@@ -22,12 +22,12 @@ const FootballField = ({ route, navigation }) => {
   
   const [footballFieldId, setFootballFieldId]=useState("")
 
-  // const [footballFieldOutput, setFootballFieldOutput]=useState("EV") // Picker value
-  const [footballFieldOutput, setFootballFieldOutput]=useState(null)
-  const [outputItems, setOutputItems]=useState([
-    {label: 'EV', value: 'EV'},
-    {label: 'Multiples', value: 'MULT'}
-  ])
+  const [footballFieldOutput, setFootballFieldOutput]=useState("EV") // Picker value
+  // const [footballFieldOutput, setFootballFieldOutput]=useState(null)
+  // const [outputItems, setOutputItems]=useState([
+  //   {label: 'EV', value: 'EV'},
+  //   {label: 'Multiples', value: 'MULT'}
+  // ])
 
   const [footballFieldScale, setFootballFieldScale]=useState("billions")
   const [valuationId, setValuationId]=useState("")
@@ -101,23 +101,27 @@ const FootballField = ({ route, navigation }) => {
     return(
           <View style={{ margin: 0, height: 200, width: 400, borderWidth: 1 }}>
               <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ color: 'white' }}>Add Comp</Text>
+                <Text style={{ color: 'white' }}>Comp Name</Text>
                 <TextInput style={{ marginTop: 5, margin: 10, height: 40, width: 200, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
                   placeholder="Company Name or Ticker"
                   onChangeText={(text) => find_company_name(text)}>
-
                 </TextInput>
                 <TouchableOpacity 
                     title="Add Comp"
+                    style={{
+                      borderRadius: 5,
+                      backgroundColor: 'blue',
+                      padding: 10
+                    }}
                     onPress={() => {
                       addComp()
                     }}>
-                      <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+                    <Text style={{ color: '#FFF' }}>Add Comp</Text>
                   </TouchableOpacity>
               </View>
               <View style={{ marginTop: 10, flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={{ color: 'white' }}>Metric</Text>
-                <InlinePicker
+                {/* <InlinePicker
                   selectedValue={footballFieldOutput}
                   onValueChange={(itemValue, itemIndex) =>
                     setFootballFieldOutput(itemValue)}
@@ -128,11 +132,11 @@ const FootballField = ({ route, navigation }) => {
                       label: "EV/EBITDA (LTM)",
                       value: "EV_E"
                     },
-                  ]}/>
+                  ]}/> */}
               </View>
               <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={{ color: 'white' }}>Stat</Text>
-                <InlinePicker
+                {/* <InlinePicker
                   selectedValue={footballFieldOutput}
                   onValueChange={(itemValue, itemIndex) =>
                     setFootballFieldOutput(itemValue)}
@@ -149,7 +153,7 @@ const FootballField = ({ route, navigation }) => {
                     label: "Low",
                     value: "Low"
                   },
-                  ]}/>
+                  ]}/> */}
               </View>
               <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={{ color: 'white' }}>Spread</Text>
@@ -240,17 +244,18 @@ const FootballField = ({ route, navigation }) => {
           { label: "Multiples", value: "MULT" },
           ]}
       /> */}
-      <DropDownPicker
+
+      {/* <DropDownPicker
         value={footballFieldOutput}
         setValue={setFootballFieldOutput}
         items={outputItems}
         setItems={setOutputItems}
-      />
+      /> */}
 
     </View>
     <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
       <Text style={{ color: 'white' }}>Scale</Text>
-      <InlinePicker
+      {/* <InlinePicker
         selectedValue={footballFieldScale}
         onValueChange={(itemValue, itemIndex) =>
           setFootballFieldScale(itemValue)}
@@ -261,7 +266,7 @@ const FootballField = ({ route, navigation }) => {
             label: "Billions",
             value: "billions"
           },
-        ]}/>
+        ]}/> */}
     </View>
   </View>  );
   }
@@ -570,7 +575,7 @@ const FootballField = ({ route, navigation }) => {
   const pixelsPerDollar = (valuationWidth-20-20) / tableRange;
 
   return (
-      <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: '#000' }}>
+      <SafeAreaView style={{ flex: 2, alignItems: 'center', backgroundColor: '#000' }}>
         <View style={{ backgroundColor: '#FFF', height: 0.4*(windowHeight), width: valuationWidth, borderRadius: 10 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 10 }}>
             <Text style={{ marginTop: 10, marginLeft: 10 }}>{footballFieldName}</Text>
@@ -610,7 +615,8 @@ const FootballField = ({ route, navigation }) => {
               <>
                 <View style={{ marginTop: 5 }}>
                   <Text>{valuation.name}</Text>
-                  <View style={{ marginStart: (valuation.minValuation - table.minRange)*pixelsPerDollar, backgroundColor: valuation.color, height: valuationHeight, width: (valuation.maxValuation - valuation.minValuation) * pixelsPerDollar, marginTop: 5 }}></View>
+                  {/* <View style={{ marginStart: (valuation.minValuation - table.minRange)*pixelsPerDollar, backgroundColor: valuation.color, height: valuationHeight, width: (valuation.maxValuation - valuation.minValuation) * pixelsPerDollar, marginTop: 5 }}></View> */}
+                  <View style={{ marginStart: 0, backgroundColor: valuation.color, height: valuationHeight, width: 0, marginTop: 5 }}></View>
                 </View>
               </>
               )
