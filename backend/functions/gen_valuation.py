@@ -19,14 +19,14 @@ import time
 #get_output:Gets valuation output
 #generate_valuation:Generates Valuation. Main function to call
 
-def get_metrics(company,comp_tgt, valuationCompsDate,iex_api_key):
+def get_metrics(company,comp_tgt,iex_api_key):
     #Preparing code
     fundamentals = [] #Fundamentals will store desired financial metrics of each company
 
     ##Fetching API
     #fundamentals_api obtains ebitda and revenue
     #both if we are dealing with the comp or with a tgt, we want the ebitdaLTM and the revenueLTM
-    fundamentals_api="https://cloud.iexapis.com/stable/time-series/fundamentals/"+company+"/ttm?token="+iex_api_key+"&to="+valuationCompsDate+"&last=1"
+    fundamentals_api="https://cloud.iexapis.com/stable/time-series/fundamentals/"+company+"/ttm?token="+iex_api_key
     fundamentals_request=requests.get(fundamentals_api)
     ebitdaLTM = fundamentals_request.json()[0]['ebitdaReported']
     revenueLTM= fundamentals_request.json()[0]['revenue']
@@ -35,9 +35,9 @@ def get_metrics(company,comp_tgt, valuationCompsDate,iex_api_key):
     if comp_tgt=="comp":
         #fundamental_valuations_api obtains enterpriseValue. Only when we are fetching a comp we are interested in enterpriseValue.
         
-        fundamental_valuations_api = "https://cloud.iexapis.com/stable//time-series/FUNDAMENTAL_VALUATIONS/"+company+"/ttm?token="+iex_api_key
-        fundamental_valuations_request=requests.get(fundamental_valuations_api)
-        enterpriseValue = fundamental_valuations_request.json()[0]['enterpriseValue']
+        ev_api = "https://cloud.iexapis.com/v1/stock/"+company+"/advanced-stats?token="+iex_api_key
+        ev_request=requests.get(ev_api)
+        enterpriseValue = ev_request.json()[0]['enterpriseValue']
 
         #calculating evToEbitdaLTM
         evToEbitdaLTM=enterpriseValue/ebitdaLTM
@@ -59,9 +59,9 @@ def get_metrics(company,comp_tgt, valuationCompsDate,iex_api_key):
 
     return fundamentals
 
-def add_COMP(compSymbol,valuationId,valuationCompsDate,iex_api_key):
+def add_COMP(compSymbol,valuationId,iex_api_key):
 
-    fundamentals=get_metrics(compSymbol,"comp", valuationCompsDate,iex_api_key)
+    fundamentals=get_metrics(compSymbol,"comp", iex_api_key)
     evToEbitdaLTM=fundamentals[0]
     evToRevenueLTM=fundamentals[1]
 
@@ -82,7 +82,7 @@ def add_COMP(compSymbol,valuationId,valuationCompsDate,iex_api_key):
     print(r)
     return r
 
-def update_VALUATION(footballFieldId, multiples,ev, valuationCompsDate,valuationTimeSeries,iex_api_key):
+def update_VALUATION(footballFieldId, multiples,ev,valuationTimeSeries,iex_api_key):
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"/?&token="+iex_api_key
     valuation=requests.get(url).json()
     
@@ -108,7 +108,7 @@ def update_VALUATION(footballFieldId, multiples,ev, valuationCompsDate,valuation
     valuation[0]['valuationEvLowEvRevLTM']=ev.iloc[3]['evToRevenueLTM']#Stat=Low, Multiple=evToRevLTM
     
     #valuationCompsDate:
-    valuation[0]['valuationCompsDate']=valuationCompsDate
+    #valuation[0]['valuationCompsDate']=valuationCompsDate
     
 
     url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
@@ -119,7 +119,7 @@ def update_VALUATION(footballFieldId, multiples,ev, valuationCompsDate,valuation
 
 
 
-def get_output(basket_of_comps, valuationId, targetSymbol, desired_multiples, valuationCompsDate,iex_api_key):
+def get_output(basket_of_comps, valuationId, targetSymbol, desired_multiples, iex_api_key):
 
     comps_raw_data = []
     tgt_raw_data=[]
@@ -136,7 +136,7 @@ def get_output(basket_of_comps, valuationId, targetSymbol, desired_multiples, va
         
 
     #We obtain ebitdaLTM and revenueLTM for the tgt
-    tgt_raw_data.append(get_metrics(targetSymbol,"tgt",valuationCompsDate,iex_api_key))
+    tgt_raw_data.append(get_metrics(targetSymbol,"tgt",iex_api_key))
   
     #Specify the columns for the tgt dataframe (ebitdaLTM and revenueLTM)
     
@@ -196,7 +196,7 @@ def retrieve_valuation_comps(valuationId, iex_api_key):
     print(basket_of_comps)
     return basket_of_comps
 
-def generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeSeries, valuationCompsDate,iex_api_key, footballFieldTimeSeries):
+def generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeSeries, iex_api_key, footballFieldTimeSeries):
     #We preprare the IDs:
     footballFieldId=targetId+"-"+footballFieldTimeSeries
     valuationId=footballFieldId+"-"+valuationTimeSeries
@@ -214,18 +214,18 @@ def generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeS
     #We get the basket of comps:
     basket_of_comps=retrieve_valuation_comps(valuationId, iex_api_key)
     print (basket_of_comps)
-    output=get_output(basket_of_comps, valuationId, targetSymbol, desired_multiples,valuationCompsDate,iex_api_key)
+    output=get_output(basket_of_comps, valuationId, targetSymbol, desired_multiples,iex_api_key)
     multiples=output[0]
     ev=output[1]
     
     
-    update_VALUATION(footballFieldId, multiples, ev,valuationCompsDate,valuationTimeSeries,iex_api_key)
+    update_VALUATION(footballFieldId, multiples, ev,valuationTimeSeries,iex_api_key)
 
 def add_VALUATION(footballFieldId, iex_api_key, valuationTimeSeries):
     now = datetime.now()
     timeDateCreated = now.strftime("%m/%d/%Y %H:%M:%S")# timeDateCreated value has to be fixed, can not be editted. It contains the
     timeDateCreated = timeDateCreated[:6]+timeDateCreated[8:-3] #time and date of when the valuation was generated for the first time
-    valuationCompsDate=now.strftime("%m/%d/%Y")
+    #valuationCompsDate=now.strftime("%m/%d/%Y")
     valuationType="COMPS"
     
     url_valuation_name="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/?last=100&token="+iex_api_key
@@ -239,7 +239,6 @@ def add_VALUATION(footballFieldId, iex_api_key, valuationTimeSeries):
         
         "footballFieldId":footballFieldId,
         "timeDateCreated":timeDateCreated,
-        "valuationCompsDate":valuationCompsDate,
         "valuationName":valuationName,
         "valuationTimeSeries":valuationTimeSeries,
         "valuationType":valuationType
