@@ -37,18 +37,76 @@ const FootballField = ({ route, navigation }) => {
   const [selectedLanguage, setSelectedLanguage] = useState("js");
   const [showValuationControls, setShowValuationControls] = useState(false);
 
+  function searchTicker(input) {
+    return fetch('http://10.239.242.79:5000/ticker/' + input, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+      return [];
+    });
+  }
+  
+  function find_company_name(input) {
+    let res_company = [];
+    let res_ticker = [];
+    /*try {
+      // Assuming `search_company` is defined somewhere else
+      res_company = search_company(input);
+    } catch (error) {
+      // handle runtime error, type error, or name error
+    }*/
+    try {
+      res_ticker = searchTicker(input);
+    } catch (error) {
+      // handle runtime error, type error, or name error
+    }
+    // Since `searchTicker` returns a Promise, we need to handle it asynchronously
+    Promise.all([res_company, res_ticker])
+      .then(([companyResults, tickerResults]) => {
+        res_company = companyResults;
+        res_ticker = tickerResults;
+        res_ticker = res_ticker.sort();
+        res_company.sort(function(a, b) {
+          return a[1] - b[1];
+        });
+        let res = res_company.concat(res_ticker);
+        let res_final = [...new Set(res)];
+        console.log("input")
+        console.log(input)
+        console.log(res_final)
+        return res_final;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        return [];
+      });
+  }
+
   function ValuationControls({ onClose }) {
     return(
           <View style={{ margin: 0, height: 200, width: 400, borderWidth: 1 }}>
               <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={{ color: 'white' }}>Add Comp</Text>
                 <TextInput style={{ marginTop: 5, margin: 10, height: 40, width: 200, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
-                  placeholder="Company Name or Ticker">
+                  placeholder="Company Name or Ticker"
+                  onChangeText={(text) => find_company_name(text)}>
+
                 </TextInput>
-                <TouchableOpacity
-                  title="Add Comp">
-                  <Image style={{ height: 40, width: 40, borderRadius: 4, marginLeft: 5 }} source={require('./plus_icon.png')}/>
-                </TouchableOpacity>
+                <TouchableOpacity 
+                    title="Add Comp"
+                    onPress={() => {
+                      addComp()
+                    }}>
+                      <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+                  </TouchableOpacity>
               </View>
               <View style={{ marginTop: 10, flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={{ color: 'white' }}>Metric</Text>
@@ -66,7 +124,7 @@ const FootballField = ({ route, navigation }) => {
                   ]}/>
               </View>
               <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ color: 'white' }}>Output</Text>
+                <Text style={{ color: 'white' }}>Stat</Text>
                 <InlinePicker
                   selectedValue={footballFieldOutput}
                   onValueChange={(itemValue, itemIndex) =>
@@ -78,6 +136,12 @@ const FootballField = ({ route, navigation }) => {
                       label: "Median",
                       value: "Median"
                     },
+                    { label: "High",
+                    value: "High"
+                  }, {
+                    label: "Low",
+                    value: "Low"
+                  },
                   ]}/>
               </View>
               <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
@@ -218,11 +282,7 @@ const FootballField = ({ route, navigation }) => {
   }*/
   
   const updateFootballFieldName= () => {
-<<<<<<< HEAD
-    let url="http://10.239.13.230:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
-=======
-    let url="http://10.239.101.190:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
->>>>>>> main
+    let url="http://10.239.242.79:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
     fetch(url,{
             method:'PUT',
             headers:{
@@ -238,11 +298,7 @@ const FootballField = ({ route, navigation }) => {
   }
 
   const deleteFootballField= () => {
-<<<<<<< HEAD
-    fetch('http://10.239.13.230:5000/footballfields',{
-=======
-    fetch('http://10.239.101.190:5000/footballfields',{
->>>>>>> main
+    fetch('http://10.239.242.79:5000/footballfields',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -258,11 +314,7 @@ const FootballField = ({ route, navigation }) => {
   }
   
   const addValuation= () => {
-<<<<<<< HEAD
-    fetch('http://10.239.13.230:5000/valuations',{
-=======
-    fetch('http://10.239.101.190:5000/valuations',{
->>>>>>> main
+    fetch('http://10.239.242.79:5000/valuations',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -280,11 +332,7 @@ const FootballField = ({ route, navigation }) => {
 
   function retrieveValuations() {
     
-<<<<<<< HEAD
-    let url = "http://10.239.13.230:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
-=======
-    let url = "http://10.239.101.190:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
->>>>>>> main
+    let url = "http://10.239.242.79:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
@@ -397,11 +445,7 @@ const FootballField = ({ route, navigation }) => {
   }, []);*/
 
     const generateValuation= () => {
-<<<<<<< HEAD
-    fetch('http://10.239.13.230:5000/valuations',{
-=======
-    fetch('http://10.239.101.190:5000/valuations',{
->>>>>>> main
+    fetch('http://10.239.242.79:5000/valuations',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -422,7 +466,7 @@ const FootballField = ({ route, navigation }) => {
   }
   
   const updateValuationName= () => {
-    fetch('http://10.239.101.190:5000/valuations/names',{
+    fetch('http://10.239.242.79:5000/valuations/names',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -442,7 +486,7 @@ const FootballField = ({ route, navigation }) => {
 
 
   const deleteValuation= () => {
-    fetch('http://10.239.101.190:5000/valuations',{
+    fetch('http://10.239.242.79:5000/valuations',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -458,8 +502,8 @@ const FootballField = ({ route, navigation }) => {
   }
 
 
-  const addComp= () => {
-    fetch('http://10.239.101.190:5000/comps',{
+  function addComp (valuationId, compSymbol, )  {
+    fetch('http://10.239.242.79:5000/comps',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -467,8 +511,7 @@ const FootballField = ({ route, navigation }) => {
             },
             body:JSON.stringify({
               compSymbol:compSymbol,
-              valuationId:valuationId,
-              valuationCompsDate:valuationCompsDate})}
+              valuationId:valuationId})}
         )
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
@@ -477,7 +520,7 @@ const FootballField = ({ route, navigation }) => {
 
 
   const deleteComp= () => {
-    fetch('http://10.239.101.190:5000/comps',{
+    fetch('http://10.239.242.79:5000/comps',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',

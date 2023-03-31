@@ -7,11 +7,6 @@ const SignUpSignIn = ({ navigation }) => {
   const [email, setEmail]=useState("")
   const [password, setPassword]=useState("")
   
-<<<<<<< HEAD
-  function retrieveTargets(userId) {
-    
-    const url = 'http://10.239.13.230:5000/targets/'+userId+'/'
-=======
   function retrieveTargets(resp) {
     console.log(resp)
     console.log(typeof resp)
@@ -20,8 +15,7 @@ const SignUpSignIn = ({ navigation }) => {
     const userName=resp[1]
     const userEmail=resp[2]
 
-    const url = 'http://10.239.101.190:5000/targets/'+userId+'/'
->>>>>>> main
+    const url = 'http://10.239.242.79:5000/targets/'+userId+'/'
     console.log(url)
     return fetch(url, {
       method: "GET",
@@ -49,28 +43,9 @@ const SignUpSignIn = ({ navigation }) => {
   
         function signIn() {
 
-<<<<<<< HEAD
-    console.log("email")
-    console.log(email)
-    const url = 'http://10.239.13.230:5000/users/'+email
-    return fetch(url, {
-      method:'POST',
-      headers:{
-          'Accept':'application/json',
-          'Content-Type':'application/json'
-      },
-      body:JSON.stringify({
-        password:password})} //ADD SECURITY. I DONT LIKE TO SEND PASSWORD TO LOCAL HOST
-      )
-      .then(resp=>resp.text())
-      .then(resp => {
-        if (resp === "Incorrect password") {
-          console.log(resp);
-        ;
-=======
           console.log("email")
           console.log(email)
-          const url = 'http://10.239.101.190:5000/users/'+email
+          const url = 'http://10.239.242.79:5000/users/'+email
           return fetch(url, {
             method:'POST',
             headers:{
@@ -103,7 +78,6 @@ const SignUpSignIn = ({ navigation }) => {
               console.error("Error fetching data:", error);
               return [];
             });
->>>>>>> main
         }
 
   return (

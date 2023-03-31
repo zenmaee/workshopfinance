@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Image, Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
+import { SafeAreaView, StyleSheet, TouchableOpacity, Text, View, Image, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-paper';
 
 const HomeScreen = ({ route, navigation }) => {
@@ -11,7 +11,7 @@ const HomeScreen = ({ route, navigation }) => {
   function retrieveFootballFields(targetId) {
     //let ffLists=[]
     //change routes: only showing last ff 
-      const url = "http://10.239.101.190:5000/footballfields/" + targetId + "/";
+      const url = "http://10.239.242.79:5000/footballfields/" + targetId + "/";
       console.log(url)
       return fetch(url, {
         method: "GET",
@@ -43,10 +43,7 @@ const HomeScreen = ({ route, navigation }) => {
                   ffsLists.push(ff)
                 }
               }
-            setFootballFields(ffsLists)
-            getLatestFF(footballFields)
-
-          
+            setFootballFields(ffsLists)          
         }
             getFootballFields()
           }, []);
@@ -63,16 +60,31 @@ const HomeScreen = ({ route, navigation }) => {
             console.log("latestFF1")
             console.log(latestFootballField)
           }
-          
+          useEffect(() => {
+            getLatestFF(footballFields);
+          }, [footballFields]);
   return (
     <SafeAreaView style={styles.container}>
           <Image style={styles.wfLogo} resizeMode="contain" source={require('./logo_dark.png')}/>
 
-          <TouchableOpacity style={styles.buttons_1} onPress={() => navigation.navigate('FootballField', {targetId: latestFootballField.targetId,footballFieldName: latestFootballField.footballFieldName,footballFieldTimeSeries: latestFootballField.footballFieldTimeSeries})}>
+          {latestFootballField ? (
+      <TouchableOpacity style={styles.buttons_1} onPress={() => {
+        navigation.navigate('FootballField', {
+          targetId: latestFootballField.targetId,
+          footballFieldName: latestFootballField.footballFieldName,
+          footballFieldTimeSeries: latestFootballField.footballFieldTimeSeries
+        });
+      }}>
               <Text style={styles.buttonText_1}>Open Most Recent Football Field</Text>
-          </TouchableOpacity>
+      </TouchableOpacity>
+    ) : (
+      // render a loader or a message while waiting for latestFootballField
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    )}
 
-          <TouchableOpacity style={styles.buttons_2} onPress={() => navigation.navigate('Coverage', { footballFields: footballFields , latestFF: latestFootballField, targets: targets, name: userName , email: userEmail, userId: userId})}>
+          <TouchableOpacity style={styles.buttons_2} onPress={() =>{if (footballFields){navigation.navigate('Coverage', { footballFields: footballFields , latestFF: latestFootballField, targets: targets, name: userName , email: userEmail, userId: userId})}}}>
               <Text style={styles.buttonText_2}>Open Coverage List</Text>
           </TouchableOpacity>
 
