@@ -37,7 +37,7 @@ def get_metrics(company,comp_tgt,iex_api_key):
         
         ev_api = "https://cloud.iexapis.com/v1/stock/"+company+"/advanced-stats?token="+iex_api_key
         ev_request=requests.get(ev_api)
-        enterpriseValue = ev_request.json()[0]['enterpriseValue']
+        enterpriseValue = ev_request.json()['enterpriseValue']
 
         #calculating evToEbitdaLTM
         evToEbitdaLTM=enterpriseValue/ebitdaLTM
@@ -60,16 +60,13 @@ def get_metrics(company,comp_tgt,iex_api_key):
     return fundamentals
 
 def add_COMP(compSymbol,valuationId,iex_api_key):
-
     fundamentals=get_metrics(compSymbol,"comp", iex_api_key)
     evToEbitdaLTM=fundamentals[0]
     evToRevenueLTM=fundamentals[1]
 
     #If this dataset COMPS is empty, the firs compId will be 1. From then on, each compId will be the previous compId+1.
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS?&token="+iex_api_key
-    comps=[
-    {
-        
+    comps=[{        
         "compSymbol": compSymbol,
         "evToEbitdaLTM": evToEbitdaLTM,
         "evToRevenueLTM": evToRevenueLTM,
@@ -78,9 +75,12 @@ def add_COMP(compSymbol,valuationId,iex_api_key):
 
     #POST each comp into the COMPS dataset
     r = requests.post(url, json=comps)
-    print("r de comps")
-    print(r)
-    return r
+    print("r")
+    print(r.json()) # <--- Convert response to JSON format
+    if r.status_code==200:
+        return "Successful Comps Post"
+    else:
+        return "Unsuccessful Comps Post"
 
 def update_VALUATION(footballFieldId, multiples,ev,valuationTimeSeries,iex_api_key):
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"/?&token="+iex_api_key

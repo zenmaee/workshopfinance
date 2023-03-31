@@ -335,7 +335,7 @@ function PubControls({ onClose}) {
           return [];
           });}
       
-        useEffect(() => {
+        
             async function getTargetData() {
               let targetData = await retrieveTargetData(targetSymbol);
               setTargetName(targetData.name)
@@ -346,25 +346,28 @@ function PubControls({ onClose}) {
 
           
         }
-            getTargetData()
-          }, []);
+            
     
-          function searchTicker(input) {
-            return fetch('http://10.239.242.79:5000/ticker/' + input, {
-              method: 'GET',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-            })
-            .then((data) => {
-              return data;
-            })
-            .catch((error) => {
-              console.error("Error fetching data:", error);
-              return [];
-            });
-          }
+        function searchTicker(input) {
+          return fetch('http://10.239.242.79:5000/ticker/' + input, {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+          })
+          .then((resp) => resp.json()) // Parse response as JSON
+          .then((data) => {
+            console.log("data")
+            console.log(data)
+            return data;
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            return [];
+          });
+        }
+        
           
           function find_company_name(input) {
             let res_company = [];
@@ -383,6 +386,8 @@ function PubControls({ onClose}) {
             // Since `searchTicker` returns a Promise, we need to handle it asynchronously
             Promise.all([res_company, res_ticker])
               .then(([companyResults, tickerResults]) => {
+                console.log("res_ticker")
+                console.log(res_ticker)
                 res_company = companyResults;
                 res_ticker = tickerResults;
                 res_ticker = res_ticker.sort();
@@ -409,7 +414,8 @@ function PubControls({ onClose}) {
             mode='outlined'
             placeholder="Search by Ticker:"
             // Call `find_company_name` when the input value changes
-            onChangeText={(text) => find_company_name(text)}
+            onChangeText={(text) => find_company_name(text)
+            }
           />
         
           

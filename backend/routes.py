@@ -70,10 +70,13 @@ def sign_ins(email):
 def add_valuations():
     #First we get info from frontend
     footballFieldTimeSeries=request.json['footballFieldTimeSeries']
-    userId=request.json['userId']
-    footballFieldId=userId+footballFieldTimeSeries
+    targetId=request.json['targetId']
+    valuationTimeSeries=request.json['valuationTimeSeries']
+
+    footballFieldId=targetId+"-"+footballFieldTimeSeries
+    
     #Then we send it to the database
-    add_VALUATION(footballFieldId,iex_api_key)
+    add_VALUATION(footballFieldId,iex_api_key, valuationTimeSeries)
     return "Successful VALUATION POST"
 
 @app.route('/valuations/names', methods = ['PUT'])
@@ -133,7 +136,8 @@ def add_comps():
     compSymbol=request.json['compSymbol']
     valuationId=request.json['valuationId']
 
-    add_COMP(compSymbol,valuationId,iex_api_key)
+    r=add_COMP(compSymbol,valuationId,iex_api_key)
+    return r
 
 @app.route('/footballFields/names/<targetId>/<footballFieldTimeSeries>', methods = ['PUT'])
 def update_ff_names(targetId, footballFieldTimeSeries):
