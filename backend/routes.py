@@ -132,9 +132,8 @@ def retrieve_footballfields(targetId, footballFieldTimeSeries):
 def add_comps():
     compSymbol=request.json['compSymbol']
     valuationId=request.json['valuationId']
-    valuationCompsDate=request.json['valuationCompsDate']
 
-    add_COMP(compSymbol,valuationId,valuationCompsDate,iex_api_key)
+    add_COMP(compSymbol,valuationId,iex_api_key)
 
 @app.route('/footballFields/names/<targetId>/<footballFieldTimeSeries>', methods = ['PUT'])
 def update_ff_names(targetId, footballFieldTimeSeries):
