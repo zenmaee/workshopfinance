@@ -23,6 +23,7 @@ from models import Users, users_schema
 from functions.user_identification import *
 from functions.gen_valuation import *
 from functions.gen_footballfield import *
+from functions.targets import *
 
 # Create an application instance
 # Define a route to fetch the avaialable articles
@@ -146,17 +147,27 @@ def update_ff_names(targetId, footballFieldTimeSeries):
 
 @app.route('/targets/<type>', methods=['POST'])
 def add_targets(type):
+    print("here")
     userId=request.json['userId']
     targetName=request.json['targetName']
     sectorName=request.json['sectorName']
     subsectorName=request.json['subsectorName']
-    targetRevenueLTM=request.json['revenueVal']
-    targetEbitdaLTM=request.json['ebitdaVal']
-
+    targetRevenueLTM=request.json['targetRevenueLTM']
+    targetEbitdaLTM=request.json['targetRevenueLTM']
     
+    print(targetRevenueLTM)
 
-    #if type=="Private":
-    #    add_TARGET()
+    if type=="private":
+        targetSymbol=targetName
+    else:
+        targetSymbol=request.json['targetSymbol']
+    
+    r=add_TARGET(userId, targetName, targetSymbol, sectorName, subsectorName, targetRevenueLTM, targetEbitdaLTM, type, iex_api_key)
+    if r==200:
+
+        return "Successful Target Post"
+    else:
+        return "UNSuccessful Target Post"
 
 @app.route('/targets/<userId>/', methods=['GET'])
 def retrieve_targets(userId):
@@ -178,6 +189,14 @@ def add_footballfields():
     if r.status_code==200:
 
         return "SUCCESFUL FF POST"
+
+@app.route('/ticker/<input>', methods=['GET'])
+def search_ticker(input):
+    url1 = "https://cloud.iexapis.com/stable/search/" + input + "?token=" + iex_api_key
+    temp1 = requests.get(url1)
+    op1 = temp1.json()
+    res1 = [ (sub['symbol'], sub['name']) for sub in op1 ]
+    return res1
 
 #@app.route('/update/<id>/', methods = ['PUT'])
 #def update_article(id):

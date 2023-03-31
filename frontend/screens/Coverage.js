@@ -101,7 +101,9 @@ const Coverage = ({ route, navigation }) => {
 
 
   function TabTargets() {
-    const [showControls, setShowControls] = useState (false);
+    const [showPublicControls, setShowPublicControls] = useState (false);
+    const [showPrivateControls, setShowPrivateControls] = useState (false);
+
 
 
   const addFootballField= (type, symbol) => {
@@ -155,8 +157,13 @@ const Coverage = ({ route, navigation }) => {
           </ScrollView>
       </View>
       <View style={styles.viewcontrols}>
-        {showControls ? <Controls onClose={() => { setShowControls(false)}} onAddCard={ AddtoArray }/>:<Button title="New Target" onPress={() => { setShowControls(true)}}/>}
+      {showPrivateControls ? <PrivControls onClose={() => { setShowPrivateControls(false)}} setShowPrivateControls={setShowPrivateControls} /> : <Button title="New Private Target" onPress={() => { setShowPrivateControls(true)}}/>}
+        {showPublicControls ? <PubControls onClose={() => { setShowPublicControls(false)}}/>:<Button title="New Public Target" onPress={() => { setShowPublicControls(true)}}/>}
       </View>
+
+      
+
+
       <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
             <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
               <Text style={styles.buttonText_1}>Coverage</Text>
@@ -176,40 +183,52 @@ const Coverage = ({ route, navigation }) => {
 
 
 
-function Controls({ onClose}) {
+function PrivControls({ onClose, setShowPrivateControls }) {
   const [targetName, setTargetName] = useState ("");
   const [sectorName, setSectorName] = useState ("");
   const [subsectorName, setSubsectorName] = useState ("");
-  const [revenueVal, setRevenueVal] = useState (0);
-  const [ebitdaVal, setEbitdaVal] = useState (0);
+  const [targetRevenueLTM, setTargetRevenueLTM] = useState (0);
+  const [targetEbitdaLTM, setTargetEbitdaLTM] = useState (0);
 
-  function addPrivateTarget(targetName, sectorName, subsectorName, revenueVal,ebitdaVal){
-    fetch('http://10.239.242.79:5000/targets/private',{
-            method:'POST',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-              targetName:targetName,
-              sectorName:sectorName,
-              subsectorName:subsectorName,
-              targetRevenueLTM:revenueVal,
-              targetEbitdaLTM:ebitdaVal,
-              userId:userId
-            })}
-        )
-        .then(resp=>resp.text())
-        /*.then(resp => {
-          if (resp === "SUCCESFUL TARGET POST") {
-            targets.push({---new target-})
-          }
-        }) */
+  function addPrivateTarget(targetName, sectorName, subsectorName, targetRevenueLTM, targetEbitdaLTM) {
+    const target_json = {
+      targetName: targetName,
+      sectorName: sectorName,
+      subsectorName: subsectorName,
+      targetRevenueLTM: targetRevenueLTM,
+      targetEbitdaLTM: targetEbitdaLTM,
+      userId: userId
+    };
+    console.log("priv tgts")
+    fetch('http://10.239.242.79:5000/targets/private', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(target_json)
+      })
+      .then(resp => resp.text())
+      .then(resp => {
+        console.log(resp)
+        if (resp === "Successful Target Post") {
+          targets.push(target_json)
+          setShowPrivateControls(false)
+        }
+      })
   }
+  
 
   return (
     <View styles={styles.controls}>
     <View>
+    <TouchableOpacity 
+          title="Add New Target"
+          onPress={() => {
+            addPrivateTarget(targetName, sectorName, subsectorName, targetRevenueLTM,targetEbitdaLTM)
+          }}>
+            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+        </TouchableOpacity>
       <TextInput
         style={{ width: 400 }}
         mode='outlined'
@@ -234,22 +253,201 @@ function Controls({ onClose}) {
           <TextInput
           mode='outlined'
           placeholder="Revenue (LTM)"
-          value={ revenueVal }
-          onChangeText={(value) => setRevenueVal(value)}
+          value={ targetRevenueLTM }
+          onChangeText={(value) => setTargetRevenueLTM(value)}
           />
         </View>
         <View style={{ width: 135 }}>
           <TextInput
           mode='outlined'
           placeholder="EBITDA (LTM)"
-          value={ ebitdaVal }
-          onChangeText={(value) => setEbitdaVal(value)}
+          value={ targetEbitdaLTM }
+          onChangeText={(value) => setTargetEbitdaLTM(value)}
           />
         </View>
         <TouchableOpacity 
           title="Add New Target"
           onPress={() => {
-            addPrivateTarget(targetName, sectorName, subsectorName, revenueVal,ebitdaVal)
+            addPrivateTarget(targetName, sectorName, subsectorName, targetRevenueLTM, targetEbitdaLTM)
+          }}>
+            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          title="Delete Selected Target"
+          onPress={() => {
+            onClose()
+          }}>
+            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./delete_icon.png')}/>
+        </TouchableOpacity>
+      </View> 
+    </View>
+  </View>
+  );
+}
+
+function PubControls({ onClose}) {
+  const [targetName, setTargetName] = useState ("");
+  const [sectorName, setSectorName] = useState ("");
+  const [subsectorName, setSubsectorName] = useState ("");
+  const [targetRevenueLTM, setTargetRevenueLTM] = useState (0);
+  const [targetEbitdaLTM, setTargetEbitdaLTM] = useState (0);
+  const [targetSymbol, setTargetSymbol] = useState ("");
+
+
+  function addPublicTarget(targetName, sectorName, subsectorName, revenueVal, ebitdaVal) {
+    const target_json = {
+      targetName: targetName,
+      sectorName: sectorName,
+      subsectorName: subsectorName,
+      targetRevenueLTM: revenueVal,
+      targetEbitdaLTM: ebitdaVal,
+      userId: userId
+    };
+    fetch('http://10.239.242.79:5000/targets/public', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(target_json)
+      })
+      .then(resp => resp.text())
+      .then(resp => {
+        if (resp === "SUCCESFUL TARGET POST") {
+          targets.push(target_json)
+        }
+      })
+  }
+  
+    function retrieveTargetData(targetSymbol){
+      fetch('http://10.239.242.79:5000/targets/'+targetSymbol, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+      })
+      .then((resp) => resp.json())
+      .then((data) => {
+          return data})
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          return [];
+          });}
+      
+        useEffect(() => {
+            async function getTargetData() {
+              let targetData = await retrieveTargetData(targetSymbol);
+              setTargetName(targetData.name)
+              setSectorName(targetData.sectorName)
+              setSubsectorName(targetData.subsectorName)
+              setTargetRevenueLTM(targetData.targetRevenueLTM)
+              setTargetEbitdaLTM(targetData.ebitdaRevenueLTM)
+
+          
+        }
+            getTargetData()
+          }, []);
+    
+          function searchTicker(input) {
+            return fetch('http://10.239.242.79:5000/ticker/' + input, {
+              method: 'GET',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+            })
+            .then((data) => {
+              return data;
+            })
+            .catch((error) => {
+              console.error("Error fetching data:", error);
+              return [];
+            });
+          }
+          
+          function find_company_name(input) {
+            let res_company = [];
+            let res_ticker = [];
+            /*try {
+              // Assuming `search_company` is defined somewhere else
+              res_company = search_company(input);
+            } catch (error) {
+              // handle runtime error, type error, or name error
+            }*/
+            try {
+              res_ticker = searchTicker(input);
+            } catch (error) {
+              // handle runtime error, type error, or name error
+            }
+            // Since `searchTicker` returns a Promise, we need to handle it asynchronously
+            Promise.all([res_company, res_ticker])
+              .then(([companyResults, tickerResults]) => {
+                res_company = companyResults;
+                res_ticker = tickerResults;
+                res_ticker = res_ticker.sort();
+                res_company.sort(function(a, b) {
+                  return a[1] - b[1];
+                });
+                let res = res_company.concat(res_ticker);
+                let res_final = [...new Set(res)];
+                console.log("input")
+                console.log(input)
+                console.log(res_final)
+                return res_final;
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                return [];
+              });
+          }
+          
+    return (
+      <View styles={styles.controls}>
+        <View>
+          <TextInput
+            mode='outlined'
+            placeholder="Search by Ticker:"
+            // Call `find_company_name` when the input value changes
+            onChangeText={(text) => find_company_name(text)}
+          />
+        
+          
+      <Text
+        style={{ width: 400 }}
+        mode='outlined'
+        placeholder="Target Name"
+        value={ targetName }
+      />
+      <TextInput
+        mode='outlined'
+        placeholder="Target Sector"
+        value={ sectorName }
+      />
+      <TextInput
+        mode='outlined'
+        placeholder="Target Subsector"
+        value={ subsectorName }
+      />
+      <View style={{flexDirection: "row", alignItems: 'center'}}>
+        <View style={{ marginRight: 5, width: 150 }}>
+          <Text
+          mode='outlined'
+          placeholder="Revenue (LTM)"
+          value={targetRevenueLTM}
+          />
+        </View>
+        <View style={{ width: 135 }}>
+          <Text
+          mode='outlined'
+          placeholder="EBITDA (LTM)"
+          value={targetEbitdaLTM}
+          />
+        </View>
+        <TouchableOpacity 
+          title="Add New Target"
+          onPress={() => {
+            addPublicTarget(targetName, sectorName, subsectorName, targetRevenueLTM,targetEbitdaLTM)
           }}>
             <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
         </TouchableOpacity>

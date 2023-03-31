@@ -45,3 +45,4 @@ def find_company_name(input):
   return res_final
 
 out = find_company_name("tesla")
+print(out)
