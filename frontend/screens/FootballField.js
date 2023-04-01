@@ -17,11 +17,9 @@ const InlinePicker = ({ selectedValue, onValueChange, options }) => {
 const FootballField = ({ route, navigation }) => {
   const {targetId, footballFieldName,footballFieldTimeSeries} = route.params; //newFootballField=1 will be a recently created one. If this =0, it is an old one
   const targetSymbol = targetId.split("-")[1]
-  const [footballFieldId, setFootballFieldId]=useState("")
   const [footballFieldOutput, setFootballFieldOutput]=useState("EV")
   const [footballFieldScale, setFootballFieldScale]=useState("billions")
   const [valuationId, setValuationId]=useState("")
-  const [valuationCompsDate, setValuationCompsDate]=useState("")
   const [valuationMetric, setValuationMetric]=useState("EV_E")
   const [valuationStat, setValuationStat]=useState("AV")
   const [valuationTimeSeries, setValuationTimeSeries]=useState("")
@@ -29,7 +27,6 @@ const FootballField = ({ route, navigation }) => {
   const [valuationColor, setValuationColor]=useState("")
   const [valuationName, setValuationName]=useState("")
   const [compSymbol, setCompSymbol]=useState("")
-  const [response, setResponse]=useState([])
   const [valuations, setValuations] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState("js");
   const [showValuationControls, setShowValuationControls] = useState(false);
@@ -58,12 +55,6 @@ const FootballField = ({ route, navigation }) => {
   function find_company_name(input) {
     let res_company = [];
     let res_ticker = [];
-    /*try {
-      // Assuming `search_company` is defined somewhere else
-      res_company = search_company(input);
-    } catch (error) {
-      // handle runtime error, type error, or name error
-    }*/
     try {
       res_ticker = searchTicker(input);
     } catch (error) {
@@ -220,6 +211,7 @@ const FootballField = ({ route, navigation }) => {
               
               onAdd()
               setValuationTimeSeries(valuationTS)
+              setValuationId(targetId+"-"+footballFieldTimeSeries+"-"+valuationTS)
               //navigation.navigate('Coverage', { userId: resp});
             }
           })     
@@ -287,35 +279,6 @@ const FootballField = ({ route, navigation }) => {
     </View>
     </View>  );
     }
-
-  /*
-  function retrieveFootballField() {
-    const url = 'http://10.239.106.85:5000/footballfields/'+targetId+'/'+footballFieldTimeSeries;  
-    return fetch(url, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        console.log("Response data:", data);
-        if (data && data.length > 0) {
-          const footballFieldName = data[0].footballFieldName;
-          const targetId = data[0].targetId;
-          const targetSymbol = targetId.split("-")[1];
-          return [footballFieldName, targetSymbol];
-        } else {
-          throw new Error("Invalid response data");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        return [];
-      });
-  }*/
-  
   const updateFootballFieldName= () => {
     let url="http://10.239.242.79:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
     fetch(url,{
@@ -442,6 +405,8 @@ const FootballField = ({ route, navigation }) => {
   useEffect(() => {
     async function getValuations() {
       let data = await retrieveValuations();
+      console.log("data")
+      console.log(data)
       let val=valuationNumbers(data, footballFieldOutput, valuationMetric, valuationStat)
       console.log(val)
       setValuations(val);
@@ -461,7 +426,7 @@ const FootballField = ({ route, navigation }) => {
     getFootballField();
   }, []);*/
 
-    const generateValuation= () => {
+    function generateValuation() {
     fetch('http://10.239.242.79:5000/valuations',{
             method:'PUT',
             headers:{
@@ -469,12 +434,11 @@ const FootballField = ({ route, navigation }) => {
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              userId:"Tester3",
+              targetId:targetId,
               valuationName:"Changing name",
-              footballFieldTimeSeries:"FF Test",
-              valuationTimeSeries:"1676081515625045",
+              footballFieldTimeSeries:footballFieldTimeSeries,
+              valuationTimeSeries:valuationTimeSeries,
               targetSymbol:targetSymbol,
-              valuationCompsDate:"02/10/2023"
             })}
         )
         .then(resp=>resp.text())
@@ -532,6 +496,7 @@ const FootballField = ({ route, navigation }) => {
         )
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
+        generateValuation()
         
   }
 

@@ -75,8 +75,6 @@ def add_COMP(compSymbol,valuationId,iex_api_key):
 
     #POST each comp into the COMPS dataset
     r = requests.post(url, json=comps)
-    print("r")
-    print(r.json()) # <--- Convert response to JSON format
     if r.status_code==200:
         return "Successful Comps Post"
     else:
@@ -110,7 +108,6 @@ def update_VALUATION(footballFieldId, multiples,ev,valuationTimeSeries,iex_api_k
     #valuationCompsDate:
     #valuation[0]['valuationCompsDate']=valuationCompsDate
     
-
     url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
     r=requests.post(url, json=valuation)
 
@@ -185,14 +182,19 @@ def get_output(basket_of_comps, valuationId, targetSymbol, desired_multiples, ie
 
 def retrieve_valuation_comps(valuationId, iex_api_key):
     #How to obtain all queries from API
-    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS/"+valuationId+"/?last=100&token="+iex_api_key
-    print(url)
-    r=requests.get(url).json()
-    print(r)
     basket_of_comps=[]
-    for comp in r:
-        print(comp)
-        basket_of_comps.append(comp['compSymbol'])
+    while basket_of_comps==[]:
+        url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS/"+valuationId+"/?last=100&token="+iex_api_key
+        print("url")
+        print(url)
+        print("aqui")
+        r=requests.get(url).json()
+        print(r)
+        for comp in r:
+            print(comp)
+            basket_of_comps.append(comp['compSymbol'])
+
+    print("boc")
     print(basket_of_comps)
     return basket_of_comps
 
@@ -208,7 +210,6 @@ def generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeS
     #basket_of_comps = random.sample(comps, 2)
     #for comp in basket_of_comps:
     #   add_COMP(comp,valuationId,valuationCompsDate,iex_api_key)
-    #print(basket_of_comps)
     #time.sleep(0.1)
 
     #We get the basket of comps:
