@@ -101,24 +101,25 @@ const SignUpSignIn = ({ navigation }) => {
                 style={styles.input}
                 value={email}
                 onChangeText = {text=>setEmail(text)}
+                //clearButtonMode='always'
                 autoCapitalize='none' 
                 keyboardType="default"
                 ></TextInput>
               <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View> 
 
-          <View style={{ marginTop: 10}}>
+          <View style={{ marginTop: 15}}>
               <Text style={styles.inputTitle}>Password</Text>
               <TextInput
                 style={styles.input}
                 value={password}
                 onChangeText = {text=>setPassword(text)} 
+                //clearButtonMode='always'
                 autoCapitalize='none' 
                 keyboardType="default"
                 ></TextInput>
               <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View> 
-
 
           <TouchableOpacity>
             <Text style={[styles.buttonText, { marginTop: 5, fontWeight: "600" }]}>Forgot Password?</Text>

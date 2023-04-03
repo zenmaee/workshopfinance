@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Image, Text, View, TextInput, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, Text, View, TextInput, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
 
 
 const SignUp = ({ navigation }) => {
@@ -102,97 +102,106 @@ const SignUp = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-          <Image style={styles.wfLogo} resizeMode="contain" source={require('./logo_dark.png')}/>
-            <View style={{ marginTop: 10}}>
-              <Text style={styles.inputTitle}>First Name</Text>
-              <TextInput
-                //placeholder={this.placeholder}
-                //secureTextEntry={this.isSecure}
-                style={styles.input}
-                value={firstName}
-                onChangeText = {text=>setFirstName(text)} 
-                keyboardType="default"
-                ></TextInput>
-              <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
-            </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#000'}}>
+      <View>
+        <Image style={styles.wfLogo} resizeMode="contain" source={require('./logo_dark.png')}/>
+        <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
+          <View style={{ marginTop: 80, marginBottom: 10 }}>
+            <Text style={styles.inputTitle}>First Name</Text>
+            <TextInput
+              //secureTextEntry={this.isSecure}
+              style={styles.input}
+              value={firstName}
+              onChangeText = {text=>setFirstName(text)} 
+              keyboardType="default"
+              // placeholder="Enter first name here"
+              // placeholderTextColor={styles.placeholderTextColorStyle}
+              />
+            <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+          </View>
 
-            <View style={{ marginTop: 1, marginBottom: 1}} >
-              <Text style={styles.inputTitle}>Last Name</Text>
-              <TextInput
-                //placeholder={this.placeholder}
-                //secureTextEntry={this.isSecure}
-                style={styles.input}
-                value={lastName}
-                onChangeText = {text=>setLastName(text)} 
-                keyboardType="default"
-                ></TextInput>
-              <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
-            </View>
+          <View style={{ marginTop: 5, marginBottom: 10 }} >
+            <Text style={styles.inputTitle}>Last Name</Text>
+            <TextInput
+              //secureTextEntry={this.isSecure}
+              style={styles.input}
+              value={lastName}
+              onChangeText = {text=>setLastName(text)} 
+              keyboardType="default"
+              // placeholder="Enter last name here"
+              // placeholderTextColor={styles.placeholderTextColorStyle}
+              />
+            <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+          </View>
 
-            <View style={{ marginTop: 1, marginBottom: 1}} >
-              <Text style={styles.inputTitle}>Email Address</Text>
-              <TextInput
-                //placeholder={this.placeholder}
-                //secureTextEntry={this.isSecure}
-                style={styles.input}
-                value={email}
-                onChangeText={text => handleCheckEmail(text)}
-                //onChangeText = {text=>setEmail(text)} 
-                keyboardType="default"
-                ></TextInput>
-              <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
-            </View>
-            {checkValidEmail ? (
-              <Text style={styles.textFailed}>Wrong format email</Text>
-              ) : (
-              <Text style={styles.textFailed}> </Text>
-            )}
+          <View style={{ marginTop: 5, marginBottom: 10 }} >
+            <Text style={styles.inputTitle}>Email Address</Text>
+            <TextInput
+              //secureTextEntry={this.isSecure}
+              style={styles.input}
+              value={email}
+              onChangeText={text => handleCheckEmail(text)}
+              //onChangeText = {text=>setEmail(text)} 
+              keyboardType="default"
+              // placeholder="Enter email address here"
+              // placeholderTextColor={styles.placeholderTextColorStyle}
+              />
+            <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+          </View>
+          {checkValidEmail ? (
+            <Text style={styles.textFailed}>Wrong format email</Text>
+            ) : (
+            <Text style={styles.textFailed}> </Text>
+          )}
 
-            <View style={{ marginTop: 1, marginBottom: 1}} >
-              <Text style={styles.inputTitle}>Enter password</Text>
-              <TextInput
-                //placeholder={this.placeholder}
-                //secureTextEntry={this.isSecure}
-                style={styles.input}
-                //value={Password}
-                //onChangeText = {text=>this.setPassword()} 
-                keyboardType="default"
-                ></TextInput>
-              <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
-            </View>
+          <View style={{ marginTop: 5, marginBottom: 10 }} >
+            <Text style={styles.inputTitle}>Enter Password</Text>
+            <TextInput
+              //secureTextEntry={this.isSecure}
+              style={styles.input}
+              //value={Password}
+              //onChangeText = {text=>this.setPassword()} 
+              keyboardType="default"
+              // placeholder="Enter password here"
+              // placeholderTextColor={styles.placeholderTextColorStyle}
+              />
+            <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+          </View>
 
-            <View style={{ marginTop: 1, marginBottom: 1}} >
-              <Text style={styles.inputTitle}>Confirm password</Text>
-              <TextInput
-                //placeholder={this.placeholder}
-                //secureTextEntry={this.isSecure}
-                style={styles.input}
-                value={password}
-                onChangeText = {text=>setPassword(text)} 
-                keyboardType="default"
-                ></TextInput>
-              <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
-            </View>
+          <View style={{ marginTop: 5, marginBottom: 10 }} >
+            <Text style={styles.inputTitle}>Confirm Password</Text>
+            <TextInput
+              //secureTextEntry={this.isSecure}
+              style={styles.input}
+              value={password}
+              onChangeText = {text=>setPassword(text)} 
+              keyboardType="default"
+              // placeholder="Enter confirmed password here"
+              // placeholderTextColor={styles.placeholderTextColorStyle}
+              />
+            <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+          </View>
 
-          {/*
-          <TouchableOpacity style={styles.buttons} onPress={() => addUsers()}>
-              <Text style={styles.buttonText}>Sign Up</Text>
-          </TouchableOpacity>
-          */}
+        {/*
+        <TouchableOpacity style={styles.buttons} onPress={() => addUsers()}>
+            <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
+        */}
 
-          {email == '' || password == '' || checkValidEmail == true ? (
-          <TouchableOpacity
-            disabled
-            style={styles.buttonDisable}
-            onPress={handleLogin}>
-            <Text style={styles.text}>Sign Up</Text>
-          </TouchableOpacity>
-          ) : (
-          <TouchableOpacity style={styles.buttons} onPress={handleLogin}>
-            <Text style={styles.text}>Sign Up</Text>
-          </TouchableOpacity>
-         )}
+        {email == '' || password == '' || checkValidEmail == true ? (
+        <TouchableOpacity
+          disabled
+          style={styles.buttonDisable}
+          onPress={handleLogin}>
+          <Text style={styles.text}>Sign Up</Text>
+        </TouchableOpacity>
+        ) : (
+        <TouchableOpacity style={styles.buttons} onPress={handleLogin}>
+          <Text style={styles.text}>Sign Up</Text>
+        </TouchableOpacity>
+        )}
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
@@ -200,11 +209,6 @@ console.log()
 export default SignUp;
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#000',
-      alignItems: "center"
-    },
     buttons: {
         fontSize: 16,
         borderRadius: 4, 
@@ -263,5 +267,5 @@ const styles = StyleSheet.create({
     textFailed: {
       alignSelf: 'flex-end',
       color: 'red',
-    },
+    }
 });
