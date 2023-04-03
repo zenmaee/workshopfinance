@@ -173,7 +173,7 @@ const FootballField = ({ route, navigation }) => {
     );
   }
 
-  function FootballFieldChart() {
+  function FootballFieldChart({ onRenderComps}) {
     return(
       <View>
         <ScrollView
@@ -189,7 +189,7 @@ const FootballField = ({ route, navigation }) => {
                 {/* <View style={{ marginStart: (valuation.minValuation-table.minRange)*pixelsPerDollar, backgroundColor: valuation.color, height: valuationHeight, width: (valuation.maxValuation-valuation.minValuation)*pixelsPerDollar, marginTop: 5 }}></View> */}
                 <TouchableOpacity
                   onPress={() => {
-                    renderComps()
+                    onRenderComps()
                   }}>
                   <View style={{ marginStart: 0, backgroundColor: valuation.color, height: valuationHeight, width: 0, marginTop: 5 }}/>
                 </TouchableOpacity>
@@ -762,8 +762,9 @@ const FootballField = ({ route, navigation }) => {
               </View>
             )
           )}
+          {/* In theory, when a valuation bar is pressed it should display the comp controls */}
           <View style={{ backgroundColor: 'black', height: 1, width: valuationWidth-40, marginLeft: 20, marginTop: 5 }}/>
-          {showCompControls ? <CompControls/>:<FootballFieldChart/>}
+          {showCompControls ? <CompControls/>:<FootballFieldChart onRenderComps={() => {setShowCompControls(true)}}/>} 
         </View>
         
 
