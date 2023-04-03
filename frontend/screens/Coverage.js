@@ -105,7 +105,6 @@ const Coverage = ({ route, navigation }) => {
     const [showPrivateControls, setShowPrivateControls] = useState (false);
 
 
-
   const addFootballField= (type, symbol) => {
     const footballFieldTimeSeries = Math.floor(Date.now() * 1000).toString();
     fetch('http://10.239.251.136:5000/footballFields',{ 
