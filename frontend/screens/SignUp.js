@@ -114,6 +114,7 @@ const SignUp = ({ navigation }) => {
               value={firstName}
               onChangeText = {text=>setFirstName(text)} 
               keyboardType="default"
+              autoCapitalize="none"
               // placeholder="Enter first name here"
               // placeholderTextColor={styles.placeholderTextColorStyle}
               />
@@ -128,6 +129,7 @@ const SignUp = ({ navigation }) => {
               value={lastName}
               onChangeText = {text=>setLastName(text)} 
               keyboardType="default"
+              autoCapitalize="none"
               // placeholder="Enter last name here"
               // placeholderTextColor={styles.placeholderTextColorStyle}
               />
@@ -143,6 +145,7 @@ const SignUp = ({ navigation }) => {
               onChangeText={text => handleCheckEmail(text)}
               //onChangeText = {text=>setEmail(text)} 
               keyboardType="default"
+              autoCapitalize="none"
               // placeholder="Enter email address here"
               // placeholderTextColor={styles.placeholderTextColorStyle}
               />
@@ -162,6 +165,7 @@ const SignUp = ({ navigation }) => {
               //value={Password}
               //onChangeText = {text=>this.setPassword()} 
               keyboardType="default"
+              autoCapitalize="none"
               // placeholder="Enter password here"
               // placeholderTextColor={styles.placeholderTextColorStyle}
               />
@@ -176,6 +180,7 @@ const SignUp = ({ navigation }) => {
               value={password}
               onChangeText = {text=>setPassword(text)} 
               keyboardType="default"
+              autoCapitalize="none"
               // placeholder="Enter confirmed password here"
               // placeholderTextColor={styles.placeholderTextColorStyle}
               />
