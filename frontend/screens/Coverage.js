@@ -14,7 +14,7 @@ const Coverage = ({ route, navigation }) => {
 
 
   function TabFootballField() {
-/*    const [footballFields, setFootballFields] = useState([])
+/*   const [footballFields, setFootballFields] = useState([])
 
     function retrieveFootballFields(targetId) {
       //let ffLists=[]
@@ -509,6 +509,8 @@ const styles = StyleSheet.create({
   },
   scrollview: {
     alignItems: 'center',
+    marginVertical: 30, 
+    marginHorizontal: 20, 
     height: Dimensions.get('window').height / 2.5,
     width: Dimensions.get('window').width * 0.95
   },
