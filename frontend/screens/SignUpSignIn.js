@@ -15,7 +15,11 @@ const SignUpSignIn = ({ navigation }) => {
     const userName=resp[1]
     const userEmail=resp[2]
 
+<<<<<<< HEAD
     const url = 'http://10.239.251.136:5000/targets/'+userId+'/'
+=======
+    const url = 'http://172.20.10.13:5000/targets/'+userId+'/'
+>>>>>>> ede5c2d510e1c4029dfffa203387bb3f20d74fc6
     console.log(url)
     return fetch(url, {
       method: "GET",
@@ -45,7 +49,11 @@ const SignUpSignIn = ({ navigation }) => {
 
           console.log("email")
           console.log(email)
+<<<<<<< HEAD
           const url = 'http://10.239.251.136:5000/users/'+email
+=======
+          const url = 'http://172.20.10.13:5000/users/'+email
+>>>>>>> ede5c2d510e1c4029dfffa203387bb3f20d74fc6
           return fetch(url, {
             method:'POST',
             headers:{

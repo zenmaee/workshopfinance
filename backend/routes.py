@@ -70,10 +70,17 @@ def sign_ins(email):
 def add_valuations():
     #First we get info from frontend
     footballFieldTimeSeries=request.json['footballFieldTimeSeries']
-    userId=request.json['userId']
-    footballFieldId=userId+footballFieldTimeSeries
+    targetId=request.json['targetId']
+    valuationTimeSeries=request.json['valuationTimeSeries']
+
+    footballFieldId=targetId+"-"+footballFieldTimeSeries
+    
     #Then we send it to the database
+<<<<<<< HEAD
     add_VALUATION(footballFieldId, iex_api_key)
+=======
+    add_VALUATION(footballFieldId,iex_api_key, valuationTimeSeries)
+>>>>>>> ede5c2d510e1c4029dfffa203387bb3f20d74fc6
     return "Successful VALUATION POST"
 
 @app.route('/valuations/names', methods = ['PUT'])
@@ -93,17 +100,20 @@ def update_valuation_names():
 def generate_valuations():
     #When a user changes the valuation fields, the only one that will re-generate a new valuation is the asOfDate
     #This put will lead to a new valuation generation
-    userId=request.json['userId']
+    targetId=request.json['targetId']
     footballFieldTimeSeries=request.json['footballFieldTimeSeries']
     valuationTimeSeries=request.json['valuationTimeSeries']
-    footballFieldId=userId+footballFieldTimeSeries
-    valuationCompsDate=request.json['valuationCompsDate']
+    footballFieldId=targetId+footballFieldTimeSeries
     targetSymbol=request.json['targetSymbol']
 
     desired_multiples=["evToEbitdaLTM", "evToRevenueLTM"]
     #Ver cómo coger valuationId
     #Ver cómo coger basketofcomps
+<<<<<<< HEAD
     generate_valuation(userId, targetSymbol, desired_multiples, valuationTimeSeries, iex_api_key, footballFieldTimeSeries)
+=======
+    generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeSeries, iex_api_key, footballFieldTimeSeries)
+>>>>>>> ede5c2d510e1c4029dfffa203387bb3f20d74fc6
 
     return "Successful PUT"
 
@@ -133,7 +143,8 @@ def add_comps():
     compSymbol=request.json['compSymbol']
     valuationId=request.json['valuationId']
 
-    add_COMP(compSymbol,valuationId,iex_api_key)
+    r=add_COMP(compSymbol,valuationId,iex_api_key)
+    return r
 
 @app.route('/footballFields/names/<targetId>/<footballFieldTimeSeries>', methods = ['PUT'])
 def update_ff_names(targetId, footballFieldTimeSeries):
@@ -218,4 +229,8 @@ def search_ticker(input):
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
+<<<<<<< HEAD
     app.run(host='10.239.251.136',port=5000, debug=True) #changes every time we change wifi
+=======
+    app.run(host='172.20.10.13',port=5000, debug=True) #changes every time we change wifi
+>>>>>>> ede5c2d510e1c4029dfffa203387bb3f20d74fc6

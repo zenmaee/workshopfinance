@@ -334,7 +334,7 @@ function PubControls({ onClose}) {
           return [];
           });}
       
-        useEffect(() => {
+        
             async function getTargetData() {
               let targetData = await retrieveTargetData(targetSymbol);
               setTargetName(targetData.name)
@@ -345,8 +345,7 @@ function PubControls({ onClose}) {
 
           
         }
-            getTargetData()
-          }, []);
+            
     
           function searchTicker(input) {
             return fetch('http://10.239.251.136:5000/ticker/' + input, {
@@ -382,6 +381,8 @@ function PubControls({ onClose}) {
             // Since `searchTicker` returns a Promise, we need to handle it asynchronously
             Promise.all([res_company, res_ticker])
               .then(([companyResults, tickerResults]) => {
+                console.log("res_ticker")
+                console.log(res_ticker)
                 res_company = companyResults;
                 res_ticker = tickerResults;
                 res_ticker = res_ticker.sort();
@@ -408,7 +409,8 @@ function PubControls({ onClose}) {
             mode='outlined'
             placeholder="Search by Ticker:"
             // Call `find_company_name` when the input value changes
-            onChangeText={(text) => find_company_name(text)}
+            onChangeText={(text) => find_company_name(text)
+            }
           />
         
           

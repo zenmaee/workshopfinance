@@ -16,7 +16,6 @@ import DropDownPicker from 'react-native-dropdown-picker'
 // }
 
 const FootballField = ({ route, navigation }) => {
-  console.log(route.params); 
   const {targetId, footballFieldName,footballFieldTimeSeries} = route.params; //newFootballField=1 will be a recently created one. If this =0, it is an old one
   const targetSymbol = targetId.split("-")[1]
   
@@ -59,17 +58,21 @@ const FootballField = ({ route, navigation }) => {
   const [valuationId, setValuationId]=useState("")
   const [valuationCompsDate, setValuationCompsDate]=useState("")
   const [footballFieldStat, setFootballFieldStat]=useState("AV")
+  const [footballFieldOutput, setFootballFieldOutput]=useState("EV")
+  const [footballFieldScale, setFootballFieldScale]=useState("billions")
+  const [valuationId, setValuationId]=useState("")
+  const [valuationMetric, setValuationMetric]=useState("EV_E")
+  const [valuationStat, setValuationStat]=useState("AV")
+  const [valuationTimeSeries, setValuationTimeSeries]=useState("")
   const [valuationSpread, setValuationSpread]=useState("")
   const [valuationColor, setValuationColor]=useState("")
   const [valuationName, setValuationName]=useState("")
   const [compSymbol, setCompSymbol]=useState("")
-  const [valuationTimeSeries, setValuationTimeSeries]=useState("")
-  const [response, setResponse]=useState([])
   const [valuations, setValuations] = useState([]);
 
   const [showCompControls, setShowCompControls] = useState(false);
   const [showValuationControls, setShowValuationControls] = useState(false);
-
+  
   function searchTicker(input) {
     return fetch('http://10.239.251.136:5000/ticker/' + input, { 
       method: 'GET',
@@ -78,7 +81,10 @@ const FootballField = ({ route, navigation }) => {
         'Content-Type': 'application/json'
       },
     })
+    .then((resp) => resp.json()) // Parse response as JSON
     .then((data) => {
+      console.log("data")
+      console.log(data)
       return data;
     })
     .catch((error) => {
@@ -87,15 +93,10 @@ const FootballField = ({ route, navigation }) => {
     });
   }
   
+    
   function find_company_name(input) {
     let res_company = [];
     let res_ticker = [];
-    /*try {
-      // Assuming `search_company` is defined somewhere else
-      res_company = search_company(input);
-    } catch (error) {
-      // handle runtime error, type error, or name error
-    }*/
     try {
       res_ticker = searchTicker(input);
     } catch (error) {
@@ -104,6 +105,8 @@ const FootballField = ({ route, navigation }) => {
     // Since `searchTicker` returns a Promise, we need to handle it asynchronously
     Promise.all([res_company, res_ticker])
       .then(([companyResults, tickerResults]) => {
+        console.log("res_ticker")
+        console.log(res_ticker)
         res_company = companyResults;
         res_ticker = tickerResults;
         res_ticker = res_ticker.sort();
@@ -209,23 +212,23 @@ const FootballField = ({ route, navigation }) => {
     return(
       <View style={{ flex: 1, height: 200, width: 400, borderWidth: 1 }}>
           <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ color: 'white' }}>Comp Name</Text>
-            <TextInput style={{ marginTop: 5, margin: 10, height: 40, width: 200, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
-              placeholder="Company Name or Ticker"
-              onChangeText={(text) => find_company_name(text)}>
-            </TextInput>
-            <TouchableOpacity 
-              title="Add Comp"
-              style={{
-                borderRadius: 5,
-                backgroundColor: 'blue',
-                padding: 10
-              }}
-              onPress={() => {
-                addComp()
-              }}>
-              <Text style={{ color: '#FFF' }}>Add Comp</Text>
-            </TouchableOpacity>
+          <Text style={{ color: 'white' }}>Add Comp</Text>
+                <TextInput 
+                  style={{ marginTop: 5, margin: 10, height: 40, width: 200, padding: 5, borderRadius: 10, backgroundColor: '#FFF' }}
+                  placeholder="Company Name or Ticker"
+                  value={compSymbol}
+                  onChangeText={(text) => {
+                    find_company_name(text);
+                    setCompSymbol(text);
+                  }}
+                />
+                <TouchableOpacity 
+                    title="Add Comp"
+                    onPress={() => {
+                      addComp(compSymbol)
+                    }}>
+                      <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+                </TouchableOpacity>
           </View>
           <View style={{ marginTop: 10, flexDirection: 'row', alignItems: 'center', zIndex: 200 }}>
             <Text style={{ color: 'white' }}>Metric</Text>
@@ -333,16 +336,45 @@ const FootballField = ({ route, navigation }) => {
           </View>
       </View>
     );
-  }
+    }
 
   function FootballFieldControls({ onAdd }) {
+    const addValuation= (targetId, footballFieldTimeSeries) => {
+      const valuationTS = Math.floor(Date.now() * 1000).toString();
+      fetch('http://172.20.10.13:5000/valuations',{
+              method:'POST',
+              headers:{
+                  'Accept':'application/json',
+                  'Content-Type':'application/json'
+              },
+              body:JSON.stringify({
+                targetId:targetId,
+                footballFieldTimeSeries:footballFieldTimeSeries,
+                valuationTimeSeries:valuationTS,
+
+                
+              })}
+          )
+          .then(resp=>resp.text())
+          .then(resp => {
+            if (resp === "Successful VALUATION POST") {
+              
+              onAdd()
+              setValuationTimeSeries(valuationTS)
+              setValuationId(targetId+"-"+footballFieldTimeSeries+"-"+valuationTS)
+              //navigation.navigate('Coverage', { userId: resp});
+            }
+          })     
+    }
+
     return(
     <View style={{ flex: 1, margin: 10, height: 200, width: 400, borderWidth: 1 }}>
       <View style={{ alignItems: 'center' }}> 
               <TouchableOpacity 
               style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }} 
               onPress={() => {
-                onAdd()
+                addValuation(targetId, footballFieldTimeSeries)
+
               }}>
                 <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Add Valuation</Text>
               </TouchableOpacity>
@@ -491,22 +523,7 @@ const FootballField = ({ route, navigation }) => {
        
   }
   
-  const addValuation= () => {
-    fetch('http://10.239.242.79:5000/valuations',{
-            method:'POST',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-              footballFieldTimeSeries:"FF Test",
-              userId:"Tester3"
-            })}
-        )
-        .then(resp=>resp.text())
-        .then(resp=>console.log(resp))
-
-  }
+  
 
   function retrieveValuations() {
     
@@ -517,7 +534,7 @@ const FootballField = ({ route, navigation }) => {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-    })
+      })
       .then((resp) => resp.json())
       .then((data) => {
         return data})
@@ -558,50 +575,62 @@ const FootballField = ({ route, navigation }) => {
                 valuationCenter = valuation["valuationEvAvEvRevLTM"];
               }
             }
-          } else if (output === "MULT") {
-            if (metric === "EV_E") {
-              if (stat === "AV") {
-                valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
-              } else if (stat === "HIGH") {
-                valuationCenter = valuation["valuationMultHighEvEbitdaLTM"];
-              } else if (stat === "MED") {
-                valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
-              } else {
-                valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
-              }
-            } else if (metric === "EV_R") {
-              if (stat === "AV") {
-                valuationCenter = valuation["valuationMultAvEvRevLTM"];
-              } else if (stat === "HIGH") {
-                valuationCenter = valuation["valuationMultHighEvRevLTM"];
-              } else if (stat === "MED") {
-                valuationCenter = valuation["valuationMultAvEvRevLTM"];
-              } else {
-                valuationCenter = valuation["valuationMultAvEvRevLTM"];
-              }
+          } else if (metric === "EV_R") {
+            if (stat === "AV") {
+              valuationCenter = valuation["valuationEvAvEvRevLTM"];
+            } else if (stat === "HIGH") {
+              valuationCenter = valuation["valuationEvHighEvRevLTM"];
+            } else if (stat === "MED") {
+              valuationCenter = valuation["valuationEvAvEvRevLTM"];
+            } else {
+              valuationCenter = valuation["valuationEvAvEvRevLTM"];
+            }
+        } else if (output === "MULT") {
+          if (metric === "EV_E") {
+            if (stat === "AV") {
+              valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
+            } else if (stat === "HIGH") {
+              valuationCenter = valuation["valuationMultHighEvEbitdaLTM"];
+            } else if (stat === "MED") {
+              valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
+            } else {
+              valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
+            }
+          } else if (metric === "EV_R") {
+            if (stat === "AV") {
+              valuationCenter = valuation["valuationMultAvEvRevLTM"];
+            } else if (stat === "HIGH") {
+              valuationCenter = valuation["valuationMultHighEvRevLTM"];
+            } else if (stat === "MED") {
+              valuationCenter = valuation["valuationMultAvEvRevLTM"];
+            } else {
+              valuationCenter = valuation["valuationMultAvEvRevLTM"];
             }
           }
-        
-          let minValuation = valuationCenter - valuationCenter * valuationSpread / 100;
-          let maxValuation = valuationCenter + valuationCenter * valuationSpread / 100;
-          valuation = {
-            name: valuationName,
-            color: valuationColor,
-            minValuation: minValuation,
-            maxValuation: maxValuation,
-          };
-          valuations.push(valuation);
         }
-        return valuations;
-      }
       
+        let minValuation = valuationCenter - valuationCenter * valuationSpread / 100;
+        let maxValuation = valuationCenter + valuationCenter * valuationSpread / 100;
+        valuation = {
+          name: valuationName,
+          color: valuationColor,
+          minValuation: minValuation,
+          maxValuation: maxValuation,
+        };
+        valuations.push(valuation);
+      }
+      return valuations;
+    }
+    
   
 
   
   useEffect(() => {
     async function getValuations() {
       let data = await retrieveValuations();
-      let val=valuationNumbers(data, footballFieldOutput, footballFieldMetric, footballFieldStat)
+      console.log("data")
+      console.log(data)
+      let val=valuationNumbers(data, footballFieldOutput, valuationMetric, valuationStat)
       console.log(val)
       setValuations(val);
     }
@@ -620,20 +649,19 @@ const FootballField = ({ route, navigation }) => {
     getFootballField();
   }, []);*/
 
-    const generateValuation= () => {
-    fetch('http://10.239.242.79:5000/valuations',{
+    function generateValuation() {
+    fetch('http://172.20.10.13:5000/valuations',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              userId:"Tester3",
+              targetId:targetId,
               valuationName:"Changing name",
-              footballFieldTimeSeries:"FF Test",
-              valuationTimeSeries:"1676081515625045",
+              footballFieldTimeSeries:footballFieldTimeSeries,
+              valuationTimeSeries:valuationTimeSeries,
               targetSymbol:targetSymbol,
-              valuationCompsDate:"02/10/2023"
             })}
         )
         .then(resp=>resp.text())
@@ -642,7 +670,7 @@ const FootballField = ({ route, navigation }) => {
   }
   
   const updateValuationName= () => {
-    fetch('http://10.239.242.79:5000/valuations/names',{
+    fetch('http://172.20.10.13:5000/valuations/names',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -662,7 +690,7 @@ const FootballField = ({ route, navigation }) => {
 
 
   const deleteValuation= () => {
-    fetch('http://10.239.242.79:5000/valuations',{
+    fetch('http://172.20.10.13:5000/valuations',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -678,8 +706,8 @@ const FootballField = ({ route, navigation }) => {
   }
 
 
-  function addComp (valuationId, compSymbol, )  {
-    fetch('http://10.239.251.136:5000/comps',{
+  function addComp (compSymbol)  {
+    fetch('http://172.20.10.13:5000/comps',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -691,6 +719,7 @@ const FootballField = ({ route, navigation }) => {
         )
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
+        generateValuation()
         
   }
 
@@ -731,7 +760,6 @@ const FootballField = ({ route, navigation }) => {
   const tableRange = table.maxRange - table.minRange;
   const tableMean = (table.maxRange + table.minRange) / 2;
   const pixelsPerDollar = (valuationWidth-20-20) / tableRange;
-
   return (
       <SafeAreaView style={{ flex: 2, alignItems: 'center', backgroundColor: '#000' }}>
         <View style={{ flex: 1, backgroundColor: '#FFF', height: 0.4*(windowHeight), width: valuationWidth, borderRadius: 10 }}>
