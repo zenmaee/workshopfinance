@@ -829,7 +829,7 @@ const FootballField = ({ route, navigation }) => {
               <Text style={{ color: 'black', backgroundColor: 'light-gray', borderTopLeftRadius: 10, borderTopRightRadius: 10  }}> Multiple</Text>
             </View>
         </View> */}
-        <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
+        {/* <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
           <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
             <Text style={styles.buttonText_1}>Coverage</Text>
           </TouchableOpacity>
@@ -841,7 +841,7 @@ const FootballField = ({ route, navigation }) => {
           <TouchableOpacity style={styles.button_3}>
             <Text style={styles.buttonText_1}>Profile</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
     </SafeAreaView>
   );
 }

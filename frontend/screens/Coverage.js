@@ -83,7 +83,7 @@ const Coverage = ({ route, navigation }) => {
                       }
                     </ScrollView>
                 </View>
-                <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
+                {/* <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
                       <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
                         <Text style={styles.buttonText_1}>Coverage</Text>
                       </TouchableOpacity>
@@ -95,7 +95,7 @@ const Coverage = ({ route, navigation }) => {
                       <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { name: name , email: email})}>
                         <Text style={styles.buttonText_1}>Profile</Text>
                       </TouchableOpacity>
-                </View>
+                </View> */}
               </SafeAreaView>
             );
     }
@@ -168,7 +168,7 @@ const Coverage = ({ route, navigation }) => {
       
 
 
-      <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
+      {/* <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
             <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
               <Text style={styles.buttonText_1}>Coverage</Text>
             </TouchableOpacity>
@@ -180,7 +180,7 @@ const Coverage = ({ route, navigation }) => {
             <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { name: name , email: email})}>
                 <Text style={styles.buttonText_1}>Profile</Text>
             </TouchableOpacity>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 }
