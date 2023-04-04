@@ -58,11 +58,7 @@ const SignUp = ({ navigation }) => {
   };
 
   const addUsers = () => {
-<<<<<<< HEAD
     fetch('http://10.239.251.136:5000/users', {
-=======
-    fetch('http://172.20.10.13:5000/users', {
->>>>>>> ede5c2d510e1c4029dfffa203387bb3f20d74fc6
       method: 'POST',
       headers: {
         'Accept': 'application/json',
