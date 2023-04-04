@@ -76,11 +76,7 @@ def add_valuations():
     footballFieldId=targetId+"-"+footballFieldTimeSeries
     
     #Then we send it to the database
-<<<<<<< HEAD
-    add_VALUATION(footballFieldId, iex_api_key)
-=======
     add_VALUATION(footballFieldId,iex_api_key, valuationTimeSeries)
->>>>>>> ede5c2d510e1c4029dfffa203387bb3f20d74fc6
     return "Successful VALUATION POST"
 
 @app.route('/valuations/names', methods = ['PUT'])
@@ -109,11 +105,7 @@ def generate_valuations():
     desired_multiples=["evToEbitdaLTM", "evToRevenueLTM"]
     #Ver cómo coger valuationId
     #Ver cómo coger basketofcomps
-<<<<<<< HEAD
-    generate_valuation(userId, targetSymbol, desired_multiples, valuationTimeSeries, iex_api_key, footballFieldTimeSeries)
-=======
     generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeSeries, iex_api_key, footballFieldTimeSeries)
->>>>>>> ede5c2d510e1c4029dfffa203387bb3f20d74fc6
 
     return "Successful PUT"
 
@@ -229,8 +221,4 @@ def search_ticker(input):
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
-<<<<<<< HEAD
-    app.run(host='10.239.251.136',port=5000, debug=True) #changes every time we change wifi
-=======
-    app.run(host='172.20.10.13',port=5000, debug=True) #changes every time we change wifi
->>>>>>> ede5c2d510e1c4029dfffa203387bb3f20d74fc6
+    app.run(host='10.0.0.187',port=5000, debug=True) #changes every time we change wifi
