@@ -34,7 +34,9 @@ def add_FOOTBALLFIELD(targetId,footballFieldType,footballFieldTimeSeries,iex_api
 
     }
   ])
-    return r
+    if r.status_code==200:
+
+        return footballFieldName
 
 
 def update_FF_NAME(targetId, footballFieldTimeSeries,footballFieldName,iex_api_key):

@@ -116,6 +116,13 @@ def retrieve_valuations(footballFieldId):
     print("estoy aqui")
     return resp
 
+@app.route('/comps/<valuationId>', methods=['GET'])
+def retrieve_comps(valuationId):
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS/"+valuationId+"?last=100&token="+iex_api_key
+    resp = requests.get(url).json()
+    print("estoy aqui")
+    return resp
+
 @app.route('/footballfields/<targetId>/', methods=['GET'])
 def retrieve_footballfields_bytarget(targetId):
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS/"+targetId+"?last=3&token="+iex_api_key
@@ -143,7 +150,8 @@ def update_ff_names(targetId, footballFieldTimeSeries):
     
     #This UPDATE will only change the footballfield name. No recalculation should be done
     footballFieldName=request.json['footballFieldName']
-
+    print("footballFieldName")
+    print(footballFieldName)
     update_FF_NAME(targetId, footballFieldTimeSeries,footballFieldName,iex_api_key)
     return "Successful PUT"
 
@@ -156,15 +164,17 @@ def add_targets(type):
     subsectorName=request.json['subsectorName']
     targetRevenueLTM=request.json['targetRevenueLTM']
     targetEbitdaLTM=request.json['targetRevenueLTM']
+    targetType=request.json['targetType']
     
     print(targetRevenueLTM)
 
     if type=="private":
         targetSymbol=targetName
+        
     else:
         targetSymbol=request.json['targetSymbol']
     
-    r=add_TARGET(userId, targetName, targetSymbol, sectorName, subsectorName, targetRevenueLTM, targetEbitdaLTM, type, iex_api_key)
+    r=add_TARGET(userId, targetName, targetSymbol, sectorName, subsectorName, targetRevenueLTM, targetEbitdaLTM, targetType, iex_api_key)
     if r==200:
 
         return "Successful Target Post"
@@ -177,20 +187,39 @@ def retrieve_targets(userId):
     resp = requests.get(url).json()
     return resp
 
+@app.route('/targets/public/<tgtSymbol>', methods=['GET'])
+def retrieve_pub_targets(tgtSymbol):
+    fundamentals_url="https://cloud.iexapis.com/stable/time-series/fundamentals/"+tgtSymbol+"/ttm?token="+iex_api_key
+    stock_url="https://cloud.iexapis.com/stable/stock/"+tgtSymbol+"/company?token="+iex_api_key
+    fundamentals_resp = requests.get(fundamentals_url).json()[0]
+    stock_resp = requests.get(stock_url).json()
+    ebitda=fundamentals_resp['ebitdaReported']
+    revenue=fundamentals_resp['revenue']
+    name=stock_resp["companyName"]
+    sector=stock_resp["sector"]
+
+    resp={
+        "ebitda":ebitda,
+        "revenue":revenue,
+        "name":name,
+        "sector":sector
+    }
+    return resp
+
 @app.route('/footballFields', methods=['POST'])
 def add_footballfields():
 
     targetSymbol=request.json['targetSymbol']
     userId=request.json['userId']
-    footballFieldType=request.json['footballFieldType']
+    footballFieldType=""
     footballFieldTimeSeries = request.json['footballFieldTimeSeries']
 
     targetId=userId+"-"+targetSymbol
     #Then we send it to the database
     r = add_FOOTBALLFIELD(targetId,footballFieldType,footballFieldTimeSeries,iex_api_key)
-    if r.status_code==200:
+    
 
-        return "SUCCESFUL FF POST"
+    return {"success": r}
 
 @app.route('/ticker/<input>', methods=['GET'])
 def search_ticker(input):
@@ -221,4 +250,4 @@ def search_ticker(input):
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
-    app.run(host='10.0.0.187',port=5000, debug=True) #changes every time we change wifi
+    app.run(host='10.239.242.79',port=5000, debug=True) #changes every time we change wifi

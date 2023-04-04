@@ -39,11 +39,11 @@ def sign_in(email,password,iex_api_key):
   url_to_check = "https://cloud.iexapis.com/v1/data/WORKSHOPFINANCE/USERDATA/"+emailHash+"?&token="+iex_api_key
   resp = requests.get(url_to_check).json()
   if ( len(resp) == 0 ):
-    return "User Does Not Exist"
+    return {"error": "User Does Not Exist"}
   name = resp[0]['firstName'] + " " + resp[0]['lastName'] 
   db_password = resp[0]['password']  
   password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
   if(db_password == password_hash ):
-    return [emailHash, name, email_lower]
+    return {"emailHash": emailHash, "name": name, "email": email_lower}
   else:
-    return "Incorrect Password"  
+    return {"error": "Incorrect Password"}

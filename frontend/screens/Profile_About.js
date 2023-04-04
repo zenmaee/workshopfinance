@@ -27,7 +27,7 @@ return (
     </View>
   </View>
   <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
-    <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
+    <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate(navigation.navigate('Coverage', { footballFields: footballFields , latestFF: latestFootballField, targets: targets, name: userName , email: userEmail, userId: userId}))}>
       <Text style={styles.buttonText_1}>Coverage</Text>
     </TouchableOpacity>
 

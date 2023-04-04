@@ -10,7 +10,8 @@ import { TouchableWithoutFeedback } from 'react-native';
 const Tab = createMaterialTopTabNavigator();
 const Coverage = ({ route, navigation }) => {
   const { footballFields, latestFF, targets, name, email, userId} = route.params;
-
+  console.log("targets cov")
+  console.log(targets)
 
 
   function TabFootballField() {
@@ -105,9 +106,11 @@ const Coverage = ({ route, navigation }) => {
     const [showPrivateControls, setShowPrivateControls] = useState (false);
 
 
-  const addFootballField= (type, symbol) => {
+  function addFootballField(type, symbol) {
     const footballFieldTimeSeries = Math.floor(Date.now() * 1000).toString();
-    fetch('http://10.0.0.187:5000/footballFields',{ 
+    console.log("addFootballField")
+    console.log(type)
+    fetch('http://10.239.242.79:5000/footballFields',{ 
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -120,13 +123,14 @@ const Coverage = ({ route, navigation }) => {
               footballFieldTimeSeries:footballFieldTimeSeries
             })}
         )
-        .then(resp=>resp.text())
+        .then(resp=>resp.json())
         .then(resp => {
-          if (resp === "SUCCESFUL FF POST") {
+          console.log("eii")
+          console.log(resp)
             let targetId=userId+"-"+symbol
-            navigation.navigate('FootballField', { newFootballField: 1, targetId:targetId, footballFieldTimeSeries:footballFieldTimeSeries})
+            navigation.navigate('FootballField', { targetId: targetId, footballFieldName:resp.success, footballFieldTimeSeries:footballFieldTimeSeries})
             //navigation.navigate('Coverage', { userId: resp});
-          }
+          
         })     
   }
 
@@ -157,7 +161,8 @@ const Coverage = ({ route, navigation }) => {
       </View>
       <View style={styles.viewcontrols}>
       {showPrivateControls ? <PrivControls onClose={() => { setShowPrivateControls(false)}} setShowPrivateControls={setShowPrivateControls} /> : <Button title="New Private Target" onPress={() => { setShowPrivateControls(true)}}/>}
-        {showPublicControls ? <PubControls onClose={() => { setShowPublicControls(false)}}/>:<Button title="New Public Target" onPress={() => { setShowPublicControls(true)}}/>}
+      {showPublicControls ? <PubControls onClose={() => { setShowPublicControls(false)}} setShowPublicControls={setShowPublicControls} /> : <Button title="New Public Target" onPress={() => { setShowPublicControls(true)}}/>}
+
       </View>
 
       
@@ -196,10 +201,11 @@ function PrivControls({ onClose, setShowPrivateControls }) {
       subsectorName: subsectorName,
       targetRevenueLTM: targetRevenueLTM,
       targetEbitdaLTM: targetEbitdaLTM,
+      targetType:"private",
       userId: userId
     };
     console.log("priv tgts")
-    fetch('http://10.0.0.187:5000/targets/private', {
+    fetch('http://10.239.242.79:5000/targets/private', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -212,6 +218,7 @@ function PrivControls({ onClose, setShowPrivateControls }) {
         console.log(resp)
         if (resp === "Successful Target Post") {
           targets.push(target_json)
+          
           setShowPrivateControls(false)
         }
       })
@@ -284,71 +291,76 @@ function PrivControls({ onClose, setShowPrivateControls }) {
   );
 }
 
-function PubControls({ onClose}) {
-  const [targetName, setTargetName] = useState ("");
-  const [sectorName, setSectorName] = useState ("");
-  const [subsectorName, setSubsectorName] = useState ("");
-  const [targetRevenueLTM, setTargetRevenueLTM] = useState (0);
-  const [targetEbitdaLTM, setTargetEbitdaLTM] = useState (0);
-  const [targetSymbol, setTargetSymbol] = useState ("");
+function PubControls({ onClose, setShowPublicControls }) {
+  const [targetName, setTargetName] = useState("");
+  const [sectorName, setSectorName] = useState("");
+  const [subsectorName, setSubsectorName] = useState("");
+  const [targetRevenueLTM, setTargetRevenueLTM] = useState(0);
+  const [targetEbitdaLTM, setTargetEbitdaLTM] = useState(0);
+  const [targetSymbol, setTargetSymbol] = useState("");
 
-
-  function addPublicTarget(targetName, sectorName, subsectorName, revenueVal, ebitdaVal) {
+  async function addPublicTarget(targetData) {
     const target_json = {
-      targetName: targetName,
-      sectorName: sectorName,
-      subsectorName: subsectorName,
-      targetRevenueLTM: revenueVal,
-      targetEbitdaLTM: ebitdaVal,
-      userId: userId
+      targetName: targetData.name,
+      sectorName: targetData.sector,
+      targetSymbol: targetSymbol,
+      targetRevenueLTM: targetData.revenue,
+      targetEbitdaLTM: targetData.ebitda,
+      subsectorName:subsectorName,
+      userId: userId,
+      targetType:"public"
     };
-    fetch('http://10.0.0.187:5000/targets/public', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(target_json)
-      })
-      .then(resp => resp.text())
-      .then(resp => {
-        if (resp === "SUCCESFUL TARGET POST") {
-          targets.push(target_json)
-        }
-      })
-  }
-  
-    function retrieveTargetData(targetSymbol){
-      fetch('http://10.0.0.187:5000/targets/'+targetSymbol, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-      })
-      .then((resp) => resp.json())
-      .then((data) => {
-          return data})
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          return [];
-          });}
-      
-        
-            async function getTargetData() {
-              let targetData = await retrieveTargetData(targetSymbol);
-              setTargetName(targetData.name)
-              setSectorName(targetData.sectorName)
-              setSubsectorName(targetData.subsectorName)
-              setTargetRevenueLTM(targetData.targetRevenueLTM)
-              setTargetEbitdaLTM(targetData.ebitdaRevenueLTM)
 
-          
+
+    const response = await fetch("http://10.239.242.79:5000/targets/public", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(target_json),
+    });
+    const resp = await response.text();
+    console.log(resp)
+    if (resp === "Successful Target Post") {
+      targets.push(target_json)
+      setShowPublicControls(false)
+    }
+  }
+
+  async function retrieveTargetData(targetSymbol) {
+    console.log(targetSymbol)
+    try {
+      const response = await fetch(
+        "http://10.239.242.79:5000/targets/public/" + targetSymbol,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
         }
+      );
+      const data = await response.json();
+      console.log("data")
+      console.log(data)
+      return data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return [];
+    }
+  }
+
+  async function getTargetData() {
+    let targetData = await retrieveTargetData(targetSymbol);
+    console.log("targetData");
+    console.log(targetData);
+    await addPublicTarget(targetData);
+  }
             
     
           function searchTicker(input) {
-            return fetch('http://10.0.0.187:5000/ticker/' + input, {
+            return fetch('http://10.239.242.79:5000/ticker/' + input, {
               method: 'GET',
               headers: {
                 'Accept': 'application/json',
@@ -367,12 +379,7 @@ function PubControls({ onClose}) {
           function find_company_name(input) {
             let res_company = [];
             let res_ticker = [];
-            /*try {
-              // Assuming `search_company` is defined somewhere else
-              res_company = search_company(input);
-            } catch (error) {
-              // handle runtime error, type error, or name error
-            }*/
+
             try {
               res_ticker = searchTicker(input);
             } catch (error) {
@@ -409,46 +416,24 @@ function PubControls({ onClose}) {
             mode='outlined'
             placeholder="Search by Ticker:"
             // Call `find_company_name` when the input value changes
-            onChangeText={(text) => find_company_name(text)
+            onChangeText={(text) => setTargetSymbol(text)
             }
           />
         
           
-      <Text
-        style={{ width: 400 }}
-        mode='outlined'
-        placeholder="Target Name"
-        value={ targetName }
-      />
-      <TextInput
-        mode='outlined'
-        placeholder="Target Sector"
-        value={ sectorName }
-      />
-      <TextInput
-        mode='outlined'
-        placeholder="Target Subsector"
-        value={ subsectorName }
-      />
+
+
       <View style={{flexDirection: "row", alignItems: 'center'}}>
         <View style={{ marginRight: 5, width: 150 }}>
-          <Text
-          mode='outlined'
-          placeholder="Revenue (LTM)"
-          value={targetRevenueLTM}
-          />
+    
         </View>
         <View style={{ width: 135 }}>
-          <Text
-          mode='outlined'
-          placeholder="EBITDA (LTM)"
-          value={targetEbitdaLTM}
-          />
+
         </View>
         <TouchableOpacity 
           title="Add New Target"
           onPress={() => {
-            addPublicTarget(targetName, sectorName, subsectorName, targetRevenueLTM,targetEbitdaLTM)
+            getTargetData()
           }}>
             <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
         </TouchableOpacity>

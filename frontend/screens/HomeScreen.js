@@ -1,3 +1,4 @@
+
 import React, {useState, useEffect} from 'react';
 import { SafeAreaView, StyleSheet, TouchableOpacity, Text, View, Image, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-paper';
@@ -6,12 +7,14 @@ const HomeScreen = ({ route, navigation }) => {
   const { userName, userEmail, userId, targets } = route.params;
   const [footballFields, setFootballFields] = useState([])
   const [latestFootballField, setLatestFootballField] = useState([])
-
+  console.log("targets hs")
+  console.log(targets)
 
   function retrieveFootballFields(targetId) {
     //let ffLists=[]
     //change routes: only showing last ff 
-      const url = "http://10.239.251.136:5000/footballfields/" + targetId + "/";
+      const url = "http://10.239.242.79:5000/footballfields/" + targetId + "/";
+      console.log("rretrieve ffs")
       console.log(url)
       return fetch(url, {
         method: "GET",
@@ -22,7 +25,8 @@ const HomeScreen = ({ route, navigation }) => {
       })
         .then((resp) => resp.json())
         .then((data) => {
-          
+        console.log("ffs")
+        console.log(data)
 
           return data})
       

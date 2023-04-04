@@ -58,7 +58,7 @@ const SignUp = ({ navigation }) => {
   };
 
   const addUsers = () => {
-    fetch('http://10.0.0.187:5000/users', {
+    fetch('http://10.239.242.79:5000/users', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -106,7 +106,7 @@ const SignUp = ({ navigation }) => {
       <View>
         <Image style={styles.wfLogo} resizeMode="contain" source={require('./logo_dark.png')}/>
         <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
-          <View style={{ marginTop: 80, marginBottom: 10 }}>
+          <View style={{ marginTop: 40, marginBottom: 10 }}>
             <Text style={styles.inputTitle}>First Name</Text>
             <TextInput
               //secureTextEntry={this.isSecure}

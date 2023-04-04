@@ -11,11 +11,13 @@ const SignUpSignIn = ({ navigation }) => {
     console.log(resp)
     console.log(typeof resp)
 
-    const userId=resp[0]
-    const userName=resp[1]
-    const userEmail=resp[2]
+    console.log("resp")
+    console.log(resp)
+    const userId=resp.emailHash
+    const userName=resp.name
+    const userEmail=resp.email
 
-    const url = 'http://10.0.0.187:5000/targets/'+userId+'/'
+    const url = 'http://10.239.242.79:5000/targets/'+userId+'/'
     console.log(url)
     return fetch(url, {
       method: "GET",
@@ -32,7 +34,6 @@ const SignUpSignIn = ({ navigation }) => {
           userId: userId,
           targets: data,
         })
-
         return data})
         
       .catch((error) => {
@@ -45,7 +46,7 @@ const SignUpSignIn = ({ navigation }) => {
 
           console.log("email")
           console.log(email)
-          const url = 'http://10.0.0.187:5000/users/'+email
+          const url = 'http://10.239.242.79:5000/users/'+email
           return fetch(url, {
             method:'POST',
             headers:{
@@ -56,28 +57,24 @@ const SignUpSignIn = ({ navigation }) => {
               password:password})} //ADD SECURITY. I DONT LIKE TO SEND PASSWORD TO LOCAL HOST
             )
             
-            .then(resp => {
-              if (resp === "Incorrect password") {
-                console.log(resp);
-              ;
+            .then(resp => resp.json())
+            .then(json => {
+              if (json.error === "Incorrect Password") {
+                console.log(json.error);
               }
-              else if (resp==="User Does Not Exist"){
-                
-                console.log(resp);
+              else if (json.error === "User Does Not Exist"){
+                console.log(json.error);
               }
               else {
-                console.log("next stop cov")
-                console.log(resp.value)
-                return resp.json() // Convert the response to JSON
+                retrieveTargets(json); // Pass the JSON response to the retrieveTargets function
+                return json; // Return the JSON response from the Promise chain
               }
-            })
-            .then(json => {
-              retrieveTargets(json); // Pass the JSON response to the retrieveTargets function
             })
             .catch((error) => {
               console.error("Error fetching data:", error);
               return [];
             });
+
         }
 
   return (

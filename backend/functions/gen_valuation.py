@@ -82,6 +82,7 @@ def add_COMP(compSymbol,valuationId,iex_api_key):
 
 def update_VALUATION(footballFieldId, multiples,ev,valuationTimeSeries,iex_api_key):
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"/?&token="+iex_api_key
+    print(url)
     valuation=requests.get(url).json()
     
     #Depending on the desired stat, we will want one row of multiples/ev or another.
@@ -107,10 +108,13 @@ def update_VALUATION(footballFieldId, multiples,ev,valuationTimeSeries,iex_api_k
     
     #valuationCompsDate:
     #valuation[0]['valuationCompsDate']=valuationCompsDate
-    
-    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
+    print("valuation")
+    print(valuation)
+   
+    #url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
+    url="https://workspace.iex.cloud/v1/datasets/workshopfinance/VALUATIONS?token=sk_cd4257e5aa684ab6a245c13b45f0e204"
     r=requests.post(url, json=valuation)
-
+    print(r)
     return r
     
 
@@ -259,6 +263,7 @@ def update_VALUATION_NAME(targetId,footballFieldTimeSeries,valuationTimeSeries,v
     valuation=requests.get(url).json()
     valuation[0]['valuationName']=valuationName
 
+    #url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
     url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
     r=requests.post(url, json=valuation)
     return r
