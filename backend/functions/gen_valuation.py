@@ -84,35 +84,36 @@ def update_VALUATION(footballFieldId, multiples,ev,valuationTimeSeries,iex_api_k
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"/?&token="+iex_api_key
     print(url)
     valuation=requests.get(url).json()
-    
+    print("valuation0")
+    print(valuation)
     #Depending on the desired stat, we will want one row of multiples/ev or another.
     #However, even though the stat is changed, no recalculations should be made. All possible calculation should already be made
     #If Output=Mult:
-    valuation[0]['valuationMultAvEvEbitdaLTM']=multiples.iloc[0]['evToEbitdaLTM'] #Stat=Av, Multiple=evToEbitdaLTM
-    valuation[0]['valuationMultMedEvEbitdaLTM']=multiples.iloc[1]['evToEbitdaLTM'] #Stat=Median, Multiple=evToEbitdaLTM
-    valuation[0]['valuationMultHighEvEbitdaLTM']=multiples.iloc[2]['evToEbitdaLTM']#Stat=High, Multiple=evToEbitdaLTM
-    valuation[0]['valuationMultLowEvEbitdaLTM']=multiples.iloc[3]['evToEbitdaLTM']#Stat=Low, Multiple=evToEbitdaLTM
-    valuation[0]['valuationMultAvEvRevLTM']=multiples.iloc[0]['evToRevenueLTM']#Stat=Av, Multiple=evToRevLTM
-    valuation[0]['valuationMultMedEvRevLTM']=multiples.iloc[1]['evToRevenueLTM']#Stat=Median, Multiple=evToRevLTM
-    valuation[0]['valuationMultHighEvRevLTM']=multiples.iloc[2]['evToRevenueLTM']#Stat=High, Multiple=evToRevLTM
-    valuation[0]['valuationMultLowEvRevLTM']=multiples.iloc[3]['evToRevenueLTM']#Stat=Low, Multiple=evToRevLTM
+    valuation[0]["valuationMultAvEvEbitdaLTM"]=multiples.iloc[0]['evToEbitdaLTM'] #Stat=Av, Multiple=evToEbitdaLTM
+    valuation[0]["valuationMultMedEvEbitdaLTM"]=multiples.iloc[1]['evToEbitdaLTM'] #Stat=Median, Multiple=evToEbitdaLTM
+    valuation[0]["valuationMultHighEvEbitdaLTM"]=multiples.iloc[2]['evToEbitdaLTM']#Stat=High, Multiple=evToEbitdaLTM
+    valuation[0]["valuationMultLowEvEbitdaLTM"]=multiples.iloc[3]['evToEbitdaLTM']#Stat=Low, Multiple=evToEbitdaLTM
+    valuation[0]["valuationMultAvEvRevLTM"]=multiples.iloc[0]['evToRevenueLTM']#Stat=Av, Multiple=evToRevLTM
+    valuation[0]["valuationMultMedEvRevLTM"]=multiples.iloc[1]['evToRevenueLTM']#Stat=Median, Multiple=evToRevLTM
+    valuation[0]["valuationMultHighEvRevLTM"]=multiples.iloc[2]['evToRevenueLTM']#Stat=High, Multiple=evToRevLTM
+    valuation[0]["valuationMultLowEvRevLTM"]=multiples.iloc[3]['evToRevenueLTM']#Stat=Low, Multiple=evToRevLTM
     #If Output=Ev:
-    valuation[0]['valuationEvAvEvEbitdaLTM']=ev.iloc[0]['evToEbitdaLTM']#Stat=Av, Multiple=evToEbitdaLTM
-    valuation[0]['valuationEvMedEvEbitdaLTM']=ev.iloc[1]['evToEbitdaLTM']#Stat=Median, Multiple=evToEbitdaLTM
-    valuation[0]['valuationEvHighEvEbitdaLTM']=ev.iloc[2]['evToEbitdaLTM']#Stat=High, Multiple=evToEbitdaLTM
-    valuation[0]['valuationEvLowEvEbitdaLTM']=ev.iloc[3]['evToEbitdaLTM']#Stat=Low, Multiple=evToEbitdaLTM
-    valuation[0]['valuationEvAvEvRevLTM']=ev.iloc[0]['evToRevenueLTM']#Stat=Av, Multiple=evToRevLTM
-    valuation[0]['valuationEvMedEvRevLTM']=ev.iloc[1]['evToRevenueLTM']#Stat=Median, Multiple=evToRevLTM
-    valuation[0]['valuationEvHighEvRevLTM']=ev.iloc[2]['evToRevenueLTM']#Stat=High, Multiple=evToRevLTM
-    valuation[0]['valuationEvLowEvRevLTM']=ev.iloc[3]['evToRevenueLTM']#Stat=Low, Multiple=evToRevLTM
+    valuation[0]["valuationEvAvEvEbitdaLTM"]=ev.iloc[0]['evToEbitdaLTM']#Stat=Av, Multiple=evToEbitdaLTM
+    valuation[0]["valuationEvMedEvEbitdaLTM"]=ev.iloc[1]['evToEbitdaLTM']#Stat=Median, Multiple=evToEbitdaLTM
+    valuation[0]["valuationEvHighEvEbitdaLTM"]=ev.iloc[2]['evToEbitdaLTM']#Stat=High, Multiple=evToEbitdaLTM
+    valuation[0]["valuationEvLowEvEbitdaLTM"]=ev.iloc[3]['evToEbitdaLTM']#Stat=Low, Multiple=evToEbitdaLTM
+    valuation[0]["valuationEvAvEvRevLTM"]=ev.iloc[0]['evToRevenueLTM']#Stat=Av, Multiple=evToRevLTM
+    valuation[0]["valuationEvMedEvRevLTM"]=ev.iloc[1]['evToRevenueLTM']#Stat=Median, Multiple=evToRevLTM
+    valuation[0]["valuationEvHighEvRevLTM"]=ev.iloc[2]['evToRevenueLTM']#Stat=High, Multiple=evToRevLTM
+    valuation[0]["valuationEvLowEvRevLTM"]=ev.iloc[3]['evToRevenueLTM']#Stat=Low, Multiple=evToRevLTM
     
     #valuationCompsDate:
     #valuation[0]['valuationCompsDate']=valuationCompsDate
     print("valuation")
     print(valuation)
    
-    #url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
-    url="https://workspace.iex.cloud/v1/datasets/workshopfinance/VALUATIONS?token=sk_cd4257e5aa684ab6a245c13b45f0e204"
+    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
+    #url="https://workspace.iex.cloud/v1/datasets/workshopfinance/VALUATIONS?token=sk_cd4257e5aa684ab6a245c13b45f0e204"
     r=requests.post(url, json=valuation)
     print(r)
     return r
@@ -228,8 +229,8 @@ def generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeS
 
 def add_VALUATION(footballFieldId, iex_api_key, valuationTimeSeries):
     now = datetime.now()
-    timeDateCreated = now.strftime("%m/%d/%Y %H:%M:%S")# timeDateCreated value has to be fixed, can not be editted. It contains the
-    timeDateCreated = timeDateCreated[:6]+timeDateCreated[8:-3] #time and date of when the valuation was generated for the first time
+    #timeDateCreated = now.strftime("%m/%d/%Y %H:%M:%S")# timeDateCreated value has to be fixed, can not be editted. It contains the
+    #timeDateCreated = timeDateCreated[:6]+timeDateCreated[8:-3] #time and date of when the valuation was generated for the first time
     #valuationCompsDate=now.strftime("%m/%d/%Y")
     valuationType="COMPS"
     
@@ -243,7 +244,6 @@ def add_VALUATION(footballFieldId, iex_api_key, valuationTimeSeries):
     {
         
         "footballFieldId":footballFieldId,
-        "timeDateCreated":timeDateCreated,
         "valuationName":valuationName,
         "valuationTimeSeries":valuationTimeSeries,
         "valuationType":valuationType
