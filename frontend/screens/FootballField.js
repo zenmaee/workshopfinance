@@ -100,7 +100,7 @@ const FootballField = ({ route, navigation }) => {
 }  
 
   function searchTicker(input) {
-    return fetch('http://10.239.242.79:5000/ticker/' + input, { 
+    return fetch('http://10.239.3.201:5000/ticker/' + input, { 
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -158,7 +158,7 @@ const FootballField = ({ route, navigation }) => {
 
 
     function retrieveComps() {
-      let url = `http://10.239.242.79:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`;
+      let url = `http://10.239.3.201:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`;
       return fetch(url, {
         method: 'GET',
         headers: {
@@ -259,8 +259,6 @@ const FootballField = ({ route, navigation }) => {
 
   function FootballFieldChart({ onRenderComps}) {
     
-
-
     return (
       <View>
         <ScrollView contentContainerStyle={{ padding: 20 }}>
@@ -436,7 +434,7 @@ const FootballField = ({ route, navigation }) => {
   function FootballFieldControls({ onAdd }) {
     const addValuation= (targetId, footballFieldTimeSeries) => {
       const valuationTS = Math.floor(Date.now() * 1000).toString();
-      fetch('http://10.239.242.79:5000/valuations',{
+      fetch('http://10.239.3.201:5000/valuations',{
               method:'POST',
               headers:{
                   'Accept':'application/json',
@@ -536,7 +534,7 @@ const FootballField = ({ route, navigation }) => {
   }
   
   const updateFootballFieldName= () => {
-    let url="http://10.239.242.79:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
+    let url="http://10.239.3.201:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
     fetch(url,{
             method:'PUT',
             headers:{
@@ -552,7 +550,7 @@ const FootballField = ({ route, navigation }) => {
   }
 
   const deleteFootballField= () => {
-    fetch('http://10.239.242.79:5000/footballfields',{
+    fetch('http://10.239.3.201:5000/footballfields',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -571,7 +569,7 @@ const FootballField = ({ route, navigation }) => {
 
   function retrieveValuations() {
     
-    let url = "http://10.239.242.79:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
+    let url = "http://10.239.3.201:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
@@ -698,7 +696,7 @@ const FootballField = ({ route, navigation }) => {
   }, []);*/
 
     function generateValuation() {
-    fetch('http://10.239.242.79:5000/valuations',{
+    fetch('http://10.239.3.201:5000/valuations',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -718,7 +716,7 @@ const FootballField = ({ route, navigation }) => {
   }
   
   const updateValuationName= () => {
-    fetch('http://10.239.242.79:5000/valuations/names',{
+    fetch('http://10.239.3.201:5000/valuations/names',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -755,7 +753,7 @@ const FootballField = ({ route, navigation }) => {
 
 
   function addComp (compSymbol)  {
-    fetch('http://10.239.242.79:5000/comps',{
+    fetch('http://10.239.3.201:5000/comps',{
             method:'POST',
             headers:{
                 'Accept':'application/json',

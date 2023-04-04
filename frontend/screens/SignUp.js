@@ -65,7 +65,7 @@ const SignUp = ({ navigation }) => {
   };
 
   const addUsers = () => {
-    fetch('http://10.239.242.79:5000/users', {
+    fetch('http://10.239.3.201:5000/users', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -143,7 +143,7 @@ const SignUp = ({ navigation }) => {
             <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
 
-          <View style={{ marginTop: 5, marginBottom: 10 }} >
+          <View style={{ marginTop: 5 }} >
             <Text style={styles.inputTitle}>Email Address</Text>
             <TextInput
               //secureTextEntry={this.isSecure}
@@ -164,8 +164,9 @@ const SignUp = ({ navigation }) => {
             <Text style={styles.textFailed}> </Text>
           )}
 
-          <View style={{ marginTop: 5, marginBottom: 10 }} >
-          <TextInput
+          <View style={{ marginTop: 5, marginBottom: 10 }}>
+          <Text style={styles.inputTitle}>Enter password</Text>
+              <TextInput
                 //placeholder={this.placeholder}
                 //secureTextEntry={this.isSecure}
                 style={styles.input}

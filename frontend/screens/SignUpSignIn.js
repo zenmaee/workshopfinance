@@ -18,7 +18,7 @@ const SignUpSignIn = ({ navigation }) => {
     const userName=resp.name
     const userEmail=resp.email
 
-    const url = 'http://10.239.242.79:5000/targets/'+userId+'/'
+    const url = 'http://10.239.3.201:5000/targets/'+userId+'/'
     console.log(url)
     return fetch(url, {
       method: "GET",
@@ -47,7 +47,7 @@ const SignUpSignIn = ({ navigation }) => {
 
           console.log("email")
           console.log(email)
-          const url = 'http://10.239.242.79:5000/users/'+email
+          const url = 'http://10.239.3.201:5000/users/'+email
           return fetch(url, {
             method:'POST',
             headers:{
@@ -82,7 +82,7 @@ const SignUpSignIn = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
           <Image style={styles.wfLogo} resizeMode="contain" source={require('./logo_dark.png')}/>
 
-          <View>
+          {/* <View>
               <TouchableOpacity>
                   <View style={styles.socialButton}>
                     <Image style={styles.logo} source={require('./google_logo.jpeg')}/>
@@ -91,9 +91,9 @@ const SignUpSignIn = ({ navigation }) => {
               </TouchableOpacity>
           </View>
 
-          <Text style={[styles.buttonText, { textAlign: "center", marginVertical: 10 }]}>or</Text>
+          <Text style={[styles.buttonText, { textAlign: "center", marginVertical: 10 }]}>or</Text> */}
 
-          <View>
+          <View style={{ marginTop: 150 }}>
               <Text style={styles.inputTitle}>Email</Text>
               <TextInput
                 style={styles.input}
@@ -112,6 +112,7 @@ const SignUpSignIn = ({ navigation }) => {
                 style={styles.input}
                 autoCapitalize = "none"
                 value={password}
+                secureTextEntry={setPassword}
                 onChangeText = {text=>setPassword(text)} 
                 keyboardType="default"
               ></TextInput>
