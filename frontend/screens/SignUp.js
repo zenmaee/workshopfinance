@@ -8,6 +8,10 @@ const SignUp = ({ navigation }) => {
   const [email, setEmail]=useState("")
   const [checkValidEmail, setCheckValidEmail]=useState(false)
   const [password, setPassword]=useState("")
+  const [seePassword, setSeePassword] = useState(true);
+  const [confirmPassword, setConfirmPassword]=useState("")
+  const [seeConfirmPassword, setSeeConfirmPassword] = useState(true);
+
   //const [seePassword, setSeePassword] = useState(true);
 
   const handleCheckEmail = text => {
@@ -53,6 +57,9 @@ const SignUp = ({ navigation }) => {
     // if (!isContainsSymbol.test(value)) {
     //   return 'Password must contain at least one Special Symbol.';
     // }
+    if(value != confirmPassword){
+      return 'Passwords must match.';
+    }
 
     return null;
   };
@@ -158,32 +165,41 @@ const SignUp = ({ navigation }) => {
           )}
 
           <View style={{ marginTop: 5, marginBottom: 10 }} >
-            <Text style={styles.inputTitle}>Enter Password</Text>
-            <TextInput
-              //secureTextEntry={this.isSecure}
-              style={styles.input}
-              //value={Password}
-              //onChangeText = {text=>this.setPassword()} 
-              keyboardType="default"
-              autoCapitalize="none"
-              // placeholder="Enter password here"
-              // placeholderTextColor={styles.placeholderTextColorStyle}
-              />
+          <TextInput
+                //placeholder={this.placeholder}
+                //secureTextEntry={this.isSecure}
+                style={styles.input}
+                autoCapitalize = "none"
+                value={password}
+                secureTextEntry={seePassword}
+                onChangeText = {text=>setPassword(text)} 
+                keyboardType="default"
+                ></TextInput>
+                <TouchableOpacity
+                style={styles.wrapperIcon}
+                onPress={() => setSeePassword(!seePassword)}>
+                <Image source={seePassword ? require('./Eye.png') : require('./EyeActive.png')} style={styles.icon} />
+              </TouchableOpacity>
             <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
 
           <View style={{ marginTop: 5, marginBottom: 10 }} >
-            <Text style={styles.inputTitle}>Confirm Password</Text>
-            <TextInput
-              //secureTextEntry={this.isSecure}
-              style={styles.input}
-              value={password}
-              onChangeText = {text=>setPassword(text)} 
-              keyboardType="default"
-              autoCapitalize="none"
-              // placeholder="Enter confirmed password here"
-              // placeholderTextColor={styles.placeholderTextColorStyle}
-              />
+          <Text style={styles.inputTitle}>Confirm password</Text>
+              <TextInput
+                //placeholder={this.placeholder}
+                //secureTextEntry={this.isSecure}
+                style={styles.input}
+                autoCapitalize = "none"
+                value={confirmPassword}
+                secureTextEntry={seeConfirmPassword}
+                onChangeText = {text=>setConfirmPassword(text)} 
+                keyboardType="default"
+              ></TextInput>
+              <TouchableOpacity
+                style={styles.wrapperIcon}
+                onPress={() => setSeeConfirmPassword(!seeConfirmPassword)}>
+                <Image source={seeConfirmPassword ? require('./Eye.png') : require('./EyeActive.png')} style={styles.icon} />
+              </TouchableOpacity>
             <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
 
@@ -212,65 +228,79 @@ const SignUp = ({ navigation }) => {
 }
 console.log()
 export default SignUp;
-
 const styles = StyleSheet.create({
-    buttons: {
-        fontSize: 16,
-        borderRadius: 4, 
-        marginTop: 30, 
-        paddingVertical: 7,
-        paddingHorizontal: 20,
-        alignItems: "center", 
-        backgroundColor:'#68a0cf',
-        justifyContent: "center",
-        shadowColor: "rgba(171, 180, 189, 0.35)",
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.5,
-        shadowRadius: 10,
-        elevation: 5
-    },
-    buttonDisable: {
+  container: {
+    flex: 1,
+    backgroundColor: '#000',
+    alignItems: "center"
+  },
+  buttons: {
       fontSize: 16,
       borderRadius: 4, 
       marginTop: 30, 
       paddingVertical: 7,
       paddingHorizontal: 20,
       alignItems: "center", 
-      backgroundColor:'grey',
+      backgroundColor:'#68a0cf',
       justifyContent: "center",
       shadowColor: "rgba(171, 180, 189, 0.35)",
       shadowOffset: { width: 0, height: 0 },
       shadowOpacity: 0.5,
       shadowRadius: 10,
       elevation: 5
-    },
-    wfLogo: {
-      top: 55,
-      height: 100,
-      width: 350
-    },
-    logo: {
-      height: 18,
-      width: 20,
-      marginRight: 8
-    },
-    buttonText: {
-        fontFamily: "Avenir Next", 
-        color: "#FFF"
-    },
+  },
+  buttonDisable: {
+    fontSize: 16,
+    borderRadius: 4, 
+    marginTop: 30, 
+    paddingVertical: 7,
+    paddingHorizontal: 20,
+    alignItems: "center", 
+    backgroundColor:'grey',
+    justifyContent: "center",
+    shadowColor: "rgba(171, 180, 189, 0.35)",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    elevation: 5
+  },
+  wfLogo: {
+    top: "3%",//55,
+    //height: 100,
+    width: "100%" //350
+  },
+  logo: {
+    height: 18,
+    width: 20,
+    marginRight: 8
+  },
+  buttonText: {
+      fontFamily: "Avenir Next", 
+      color: "#FFF"
+  },
 
-    inputTitle: {
-      color: "#FFF", 
-      fontSize: 14
-    },
-    input: {
-      paddingVertical: 12,
-      color: "#FFF", 
-      fontSize: 14, 
-      fontFamily: "Avenir Next"
-    },
-    textFailed: {
-      alignSelf: 'flex-end',
-      color: 'red',
-    }
+  inputTitle: {
+    color: "#FFF", 
+    fontSize: 14
+  },
+  input: {
+    paddingVertical: 12,
+    color: "#FFF", 
+    fontSize: 14, 
+    fontFamily: "Avenir Next"
+  },
+  textFailed: {
+    alignSelf: 'flex-end',
+    color: 'red',
+  },
+  wrapperIcon: {
+    position: 'absolute',
+    right: 0,
+    padding: 10,
+  },
+  icon: {
+    tintColor: 'white',
+    width: 30,
+    height: 24,
+  }
 });

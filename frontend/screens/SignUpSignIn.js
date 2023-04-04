@@ -6,6 +6,7 @@ import InputTextField from '../components/InputTextField';
 const SignUpSignIn = ({ navigation }) => {
   const [email, setEmail]=useState("")
   const [password, setPassword]=useState("")
+  const [seePassword, setSeePassword] = useState(true);
   
   function retrieveTargets(resp) {
     console.log(resp)
@@ -109,12 +110,17 @@ const SignUpSignIn = ({ navigation }) => {
               <Text style={styles.inputTitle}>Password</Text>
               <TextInput
                 style={styles.input}
+                autoCapitalize = "none"
                 value={password}
                 onChangeText = {text=>setPassword(text)} 
-                //clearButtonMode='always'
-                autoCapitalize='none' 
                 keyboardType="default"
-                ></TextInput>
+              ></TextInput>
+              <TouchableOpacity
+                style={styles.wrapperIcon}
+                onPress={() => setSeePassword(!seePassword)}>
+                <Image 
+                  source={seePassword ? require('./Eye.png') : require('./EyeActive.png')} style={styles.icon} />
+              </TouchableOpacity>
               <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View> 
 
@@ -173,9 +179,9 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     wfLogo: {
-      top: 100,
-      height: 100,
-      width: 350
+      top: "10%", //100,
+      //height: 100,
+      width: "100%" //350
     },
     logo: {
       height: 18,
@@ -183,7 +189,7 @@ const styles = StyleSheet.create({
       marginRight: 8
     },
     socialButton: {
-        marginTop: 150, 
+        marginTop: "30%", //150, 
         flexDirection: "row",
         marginHorizontal: 12,
         paddingVertical: 12,
@@ -197,6 +203,17 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 10,
         elevation: 5
+    },
+    wrapperIcon: {
+      height: 10,
+      position: 'absolute',
+      right: 0,
+      padding: 10,
+    },
+    icon: {
+      tintColor: 'white',
+      width: 30,
+      height: 24,
     },
     buttonText: {
         fontFamily: "Avenir Next", 
