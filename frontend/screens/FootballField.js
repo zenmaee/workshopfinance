@@ -93,7 +93,6 @@ const FootballField = ({ route, navigation }) => {
     setTableRange(tableRange)
     setTableMean(tableMean)
     setPixelsPerDollar(pixelsPerDollar)
-    console.log("tableSET")
     console.log(tab)
     console.log(table)
 
@@ -263,6 +262,8 @@ const FootballField = ({ route, navigation }) => {
       <View>
         <ScrollView contentContainerStyle={{ padding: 20 }}>
           {valuations.map((valuation) => {
+            console.log("valuation")
+            console.log(valuation)
             console.log("minVALUATION")
             console.log(valuation.minValuation)
             console.log("table")
@@ -432,6 +433,7 @@ const FootballField = ({ route, navigation }) => {
     }
 
   function FootballFieldControls({ onAdd }) {
+    //ReThink this
     const addValuation= (targetId, footballFieldTimeSeries) => {
       const valuationTS = Math.floor(Date.now() * 1000).toString();
       fetch('http://10.239.15.244:5000/valuations',{
@@ -473,15 +475,22 @@ const FootballField = ({ route, navigation }) => {
               </TouchableOpacity>
       </View>
       <View>
-        <TextInput style={{ marginTop: 10, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
-          placeholder="Football Field Name"
-          value={ffName}
-          onChangeText={(text) => {
-            setFootballFieldName(text);
-          }}
-          onSubmitEditing={updateFootballFieldName}
-          keyboardType="default"
-        />
+
+      <TextInput 
+        style={{ 
+          marginTop: 10, 
+          height: 40, 
+          width: 250, 
+          padding: 5, 
+          borderRadius: 10, 
+          backgroundColor: '#FFF'
+        }}
+        placeholder="Football Field Name"
+        value={ffName}
+        onChangeText={setFootballFieldName}
+        onBlur={() => updateFootballFieldName(ffName)}
+        keyboardType="default"
+      />
         <TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
         placeholder="Target Name or Ticker"
         value={targetSymbol}
@@ -533,9 +542,11 @@ const FootballField = ({ route, navigation }) => {
     );
   }
   
-  const updateFootballFieldName= () => {
+  function updateFootballFieldName(newName)  {
+    setFootballFieldName(newName);
     let url="http://10.239.15.244:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
     console.log("updateffname_v2")
+    console.log(newName)
     fetch(url,{
             method:'PUT',
             headers:{
@@ -543,7 +554,7 @@ const FootballField = ({ route, navigation }) => {
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              footballFieldName:ffName
+              footballFieldName:newName
               })}
         )
         .then(resp=>resp.text())

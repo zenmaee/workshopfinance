@@ -66,6 +66,7 @@ const Coverage = ({ route, navigation }) => {
                     <ScrollView contentContainerStyle={styles.scrollview} keyboardDismissMode='on-drag'>
                       {
                         footballFields.map(field => {
+                          console.log(field)
                           return (
                             <TouchableWithoutFeedback onPress={() => navigation.navigate('FootballField', { targetId: field.targetId, footballFieldName: field.footballFieldName, footballFieldTimeSeries:field.footballFieldTimeSeries,})}>
                               <View style={styles.cardList}>
@@ -141,6 +142,8 @@ const Coverage = ({ route, navigation }) => {
           <ScrollView contentContainerStyle={styles.scrollview} /*keyboardDismissMode='on-drag'*/>
             {
               targets.map(field => {
+                
+                console.log(field)
                 return (
                   <TouchableOpacity style={styles.cardList}>
                     <Card>
@@ -201,7 +204,7 @@ function PrivControls({ onClose, setShowPrivateControls }) {
       subsectorName: subsectorName,
       targetRevenueLTM: targetRevenueLTM,
       targetEbitdaLTM: targetEbitdaLTM,
-      targetType:"private",
+      type:"private",
       userId: userId
     };
     console.log("priv tgts")
@@ -308,7 +311,7 @@ function PubControls({ onClose, setShowPublicControls }) {
       targetEbitdaLTM: targetData.ebitda,
       subsectorName:subsectorName,
       userId: userId,
-      targetType:"public"
+      type:"Public"
     };
 
 
