@@ -226,7 +226,7 @@ def delete_footballfields():
     footballFieldTimeSeries = request.json['footballFieldTimeSeries']
     targetId = request.json['targetId']
     
-
+    print("delete ffs")
     r=delete_FOOTBALLFIELD(iex_api_key, footballFieldTimeSeries, targetId)
     
     return r

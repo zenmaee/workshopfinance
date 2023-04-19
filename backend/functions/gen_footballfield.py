@@ -56,41 +56,44 @@ def delete_FOOTBALLFIELD(iex_api_key, footballFieldTimeSeries, targetId):
     valuations=requests.get(urL_valuations).json()
     print("valuations")
     print(valuations)
-    for valuation in valuations:
-      print(valuation)
-      valuationId=footballFieldId+"-"+valuation['valuationTimeSeries']
-      #valuationId=footballFieldId
-      urL_comps = "https://WORKSHOPFINANCE.iex.cloud/v1/data/WORKSHOPFINANCE/COMPS/" +valuationId +"?last=200&token=" + iex_api_key
-      comps=requests.get(urL_comps).json()
-      for comp in comps:
-          url_delete="https://WORKSHOPFINANCE.iex.cloud/v1/data/WORKSHOPFINANCE/COMPS/" +valuationId + "/" + comp['compSymbol']+ "?&token=" + iex_api_key
-          r=requests.delete(url_delete)
-          print(r)
-          if r.status_code==200:
-            print("ok")
-            continue
-          else:
-            ret="Error deleting comps from valuations from FF"
-            print (ret)
-            return ret
-      url_delete = urL = "https://WORKSHOPFINANCE.iex.cloud/v1/data/WORKSHOPFINANCE/VALUATIONS/" + footballFieldId +"/"+valuation['valuationTimeSeries']+"?&token=" + iex_api_key
+    if valuations!=[]:
+          
+      for valuation in valuations:
+        print(valuation)
+        valuationId=footballFieldId+"-"+valuation['valuationTimeSeries']
+        #valuationId=footballFieldId
+        urL_comps = "https://WORKSHOPFINANCE.iex.cloud/v1/data/WORKSHOPFINANCE/COMPS/" +valuationId +"?last=200&token=" + iex_api_key
+        comps=requests.get(urL_comps).json()
+        if comps != []:
+          for comp in comps:
+              url_delete="https://WORKSHOPFINANCE.iex.cloud/v1/data/WORKSHOPFINANCE/COMPS/" +valuationId + "/" + comp['compSymbol']+ "?&token=" + iex_api_key
+              r=requests.delete(url_delete)
+              print(r)
+              if r.status_code==200:
+                print("ok")
+                continue
+              else:
+                ret="Error deleting comps from valuations from FF"
+                print (ret)
+                return ret
+      url_delete =  "https://WORKSHOPFINANCE.iex.cloud/v1/data/WORKSHOPFINANCE/VALUATIONS/" + footballFieldId +"/"+valuation['valuationTimeSeries']+"?&token=" + iex_api_key
       r=requests.delete(url_delete)
-      if r.status_code==200:
-            url_delete = "https://WORKSHOPFINANCE.iex.cloud/v1/data/WORKSHOPFINANCE/FOOTBALLFIELDS/" + targetId +"/"+footballFieldTimeSeries+"?&token=" + iex_api_key
-            r=requests.delete(url_delete)
-            if r.status_code==200:
-                ret = "Success deleting FF"
-                print(ret)
-                return ret
-            else:
-                ret =  "Error deleting FF"
-                print(ret)
+      if r.status_code!=200:
+        ret = "Error deleting valuation"       
+        print(ret)
+        return (ret)  
 
-                return ret
-       
-    else:
-        ret = "Error deleting valuation from FF"
+
+    url_delete = "https://WORKSHOPFINANCE.iex.cloud/v1/data/WORKSHOPFINANCE/FOOTBALLFIELDS/" + targetId +"/"+footballFieldTimeSeries+"?&token=" + iex_api_key
+    r=requests.delete(url_delete)
+    if r.status_code==200:
+        ret = "Success deleting FF"
         print(ret)
         return ret
+    else:
+        ret =  "Error deleting FF"
+        print(ret)
+        return ret
+
 
     

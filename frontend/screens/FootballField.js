@@ -235,7 +235,7 @@ const FootballField = ({ route, navigation }) => {
             })}
             <View style={{ display: 'flex', flexDirection: 'row', marginTop: 2 }}>
             <View style={{ flex: 2, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1 }}>
-              <Text>{valuationStat} {valuationMetric}</Text>
+              <Text>{valuationStat} {metricItems.find(item => item.value === valuationMetric)?.label}</Text>
             </View>
             <View style={{ flex: 1, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1, marginLeft: 2 }}>
               {valuationStat === 'Median' && (
@@ -582,7 +582,7 @@ const FootballField = ({ route, navigation }) => {
 
   const deleteFootballField= () => {
     console.log("tryna delete ff")
-    fetch('http://10.239.15.244:5000/footballfields',{
+    fetch('http://10.239.15.244:5000/footballFields',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -592,7 +592,7 @@ const FootballField = ({ route, navigation }) => {
               footballFieldTimeSeries:footballFieldTimeSeries,
               targetId:targetId})}
         )
-        .then(resp=>console.log(resp.text))
+        .then(resp=>resp.text())
         .then(resp => {
           if (resp === "Success deleting FF") {
             navigation.navigate('HomeScreen', {
