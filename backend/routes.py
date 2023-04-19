@@ -221,6 +221,16 @@ def add_footballfields():
 
     return {"success": r}
 
+@app.route('/footballFields', methods=['DELETE'])
+def delete_footballfields():
+    footballFieldTimeSeries = request.json['footballFieldTimeSeries']
+    targetId = request.json['targetId']
+    
+
+    r=delete_FOOTBALLFIELD(iex_api_key, footballFieldTimeSeries, targetId)
+    
+    return r
+
 @app.route('/ticker/<input>', methods=['GET'])
 def search_ticker(input):
     url1 = "https://cloud.iexapis.com/stable/search/" + input + "?token=" + iex_api_key
