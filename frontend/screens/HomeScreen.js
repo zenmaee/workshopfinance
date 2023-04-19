@@ -77,6 +77,7 @@ const HomeScreen = ({ route, navigation }) => {
           userName:userName,
           userEmail:userEmail,
           userId: userId,
+          targets:targets,
           targetId: latestFootballField.targetId,
           footballFieldName: latestFootballField.footballFieldName,
           footballFieldTimeSeries: latestFootballField.footballFieldTimeSeries

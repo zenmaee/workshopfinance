@@ -439,7 +439,7 @@ const FootballField = ({ route, navigation }) => {
             }}>
               <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Back to Football Field Controls</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ backgroundColor: 'red', padding: 5, borderRadius: 5 }} onPress={() => {deleteFootballField()}}>
+            <TouchableOpacity style={{ backgroundColor: 'red', padding: 5, borderRadius: 5 }} >
               <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Delete</Text>
             </TouchableOpacity>
           </View>
@@ -552,7 +552,7 @@ const FootballField = ({ route, navigation }) => {
           </View> 
       </View>
       <View style={{ alignItems: 'center', marginTop: 15 }}>
-        <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'red', padding: 5, borderRadius: 5, width: 200 }}>
+        <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'red', padding: 5, borderRadius: 5, width: 200 }}onPress={() => {deleteFootballField()}}>
           <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Delete</Text>
         </TouchableOpacity>
       </View>
@@ -581,6 +581,7 @@ const FootballField = ({ route, navigation }) => {
   //delete FootballField. Level 1.
 
   const deleteFootballField= () => {
+    console.log("tryna delete ff")
     fetch('http://10.239.15.244:5000/footballfields',{
             method:'DELETE',
             headers:{
@@ -591,6 +592,7 @@ const FootballField = ({ route, navigation }) => {
               footballFieldTimeSeries:footballFieldTimeSeries,
               targetId:targetId})}
         )
+        .then(resp=>console.log(resp.text))
         .then(resp => {
           if (resp === "Success deleting FF") {
             navigation.navigate('HomeScreen', {
