@@ -120,7 +120,6 @@ def retrieve_valuations(footballFieldId):
 def retrieve_comps(valuationId):
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS/"+valuationId+"?last=100&token="+iex_api_key
     resp = requests.get(url).json()
-    print("estoy aqui")
     return resp
 
 @app.route('/footballfields/<targetId>/', methods=['GET'])

@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Button, ScrollView, Text, View, TextInput, SafeAreaView, TouchableOpacity, Dimensions, Image } from 'react-native';
-// import {Picker} from '@react-native-picker/picker';
 import DropDownPicker from 'react-native-dropdown-picker'
 
 
@@ -162,7 +161,6 @@ const FootballField = ({ route, navigation }) => {
 //Comp controls. Level 1.
   function CompControls() {
     const [comps, setComps] = useState([]);
-
     //Retrieve comps. Level 2.
     function retrieveComps() {
       let url = `http://10.239.15.244:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`;
@@ -187,11 +185,12 @@ const FootballField = ({ route, navigation }) => {
     useEffect(() => {
       async function getComps() {
         let data = await retrieveComps();
+        console.log("retrieveComps")
         setComps(data);
       }
       getComps();
-    }, []);
-
+    }, [])
+  
     //Calculation of stats. Level 2.
     function calculateMedian(values) {
       values.sort((a, b) => a - b);
@@ -225,7 +224,7 @@ const FootballField = ({ route, navigation }) => {
                     <Text>{comp.compSymbol}</Text>
                   </View>
                   <View style={{ flex: 0.75, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1, marginLeft: 2 }}>
-                    {valuationMetric === 'EV_E' ? <Text>{comp.evToEbitdaLTM}</Text> : valuationMetric === 'EV_R' ? <Text>{comp.evToRevenueLTM}</Text> : null}
+                    {valuationMetric === 'EV_E' ? <Text>{comp.evToEbitdaLTM.toFixed(2)}</Text> : valuationMetric === 'EV_R' ? <Text>{comp.evToRevenueLTM.toFixed(2)}</Text> : null}
                   </View>
                   <TouchableOpacity style={{ flex: 0.25 }}>
                     <Image style={{ height: 25, width: 20, borderRadius: 4, margin: 2 }} source={require('./delete_icon.png')}/>
@@ -240,22 +239,22 @@ const FootballField = ({ route, navigation }) => {
             <View style={{ flex: 1, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1, marginLeft: 2 }}>
               {valuationStat === 'Median' && (
                 <Text>
-                  {valuationMetric === "EV_E" ? calculateMedian(comps.map(comp => comp.evToEbitdaLTM)) : calculateMedian(comps.map(comp => comp.evToRevenueLTM))}
+                  {valuationMetric === "EV_E" ? calculateMedian(comps.map(comp => comp.evToEbitdaLTM)).toFixed(2) : calculateMedian(comps.map(comp => comp.evToRevenueLTM)).toFixed(2)}
                 </Text>
               )}
               {valuationStat === 'High' && (
                 <Text>
-                  {valuationMetric === "EV_E" ? Math.max(...comps.map(comp => comp.evToEbitdaLTM)) : Math.max(...comps.map(comp => comp.evToRevenueLTM))}
+                  {valuationMetric === "EV_E" ? Math.max(...comps.map(comp => comp.evToEbitdaLTM)).toFixed(2) : Math.max(...comps.map(comp => comp.evToRevenueLTM)).toFixed(2)}
                 </Text>
               )}
               {valuationStat === 'Low' && (
                 <Text>
-                  {valuationMetric === "EV_E" ? Math.min(...comps.map(comp => comp.evToEbitdaLTM)) : Math.min(...comps.map(comp => comp.evToRevenueLTM))}
+                  {valuationMetric === "EV_E" ? Math.min(...comps.map(comp => comp.evToEbitdaLTM)).toFixed(2) : Math.min(...comps.map(comp => comp.evToRevenueLTM)).toFixed(2)}
                 </Text>
               )}
-              {valuationStat === 'Average' && (
+              {valuationStat === 'Mean' && (
                 <Text>
-                  {valuationMetric === "EV_E" ? calculateAverage(comps.map(comp => comp.evToEbitdaLTM)) : calculateAverage(comps.map(comp => comp.evToRevenueLTM))}
+                  {valuationMetric === "EV_E" ? calculateAverage(comps.map(comp => comp.evToEbitdaLTM)).toFixed(2) : calculateAverage(comps.map(comp => comp.evToRevenueLTM)).toFixed(2)}
                 </Text>
               )}
             </View>
@@ -318,6 +317,7 @@ const FootballField = ({ route, navigation }) => {
 
   //Fuction ValuationControls.Level 1.
   function ValuationControls({ onClose }) {
+    console.log("valuationControls")
     return(
       <View style={{ flex: 1, height: 200, width: 400, borderWidth: 1 }}>
           <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
@@ -334,8 +334,44 @@ const FootballField = ({ route, navigation }) => {
                 <TouchableOpacity 
                     title="Add Comp"
                     onPress={() => {
-                      addComp(compSymbol)
-                    }}>
+                      console.log("add comp")
+                      fetch('http://10.239.15.244:5000/comps',{
+                        method:'POST',
+                        headers:{
+                          'Accept':'application/json',
+                          'Content-Type':'application/json'
+                        },
+                        body:JSON.stringify({
+                          compSymbol:compSymbol,
+                          valuationId:valuationId
+                        })
+                      })
+                      .then(resp=>resp.text())
+                      .then(resp => {
+                        if (resp === "Successful Comps Post") {
+                          fetch(`http://10.239.15.244:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`, {
+                            method: 'GET',
+                            headers: {
+                              Accept: 'application/json',
+                              'Content-Type': 'application/json',
+                            },
+                          })
+                          .then((resp) => resp.json())
+                          .then((data) => {
+                            setComps(data);
+                          })
+                          .catch((error) => {
+                            console.error('Error fetching data:', error);
+                            setComps([]);
+                          });
+                          generateValuation();
+                        }
+                        else {
+                          alert("Unsuccessful Comp Post")
+                        }
+                      })  
+                    }}
+                    >
                       <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
                 </TouchableOpacity>
           </View>
@@ -808,24 +844,49 @@ const FootballField = ({ route, navigation }) => {
        
   }
 
-  //AddComp. Level 1.
 
+//trying to put this functionts of level 2 as level 1:
+
+  //AddComp. Level 1.
+/*
   function addComp (compSymbol)  {
     fetch('http://10.239.15.244:5000/comps',{
-            method:'POST',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-              compSymbol:compSymbol,
-              valuationId:valuationId})}
-        )
-        .then(resp=>resp.text())
-        .then(resp=>console.log(resp))
-        generateValuation()
-        
-  }
+      method:'POST',
+      headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        compSymbol:compSymbol,
+        valuationId:valuationId
+      })
+    })
+    .then(resp=>resp.text())
+    .then(resp => {
+      if (resp === "Successful Comps Post") {
+        fetch(`http://10.239.15.244:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((resp) => resp.json())
+        .then((data) => {
+          setComps(data);
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+          setComps([]);
+        });
+        generateValuation();
+      }
+      else {
+        alert("Unsuccessful Comp Post")
+      }
+    })  
+  }*/
+  
 
   //DleteComp. Level 1.
 
