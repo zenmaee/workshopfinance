@@ -61,6 +61,7 @@ const FootballField = ({ route, navigation }) => {
   const [compSymbol, setCompSymbol]=useState("")
   const [valuations, setValuations] = useState([]);
   const [data, setData] = useState([]);
+  const [newComp, setNewComp] = useState()
 
 
   //
@@ -161,6 +162,7 @@ const FootballField = ({ route, navigation }) => {
 //Comp controls. Level 1.
   function CompControls() {
     const [comps, setComps] = useState([]);
+
     //Retrieve comps. Level 2.
     function retrieveComps() {
       let url = `http://10.239.15.244:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`;
@@ -187,9 +189,14 @@ const FootballField = ({ route, navigation }) => {
         let data = await retrieveComps();
         console.log("retrieveComps")
         setComps(data);
+        if (newComp===1){
+          console.log("ey aqui estoy tu")
+          setNewComp(0)
+          console.log(data)
+        }
       }
       getComps();
-    }, [])
+    }, [newComp])
   
     //Calculation of stats. Level 2.
     function calculateMedian(values) {
@@ -316,7 +323,7 @@ const FootballField = ({ route, navigation }) => {
 
 
   //Fuction ValuationControls.Level 1.
-  function ValuationControls({ onClose }) {
+  function ValuationControls({ onClose}) {
     console.log("valuationControls")
     return(
       <View style={{ flex: 1, height: 200, width: 400, borderWidth: 1 }}>
@@ -334,7 +341,6 @@ const FootballField = ({ route, navigation }) => {
                 <TouchableOpacity 
                     title="Add Comp"
                     onPress={() => {
-                      console.log("add comp")
                       fetch('http://10.239.15.244:5000/comps',{
                         method:'POST',
                         headers:{
@@ -349,21 +355,9 @@ const FootballField = ({ route, navigation }) => {
                       .then(resp=>resp.text())
                       .then(resp => {
                         if (resp === "Successful Comps Post") {
-                          fetch(`http://10.239.15.244:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`, {
-                            method: 'GET',
-                            headers: {
-                              Accept: 'application/json',
-                              'Content-Type': 'application/json',
-                            },
-                          })
-                          .then((resp) => resp.json())
-                          .then((data) => {
-                            setComps(data);
-                          })
-                          .catch((error) => {
-                            console.error('Error fetching data:', error);
-                            setComps([]);
-                          });
+                          console.log(resp)
+                          console.log("add comp")
+                          setNewComp(1);
                           generateValuation();
                         }
                         else {
@@ -371,6 +365,7 @@ const FootballField = ({ route, navigation }) => {
                         }
                       })  
                     }}
+                    
                     >
                       <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
                 </TouchableOpacity>
