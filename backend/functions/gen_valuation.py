@@ -59,26 +59,35 @@ def get_metrics(company,comp_tgt,iex_api_key):
 
     return fundamentals
 
-def add_COMP(compSymbol,valuationId,iex_api_key):
-    fundamentals=get_metrics(compSymbol,"comp", iex_api_key)
-    evToEbitdaLTM=fundamentals[0]
-    evToRevenueLTM=fundamentals[1]
+def add_COMP(compSymbol, valuationId, iex_api_key):
+    # Get fundamentals
+    fundamentals = get_metrics(compSymbol, "comp", iex_api_key)
+    evToEbitdaLTM, evToRevenueLTM = fundamentals[:2]
 
-    #If this dataset COMPS is empty, the firs compId will be 1. From then on, each compId will be the previous compId+1.
-    url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS?&token="+iex_api_key
-    comps=[{        
-        "compSymbol": compSymbol,
-        "evToEbitdaLTM": evToEbitdaLTM,
-        "evToRevenueLTM": evToRevenueLTM,
-        "valuationId": valuationId
-    }]
+    # Create comps object
+    comps = [
+        {
+            "compSymbol": compSymbol,
+            "evToEbitdaLTM": evToEbitdaLTM,
+            "evToRevenueLTM": evToRevenueLTM,
+            "valuationId": valuationId,
+        }
+    ]
 
-    #POST each comp into the COMPS dataset
+    # POST comps object to dataset
+    url = f"https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS?&token={iex_api_key}"
     r = requests.post(url, json=comps)
-    if r.status_code==200:
-        return "Successful Comps Post"
+
+    if r.status_code == 200:
+        # Wait until comp is added to dataset
+        while True:
+            url = f"https://WORKSHOPFINANCE.iex.cloud/v1/data/WORKSHOPFINANCE/COMPS/{valuationId}?last=1&token={iex_api_key}"
+            comp = requests.get(url).json()
+            if comp and comp[0]["compSymbol"] == compSymbol:
+                return {"success": "Successful Comps Post", "newComp": comp[0]["compSymbol"]}
+            time.sleep(0.2)  # Wait for 1 second before trying again
     else:
-        return "Unsuccessful Comps Post"
+        return {"success": "Unsuccessful Comps Post", "newComp": 0}
 
 def update_VALUATION(footballFieldId, multiples,ev,valuationTimeSeries,iex_api_key):
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"/?&token="+iex_api_key
@@ -112,7 +121,7 @@ def update_VALUATION(footballFieldId, multiples,ev,valuationTimeSeries,iex_api_k
     print("valuation")
     print(valuation)
    
-    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
+    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
     #url="https://workspace.iex.cloud/v1/datasets/workshopfinance/VALUATIONS?token=sk_cd4257e5aa684ab6a245c13b45f0e204"
     r=requests.post(url, json=valuation)
     print(r)
@@ -264,7 +273,7 @@ def update_VALUATION_NAME(targetId,footballFieldTimeSeries,valuationTimeSeries,v
     valuation[0]['valuationName']=valuationName
 
     #url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
-    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
+    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
     r=requests.post(url, json=valuation)
     return r
 

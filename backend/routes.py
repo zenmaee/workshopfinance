@@ -142,6 +142,7 @@ def add_comps():
     valuationId=request.json['valuationId']
 
     r=add_COMP(compSymbol,valuationId,iex_api_key)
+    print(r)
     return r
 
 @app.route('/footballFields/names/<targetId>/<footballFieldTimeSeries>', methods = ['PUT'])

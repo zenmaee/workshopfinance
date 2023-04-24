@@ -352,16 +352,17 @@ const FootballField = ({ route, navigation }) => {
                           valuationId:valuationId
                         })
                       })
-                      .then(resp=>resp.text())
+                      .then(resp=>resp.json())
                       .then(resp => {
-                        if (resp === "Successful Comps Post") {
-                          console.log(resp)
+                        console.log(resp)
+                        if (resp.success === "Successful Comps Post") {
+                          console.log(resp.newComp)
                           console.log("add comp")
                           setNewComp(1);
                           generateValuation();
                         }
                         else {
-                          alert("Unsuccessful Comp Post")
+                          alert(resp.success)
                         }
                       })  
                     }}
@@ -781,6 +782,7 @@ const FootballField = ({ route, navigation }) => {
     //GenerateValuation. Level 1.
 
     function generateValuation() {
+    console.log("generate valuation")
     fetch('http://10.239.15.244:5000/valuations',{
             method:'PUT',
             headers:{
@@ -797,6 +799,7 @@ const FootballField = ({ route, navigation }) => {
         )
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
+        console.log("then")
        
   }
   

@@ -44,7 +44,7 @@ def update_FF_NAME(targetId, footballFieldTimeSeries,footballFieldName,iex_api_k
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS/"+targetId+"/"+footballFieldTimeSeries+"?token="+iex_api_key
     footballField=requests.get(url).json()
     footballField[0]['footballFieldName']=footballFieldName
-    url="https://api.iex.cloud/v1/record/WORKSHOPFINANCE/FOOTBALLFIELDS?duplicateKeyHandling=true&wait=true&token="+iex_api_key
+    url="https://api.iex.cloud/v1/record/WORKSHOPFINANCE/FOOTBALLFIELDS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
     print(footballField)
     r=requests.post(url, json=footballField)
     return r
