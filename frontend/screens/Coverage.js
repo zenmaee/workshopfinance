@@ -168,9 +168,6 @@ const Coverage = ({ route, navigation }) => {
 
       </View>
 
-      
-
-
       {/* <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
             <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
               <Text style={styles.buttonText_1}>Coverage</Text>
@@ -187,8 +184,6 @@ const Coverage = ({ route, navigation }) => {
     </SafeAreaView>
   );
 }
-
-
 
 function PrivControls({ onClose, setShowPrivateControls }) {
   const [targetName, setTargetName] = useState ("");
