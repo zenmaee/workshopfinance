@@ -234,19 +234,21 @@ function PrivControls({ onClose, setShowPrivateControls }) {
             <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
         </TouchableOpacity>
       <TextInput
-        style={{ width: 400 }}
+        style={{flex:1, width: "100%"}}
         mode='outlined'
         placeholder="Target Name"
         value={ targetName }
         onChangeText={(text) => setTargetName(text)}
       />
       <TextInput
+        style={{flex:1, width: "100%"}}
         mode='outlined'
         placeholder="Target Sector"
         value={ sectorName }
         onChangeText={(text) => setSectorName(text)}
       />
       <TextInput
+        style={{flex:1, width: "100%"}}
         mode='outlined'
         placeholder="Target Subsector"
         value={ subsectorName }
@@ -489,34 +491,37 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   arrayview: {
-    marginTop: 5,
-    flex: 1
+    marginTop: "5%",
+    flex: 5,
+    width: "100%"
+    
   },
   scrollview: {
     alignItems: 'center',
     marginVertical: 30, 
     marginHorizontal: 20, 
-    height: Dimensions.get('window').height / 2.5,
-    width: Dimensions.get('window').width * 0.95
+    height: "80%", //Dimensions.get('window').height / 2.5,
+    width: "95%"// Dimensions.get('window').width * 0.95
   },
   cardList: {
     flex: 1,
-    height: Dimensions.get('window').height / 8,
-    marginTop: 10,
-    width: 400
+    //height: Dimensions.get('window').height / 8,
+    marginTop: "5%",
+    width: 100%,
+    aspectRatio: 3/1
   },
   bottomButtons: {
     position: 'absolute',
     bottom: 30
   },
-  viewcontrols: {
+  viewcontrols: { //for buttons
     flex: 1,
-    height: Dimensions.get('window').height / 2.5,
-    width: Dimensions.get('window').width * 0.95,
+    //height: "40%", //Dimensions.get('window').height / 2.5,
+    width: "95%",
   },
   controls: {
-    height: Dimensions.get('window').height / 2.5,
-    width: Dimensions.get('window').width * 0.95,
+    height: "40%", //Dimensions.get('window').height / 2.5,
+    width: "95%",
     borderWidth: 1,
     borderColor: '#FFF',
     backgroundColor: '#FFF'
