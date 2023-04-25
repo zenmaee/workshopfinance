@@ -69,7 +69,7 @@ const SignUp = ({ navigation }) => {
   };
 
   const addUsers = () => {
-    fetch('http://10.239.21.226:5000/users', {
+    fetch('http://10.239.15.244:5000/users', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -116,11 +116,11 @@ const SignUp = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#000'}}>
+    <SafeAreaView style={{backgroundColor: '#000'}}>
       <View>
         <Image style={styles.wfLogo} resizeMode="contain" source={require('./logo_dark.png')}/>
         <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
-          <View style={{ marginTop: 25, marginBottom: 10 }}>
+          <View style={{flex:2, width:"100%", marginTop: 25, marginBottom: 10 }}>
             <Text style={styles.inputTitle}>First Name</Text>
             <TextInput
               //secureTextEntry={this.isSecure}
@@ -135,7 +135,7 @@ const SignUp = ({ navigation }) => {
             <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
 
-          <View style={{ marginTop: 5, marginBottom: 10 }} >
+          <View style={{flex:2, width:"100%", marginTop: 5, marginBottom: 10 }} >
             <Text style={styles.inputTitle}>Last Name</Text>
             <TextInput
               //secureTextEntry={this.isSecure}
@@ -147,10 +147,10 @@ const SignUp = ({ navigation }) => {
               // placeholder="Enter last name here"
               // placeholderTextColor={styles.placeholderTextColorStyle}
               />
-            <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            <View style={{flex:2, width:"90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
 
-          <View style={{ marginTop: 5 }} >
+          <View style={{flex:2, width:"100%", marginTop: 5 }} >
             <Text style={styles.inputTitle}>Email Address</Text>
             <TextInput
               //secureTextEntry={this.isSecure}
@@ -163,7 +163,7 @@ const SignUp = ({ navigation }) => {
               // placeholder="Enter email address here"
               // placeholderTextColor={styles.placeholderTextColorStyle}
               />
-            <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            <View style={{flex:2, width:"90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
           {checkValidEmail ? (
             <Text style={styles.textFailed}>Wrong format email</Text>
@@ -171,7 +171,7 @@ const SignUp = ({ navigation }) => {
             <Text style={styles.textFailed}> </Text>
           )}
 
-          <View style={{ marginTop: 5, marginBottom: 10 }}>
+          <View style={{flex:2, width:"100%", marginTop: 5, marginBottom: 10 }}>
           <Text style={styles.inputTitle}>Enter password</Text>
               <TextInput
                 //placeholder={this.placeholder}
@@ -188,10 +188,10 @@ const SignUp = ({ navigation }) => {
                 onPress={() => setSeePassword(!seePassword)}>
                 <Image source={seePassword ? require('./Eye.png') : require('./EyeActive.png')} style={styles.icon} />
               </TouchableOpacity>
-            <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            <View style={{flex:2, width:"90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
 
-          <View style={{ marginTop: 5, marginBottom: 10 }} >
+          <View style={{flex:2, width:"100%", marginTop: 5, marginBottom: 10 }} >
           <Text style={styles.inputTitle}>Confirm password</Text>
               <TextInput
                 //placeholder={this.placeholder}
@@ -208,7 +208,7 @@ const SignUp = ({ navigation }) => {
                 onPress={() => setSeeConfirmPassword(!seeConfirmPassword)}>
                 <Image source={seeConfirmPassword ? require('./Eye.png') : require('./EyeActive.png')} style={styles.icon} />
               </TouchableOpacity>
-            <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            <View style={{ width: "95%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
 
         {/*
@@ -243,6 +243,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   buttons: {
+      flex: 1,
       fontSize: 16,
       borderRadius: 4, 
       marginTop: 30, 
@@ -258,6 +259,7 @@ const styles = StyleSheet.create({
       elevation: 5
   },
   buttonDisable: {
+    flex: 1,
     fontSize: 16,
     borderRadius: 4, 
     marginTop: 30, 
@@ -273,9 +275,11 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   wfLogo: {
+    flex: 1,
     top: "3%",//55,
     //height: 100,
-    width: "100%" //350
+    width: "100%", //350
+    aspectRatio: 5/1
   },
   logo: {
     height: 18,
