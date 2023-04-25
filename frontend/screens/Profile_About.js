@@ -5,25 +5,25 @@ const Profile_About = ({ route, navigation }) => {
 
 return (
 <SafeAreaView style={styles.container}>
-  <View style={{flex:1, width:"100%", padding: 10, marginTop: 10 }}>
+  <View style={{ padding: 10, marginTop: 10 }}>
     <View style={{ align: 'left' }}>
       <Text style={{ color: '#FFF', fontSize: 20, fontWeight: '700' }}>User Profile</Text>
     </View>
     <View>
-      <View style={{flex:1, flexDirection: "row", marginTop: 5 }}>
+      <View style={{ flexDirection: "row", marginTop: 5 }}>
         <Text style={{ color: '#FFF' }}>Name: </Text>
         <Text style={{ color: '#FFF' }}>{name}</Text>
       </View>
-      <View style={{flex: 1, flexDirection: "row", marginTop: 5 }}>
+      <View style={{ flexDirection: "row", marginTop: 5 }}>
         <Text style={{ color: '#FFF' }}>Email Address: </Text>
         <Text style={{ color: '#FFF' }}>{email}</Text>
       </View>
     </View>
-      <View style={{flex: 1, marginTop: 10 }}>
+      <View style={{ marginTop: 10 }}>
       <Text style={{ color: '#FFF', fontSize: 20, fontWeight: '700' }}>About Workshop</Text>
     </View>
     <View>
-      <Text style={{flex: 5, color: '#FFF', marginTop: 5 }}>Workshop Finance is an innovative tool for visualizing the results from multiple valuation methodologies. For any questions, contact us at brendan@workshopfinance.com.</Text>
+      <Text style={{ color: '#FFF', marginTop: 5 }}>Workshop Finance is an innovative tool for visualizing the results from multiple valuation methodologies. For any questions, contact us at brendan@workshopfinance.com.</Text>
     </View>
   </View>
   {/* <View style={[styles.bottomButtons, { flexDirection:"row" }]}>

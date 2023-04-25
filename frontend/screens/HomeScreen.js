@@ -13,7 +13,7 @@ const HomeScreen = ({ route, navigation }) => {
   function retrieveFootballFields(targetId) {
     //let ffLists=[]
     //change routes: only showing last ff 
-      const url = "http://10.239.15.244:5000/footballfields/" + targetId + "/";
+      const url = "http://10.239.21.226:5000/footballfields/" + targetId + "/";
       console.log("rretrieve ffs")
       console.log(url)
       return fetch(url, {
@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
       alignItems: "center"
     },
     buttons_1: {
-      flex: 1,
       fontSize: 16,
       width: 200,
       borderRadius: 4, 
@@ -129,7 +128,6 @@ const styles = StyleSheet.create({
       elevation: 5
     },
     buttons_2: {
-      flex: 1,
       fontSize: 16,
       width: 200,
       borderRadius: 4, 
@@ -146,11 +144,9 @@ const styles = StyleSheet.create({
       elevation: 5
     },
     wfLogo: {
-      top: 15%, //55,
-      //flex: 1,
-      //height: 100,
-      width: "100%", //350
-      aspectRation: 5/1
+      top: 55,
+      height: 100,
+      width: 350
     },
     buttonText_1: {
         fontFamily: "Avenir Next", 
