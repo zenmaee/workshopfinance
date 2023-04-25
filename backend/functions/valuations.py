@@ -2,7 +2,7 @@ from datetime import datetime
 from gen_valuation import *
 from user_identification import add_USERDATA
 from time import time
-
+from gen_footballfield import *
 
 #token
 iex_api_key="sk_29735f4ddf4a47efb27623b229dda54a"
@@ -37,14 +37,5 @@ else:
     valuationCompsDate=asOfDate
 
 #add_USERDATA('Ignacio','lastName','email@email.com','password', iex_api_key)
-#VALUATION 1
-add_VALUATION("Tester3FF-AAPL-TEST", "sk_29735f4ddf4a47efb27623b229dda54a", "id1")
-generate_valuation("Tester3FF-AAPL", "AAPL", desired_multiples, "id1", valuationCompsDate,iex_api_key, "TEST")
 
-#VALUATION 2
-add_VALUATION("Tester3FF-AAPL-TEST", "sk_29735f4ddf4a47efb27623b229dda54a", "id2")
-generate_valuation("Tester3FF-AAPL", "AAPL", desired_multiples, "id2", valuationCompsDate,iex_api_key, "TEST")
-
-#VALUATION 3
-add_VALUATION("Tester3FF-AAPL-TEST", "sk_29735f4ddf4a47efb27623b229dda54a", "id3")
-generate_valuation("Tester3FF-AAPL", "AAPL", desired_multiples, "id3", valuationCompsDate,iex_api_key, "TEST")
+delete_FOOTBALLFIELD(iex_api_key, "1681858646838000", "24a151fa94eec621a25698a61954dc0274d602656ce4dd02fd425a91a8dfe0e4-KO")

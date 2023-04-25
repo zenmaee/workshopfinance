@@ -7,10 +7,16 @@ import SignUp from "./screens/SignUp";
 import HomeScreen from "./screens/HomeScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+//import { NetworkInfo } from "react-native-network-info";
+
+//NetworkInfo.getIP4Address().then(ipv4Address =>  {
+//    console.log(ipv4Address);
+//  });
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+
   return (
     <NavigationContainer>
       <StatusBar backgroundColor="#000" barStyle="light-content"/> 

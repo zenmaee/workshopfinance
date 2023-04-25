@@ -120,7 +120,6 @@ def retrieve_valuations(footballFieldId):
 def retrieve_comps(valuationId):
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/COMPS/"+valuationId+"?last=100&token="+iex_api_key
     resp = requests.get(url).json()
-    print("estoy aqui")
     return resp
 
 @app.route('/footballfields/<targetId>/', methods=['GET'])
@@ -143,6 +142,7 @@ def add_comps():
     valuationId=request.json['valuationId']
 
     r=add_COMP(compSymbol,valuationId,iex_api_key)
+    print(r)
     return r
 
 @app.route('/footballFields/names/<targetId>/<footballFieldTimeSeries>', methods = ['PUT'])
@@ -152,7 +152,7 @@ def update_ff_names(targetId, footballFieldTimeSeries):
     footballFieldName=request.json['footballFieldName']
     print("footballFieldName")
     print(footballFieldName)
-    update_FF_NAME(targetId, footballFieldTimeSeries,footballFieldName,iex_api_key)
+    r=update_FF_NAME(targetId, footballFieldTimeSeries,footballFieldName,iex_api_key)
     return "Successful PUT"
 
 @app.route('/targets/<type>', methods=['POST'])
@@ -164,17 +164,16 @@ def add_targets(type):
     subsectorName=request.json['subsectorName']
     targetRevenueLTM=request.json['targetRevenueLTM']
     targetEbitdaLTM=request.json['targetRevenueLTM']
-    targetType=request.json['targetType']
     
     print(targetRevenueLTM)
 
     if type=="private":
-        targetSymbol=targetName
+        targetSymbol=request.json['targetName']
         
     else:
         targetSymbol=request.json['targetSymbol']
     
-    r=add_TARGET(userId, targetName, targetSymbol, sectorName, subsectorName, targetRevenueLTM, targetEbitdaLTM, targetType, iex_api_key)
+    r=add_TARGET(userId, targetName, targetSymbol, sectorName, subsectorName, targetRevenueLTM, targetEbitdaLTM, type, iex_api_key)
     if r==200:
 
         return "Successful Target Post"
@@ -202,7 +201,8 @@ def retrieve_pub_targets(tgtSymbol):
         "ebitda":ebitda,
         "revenue":revenue,
         "name":name,
-        "sector":sector
+        "sector":sector,
+        "type":"Public"
     }
     return resp
 
@@ -211,7 +211,7 @@ def add_footballfields():
 
     targetSymbol=request.json['targetSymbol']
     userId=request.json['userId']
-    footballFieldType=""
+    footballFieldType=request.json['footballFieldType']
     footballFieldTimeSeries = request.json['footballFieldTimeSeries']
 
     targetId=userId+"-"+targetSymbol
@@ -220,6 +220,16 @@ def add_footballfields():
     
 
     return {"success": r}
+
+@app.route('/footballFields', methods=['DELETE'])
+def delete_footballfields():
+    footballFieldTimeSeries = request.json['footballFieldTimeSeries']
+    targetId = request.json['targetId']
+    
+    print("delete ffs")
+    r=delete_FOOTBALLFIELD(iex_api_key, footballFieldTimeSeries, targetId)
+    
+    return r
 
 @app.route('/ticker/<input>', methods=['GET'])
 def search_ticker(input):
@@ -250,4 +260,4 @@ def search_ticker(input):
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
-    app.run(host='10.239.3.201',port=5000, debug=True) #changes every time we change wifi
+    app.run(host='10.239.15.244',port=5000, debug=True) #changes every time we change wifi
