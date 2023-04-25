@@ -18,7 +18,7 @@ const SignUpSignIn = ({ navigation }) => {
     const userName=resp.name
     const userEmail=resp.email
 
-    const url = 'http://10.239.3.201:5000/targets/'+userId+'/'
+    const url = 'http://10.239.15.244:5000/targets/'+userId+'/'
     console.log(url)
     return fetch(url, {
       method: "GET",
@@ -47,7 +47,7 @@ const SignUpSignIn = ({ navigation }) => {
 
           console.log("email")
           console.log(email)
-          const url = 'http://10.239.3.201:5000/users/'+email
+          const url = 'http://10.239.15.244:5000/users/'+email
           return fetch(url, {
             method:'POST',
             headers:{
@@ -61,10 +61,13 @@ const SignUpSignIn = ({ navigation }) => {
             .then(resp => resp.json())
             .then(json => {
               if (json.error === "Incorrect Password") {
-                console.log(json.error);
+                console.log(json.error); //PRITHIKA CHECKING
+                alert("Incorrect Password");
+
               }
               else if (json.error === "User Does Not Exist"){
-                console.log(json.error);
+                console.log(json.error); //PRITHIKA CHECKING
+                alert("User Does Not Exist");
               }
               else {
                 retrieveTargets(json); // Pass the JSON response to the retrieveTargets function
@@ -112,7 +115,7 @@ const SignUpSignIn = ({ navigation }) => {
                 style={styles.input}
                 autoCapitalize = "none"
                 value={password}
-                secureTextEntry={setPassword}
+                secureTextEntry={seePassword}
                 onChangeText = {text=>setPassword(text)} 
                 keyboardType="default"
               ></TextInput>
@@ -125,9 +128,9 @@ const SignUpSignIn = ({ navigation }) => {
               <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View> 
 
-          <TouchableOpacity>
-            <Text style={[styles.buttonText, { marginTop: 5, fontWeight: "600" }]}>Forgot Password?</Text>
-          </TouchableOpacity>
+          {/* <TouchableOpacity>
+            <Text style={[sty+les.buttonText, { marginTop: 5, fontWeight: "600" }]}>Forgot Password?</Text>
+          </TouchableOpacity> */}
           
           
           <TouchableOpacity style={styles.buttons} onPress={() => signIn()}>

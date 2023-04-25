@@ -1,6 +1,10 @@
 import React, {useState} from 'react';
 import { StyleSheet, Image, Text, View, TextInput, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
+//import { NetworkInfo } from "react-native-network-info";
 
+//NetworkInfo.getIP4Address().then(ipv4Address =>  {
+//    console.log(ipv4Address);
+//  });
 
 const SignUp = ({ navigation }) => {
   const [firstName, setFirstName]=useState("")
@@ -65,7 +69,7 @@ const SignUp = ({ navigation }) => {
   };
 
   const addUsers = () => {
-    fetch('http://10.239.3.201:5000/users', {
+    fetch('http://10.239.15.244:5000/users', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -81,7 +85,10 @@ const SignUp = ({ navigation }) => {
       .then(resp => resp.text())
       .then(resp => {
         console.log(resp);
-        if (resp === "Successful USERDATA POST") {
+        if (resp==="Email Exists"){
+          alert("Email already exists");
+        }
+        else if (resp === "Successful USERDATA POST") {
           navigation.navigate('SignUpSignIn');
         }
       })
@@ -113,7 +120,7 @@ const SignUp = ({ navigation }) => {
       <View>
         <Image style={styles.wfLogo} resizeMode="contain" source={require('./logo_dark.png')}/>
         <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
-          <View style={{ marginTop: 40, marginBottom: 10 }}>
+          <View style={{ marginTop: 25, marginBottom: 10 }}>
             <Text style={styles.inputTitle}>First Name</Text>
             <TextInput
               //secureTextEntry={this.isSecure}

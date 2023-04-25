@@ -1,22 +1,22 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Button, ScrollView, Text, View, TextInput, SafeAreaView, TouchableOpacity, Dimensions, Image } from 'react-native';
-// import {Picker} from '@react-native-picker/picker';
 import DropDownPicker from 'react-native-dropdown-picker'
 
-const FootballField = ({ route, navigation }) => {
-  const {targetId, footballFieldName,footballFieldTimeSeries} = route.params; //newFootballField=1 will be a recently created one. If this =0, it is an old one
-  const targetSymbol = targetId.split("-")[1]
-  
-  const [footballFieldId, setFootballFieldId]=useState("")
 
+//Original function level 0.
+const FootballField = ({ route, navigation }) => {
+  const {userName, userEmail, userId,targets, targetId, footballFieldName,footballFieldTimeSeries} = route.params; //Params we obtain from other screens
+  const targetSymbol = targetId.split("-")[1] //tgtSymbol obtained
+  const [footballFieldId, setFootballFieldId]=useState("")
   // const [footballFieldOutput, setFootballFieldOutput]=useState("EV") // Picker value
+  
+  //Preparing pickers and inputs:-FootballFieldControls
   const [openOutput, setOpenOutput] = useState(false);
   const [footballFieldOutput, setFootballFieldOutput]=useState("EV")
   const [outputItems, setOutputItems]=useState([
     {label: 'Enterprise Value', value: 'EV' },
     {label: 'Multiples', value: 'MULT' }
   ])
-
   // const [footballFieldScale, setFootballFieldScale]=useState("billions")
   const [openScale, setOpenScale] = useState(false);
   const [footballFieldScale, setFootballFieldScale]=useState("millions")
@@ -25,6 +25,9 @@ const FootballField = ({ route, navigation }) => {
     { label: "Billions", value: "billions" }
   ])
  
+
+
+  //VALUATION CONTROLS
   // const [footballFieldMetric, setFootballFieldMetric]=useState("EV_E")
   const [openMetric, setOpenMetric]=useState(false);
   const [valuationMetric, setValuationMetric]=useState("EV_R");
@@ -43,6 +46,7 @@ const FootballField = ({ route, navigation }) => {
     { label: "Low", value: "Low" }
   ])
 
+  //ValuationControls
   const [valuationId, setValuationId]=useState("")
   const [valuationCompsDate, setValuationCompsDate]=useState("")
   const [footballFieldStat, setFootballFieldStat]=useState("AV")
@@ -56,6 +60,11 @@ const FootballField = ({ route, navigation }) => {
   const [valuationName, setValuationName]=useState("")
   const [compSymbol, setCompSymbol]=useState("")
   const [valuations, setValuations] = useState([]);
+  const [data, setData] = useState([]);
+  const [newComp, setNewComp] = useState()
+
+
+  //
   const [ffName, setFootballFieldName]=useState(footballFieldName)
   const [showCompControls, setShowCompControls] = useState(false);
   const [showValuationControls, setShowValuationControls] = useState(false);
@@ -64,13 +73,16 @@ const FootballField = ({ route, navigation }) => {
   const [tableRange, setTableRange] = useState();
   const [pixelsPerDollar, setPixelsPerDollar] = useState();
 
-
-
+  //Preparing table and screen sizes
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   const valuationWidth = windowWidth-20;
   const valuationHeight = 20;
+
+
+  //setTableValues: Function to generate table in which valuations will be drawn. Level 1.
   function setTableValues(valuations){
+    console.log("reseting table values")
     const tab = {
       maxValuations: [],
       minValuations: []
@@ -93,14 +105,15 @@ const FootballField = ({ route, navigation }) => {
     setTableRange(tableRange)
     setTableMean(tableMean)
     setPixelsPerDollar(pixelsPerDollar)
-    console.log("tableSET")
-    console.log(tab)
+    console.log("table")
     console.log(table)
-
+    console.log("ffoutput")
+    console.log(footballFieldOutput)
 }  
 
+//Obtain Ticker by what the user's input. Level 1.
   function searchTicker(input) {
-    return fetch('http://10.239.3.201:5000/ticker/' + input, { 
+    return fetch('http://10.239.15.244:5000/ticker/' + input, { 
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -109,8 +122,6 @@ const FootballField = ({ route, navigation }) => {
     })
     .then((resp) => resp.json()) // Parse response as JSON
     .then((data) => {
-      console.log("data")
-      console.log(data)
       return data;
     })
     .catch((error) => {
@@ -119,7 +130,7 @@ const FootballField = ({ route, navigation }) => {
     });
   }
   
-    
+//Obtains list of companies deppending on user input. Level 1.
   function find_company_name(input) {
     let res_company = [];
     let res_ticker = [];
@@ -131,8 +142,6 @@ const FootballField = ({ route, navigation }) => {
     // Since `searchTicker` returns a Promise, we need to handle it asynchronously
     Promise.all([res_company, res_ticker])
       .then(([companyResults, tickerResults]) => {
-        console.log("res_ticker")
-        console.log(res_ticker)
         res_company = companyResults;
         res_ticker = tickerResults;
         res_ticker = res_ticker.sort();
@@ -141,9 +150,7 @@ const FootballField = ({ route, navigation }) => {
         });
         let res = res_company.concat(res_ticker);
         let res_final = [...new Set(res)];
-        console.log("input")
-        console.log(input)
-        console.log(res_final)
+
         return res_final;
       })
       .catch((error) => {
@@ -152,13 +159,13 @@ const FootballField = ({ route, navigation }) => {
       });
   }
 
-
+//Comp controls. Level 1.
   function CompControls() {
     const [comps, setComps] = useState([]);
 
-
+    //Retrieve comps. Level 2.
     function retrieveComps() {
-      let url = `http://10.239.3.201:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`;
+      let url = `http://10.239.15.244:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`;
       return fetch(url, {
         method: 'GET',
         headers: {
@@ -175,15 +182,23 @@ const FootballField = ({ route, navigation }) => {
           return [];
         });
     }
+    //UseEffect. Level 2.
   
     useEffect(() => {
       async function getComps() {
         let data = await retrieveComps();
+        console.log("retrieveComps")
         setComps(data);
+        if (newComp===1){
+          console.log("ey aqui estoy tu")
+          setNewComp(0)
+          console.log(data)
+        }
       }
       getComps();
-    }, []);
-
+    }, [newComp])
+  
+    //Calculation of stats. Level 2.
     function calculateMedian(values) {
       values.sort((a, b) => a - b);
       const half = Math.floor(values.length / 2);
@@ -198,6 +213,7 @@ const FootballField = ({ route, navigation }) => {
       return values.reduce((a, b) => a + b, 0) / values.length;
     }
     
+    //return of CompsControl.
     return (
       <View>
         <View style={{ padding: 50 }}>
@@ -215,7 +231,7 @@ const FootballField = ({ route, navigation }) => {
                     <Text>{comp.compSymbol}</Text>
                   </View>
                   <View style={{ flex: 0.75, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1, marginLeft: 2 }}>
-                    {valuationMetric === 'EV_E' ? <Text>{comp.evToEbitdaLTM}</Text> : valuationMetric === 'EV_R' ? <Text>{comp.evToRevenueLTM}</Text> : null}
+                    {valuationMetric === 'EV_E' ? <Text>{comp.evToEbitdaLTM.toFixed(2)}</Text> : valuationMetric === 'EV_R' ? <Text>{comp.evToRevenueLTM.toFixed(2)}</Text> : null}
                   </View>
                   <TouchableOpacity style={{ flex: 0.25 }}>
                     <Image style={{ height: 25, width: 20, borderRadius: 4, margin: 2 }} source={require('./delete_icon.png')}/>
@@ -225,27 +241,27 @@ const FootballField = ({ route, navigation }) => {
             })}
             <View style={{ display: 'flex', flexDirection: 'row', marginTop: 2 }}>
             <View style={{ flex: 2, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1 }}>
-              <Text>{valuationStat} {valuationMetric}</Text>
+              <Text>{valuationStat} {metricItems.find(item => item.value === valuationMetric)?.label}</Text>
             </View>
             <View style={{ flex: 1, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1, marginLeft: 2 }}>
               {valuationStat === 'Median' && (
                 <Text>
-                  {valuationMetric === "EV_E" ? calculateMedian(comps.map(comp => comp.evToEbitdaLTM)) : calculateMedian(comps.map(comp => comp.evToRevenueLTM))}
+                  {valuationMetric === "EV_E" ? calculateMedian(comps.map(comp => comp.evToEbitdaLTM)).toFixed(2) : calculateMedian(comps.map(comp => comp.evToRevenueLTM)).toFixed(2)}
                 </Text>
               )}
               {valuationStat === 'High' && (
                 <Text>
-                  {valuationMetric === "EV_E" ? Math.max(...comps.map(comp => comp.evToEbitdaLTM)) : Math.max(...comps.map(comp => comp.evToRevenueLTM))}
+                  {valuationMetric === "EV_E" ? Math.max(...comps.map(comp => comp.evToEbitdaLTM)).toFixed(2) : Math.max(...comps.map(comp => comp.evToRevenueLTM)).toFixed(2)}
                 </Text>
               )}
               {valuationStat === 'Low' && (
                 <Text>
-                  {valuationMetric === "EV_E" ? Math.min(...comps.map(comp => comp.evToEbitdaLTM)) : Math.min(...comps.map(comp => comp.evToRevenueLTM))}
+                  {valuationMetric === "EV_E" ? Math.min(...comps.map(comp => comp.evToEbitdaLTM)).toFixed(2) : Math.min(...comps.map(comp => comp.evToRevenueLTM)).toFixed(2)}
                 </Text>
               )}
-              {valuationStat === 'Average' && (
+              {valuationStat === 'Mean' && (
                 <Text>
-                  {valuationMetric === "EV_E" ? calculateAverage(comps.map(comp => comp.evToEbitdaLTM)) : calculateAverage(comps.map(comp => comp.evToRevenueLTM))}
+                  {valuationMetric === "EV_E" ? calculateAverage(comps.map(comp => comp.evToEbitdaLTM)).toFixed(2) : calculateAverage(comps.map(comp => comp.evToRevenueLTM)).toFixed(2)}
                 </Text>
               )}
             </View>
@@ -257,17 +273,21 @@ const FootballField = ({ route, navigation }) => {
     );
   }
 
+
+  //FootballField Chart. Level 1.
   function FootballFieldChart({ onRenderComps}) {
     
     return (
       <View>
         <ScrollView contentContainerStyle={{ padding: 20 }}>
           {valuations.map((valuation) => {
+            /*console.log("valuation")
+            console.log(valuation)
             console.log("minVALUATION")
             console.log(valuation.minValuation)
             console.log("table")
             console.log(table)
-            console.log(valuation.minValuation - table.minRange)
+            console.log(valuation.minValuation - table.minRange)*/
             if (!isNaN(valuation.minValuation - table.minRange)) {
               return (
                 <View style={{ marginTop: 5 }} key={valuation.name}>
@@ -301,7 +321,10 @@ const FootballField = ({ route, navigation }) => {
   
   }
 
-  function ValuationControls({ onClose }) {
+
+  //Fuction ValuationControls.Level 1.
+  function ValuationControls({ onClose}) {
+    console.log("valuationControls")
     return(
       <View style={{ flex: 1, height: 200, width: 400, borderWidth: 1 }}>
           <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
@@ -318,8 +341,33 @@ const FootballField = ({ route, navigation }) => {
                 <TouchableOpacity 
                     title="Add Comp"
                     onPress={() => {
-                      addComp(compSymbol)
-                    }}>
+                      fetch('http://10.239.15.244:5000/comps',{
+                        method:'POST',
+                        headers:{
+                          'Accept':'application/json',
+                          'Content-Type':'application/json'
+                        },
+                        body:JSON.stringify({
+                          compSymbol:compSymbol,
+                          valuationId:valuationId
+                        })
+                      })
+                      .then(resp=>resp.json())
+                      .then(resp => {
+                        console.log(resp)
+                        if (resp.success === "Successful Comps Post") {
+                          console.log(resp.newComp)
+                          console.log("add comp")
+                          setNewComp(1);
+                          generateValuation();
+                        }
+                        else {
+                          alert(resp.success)
+                        }
+                      })  
+                    }}
+                    
+                    >
                       <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
                 </TouchableOpacity>
           </View>
@@ -423,7 +471,7 @@ const FootballField = ({ route, navigation }) => {
             }}>
               <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Back to Football Field Controls</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ backgroundColor: 'red', padding: 5, borderRadius: 5 }}>
+            <TouchableOpacity style={{ backgroundColor: 'red', padding: 5, borderRadius: 5 }} >
               <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Delete</Text>
             </TouchableOpacity>
           </View>
@@ -431,10 +479,13 @@ const FootballField = ({ route, navigation }) => {
     );
     }
 
+ //FootballFieldControls. Level1.   
   function FootballFieldControls({ onAdd }) {
+    //ReThink this
+    //AddValuation. Level2.
     const addValuation= (targetId, footballFieldTimeSeries) => {
       const valuationTS = Math.floor(Date.now() * 1000).toString();
-      fetch('http://10.239.3.201:5000/valuations',{
+      fetch('http://10.239.15.244:5000/valuations',{
               method:'POST',
               headers:{
                   'Accept':'application/json',
@@ -459,6 +510,7 @@ const FootballField = ({ route, navigation }) => {
             }
           })     
     }
+    //Return of FootballField controls. Level 1.
 
     return(
     <View style={{ flex: 1, margin: 10, height: 200, width: 400, borderWidth: 1 }}>
@@ -473,15 +525,22 @@ const FootballField = ({ route, navigation }) => {
               </TouchableOpacity>
       </View>
       <View>
-        <TextInput style={{ marginTop: 10, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
-          placeholder="Football Field Name"
-          value={ffName}
-          onChangeText={(text) => {
-            setFootballFieldName(text);
-          }}
-          onSubmitEditing={updateFootballFieldName}
-          keyboardType="default"
-        />
+
+      <TextInput 
+        style={{ 
+          marginTop: 10, 
+          height: 40, 
+          width: 250, 
+          padding: 5, 
+          borderRadius: 10, 
+          backgroundColor: '#FFF'
+        }}
+        placeholder="Football Field Name"
+        value={ffName}
+        onChangeText={setFootballFieldName}
+        onBlur={() => updateFootballFieldName(ffName)}
+        keyboardType="default"
+      />
         <TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
         placeholder="Target Name or Ticker"
         value={targetSymbol}
@@ -525,7 +584,7 @@ const FootballField = ({ route, navigation }) => {
           </View> 
       </View>
       <View style={{ alignItems: 'center', marginTop: 15 }}>
-        <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'red', padding: 5, borderRadius: 5, width: 200 }}>
+        <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'red', padding: 5, borderRadius: 5, width: 200 }}onPress={() => {deleteFootballField()}}>
           <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Delete</Text>
         </TouchableOpacity>
       </View>
@@ -533,8 +592,10 @@ const FootballField = ({ route, navigation }) => {
     );
   }
   
-  const updateFootballFieldName= () => {
-    let url="http://10.239.3.201:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
+  //update FootballFieldName. Level 1.
+  function updateFootballFieldName(newName)  {
+    setFootballFieldName(newName);
+    let url="http://10.239.15.244:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
     fetch(url,{
             method:'PUT',
             headers:{
@@ -542,34 +603,50 @@ const FootballField = ({ route, navigation }) => {
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              footballFieldName:ffName
+              footballFieldName:newName
               })}
         )
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
   }
 
+  //delete FootballField. Level 1.
+
   const deleteFootballField= () => {
-    fetch('http://10.239.3.201:5000/footballfields',{
+    console.log("tryna delete ff")
+    fetch('http://10.239.15.244:5000/footballFields',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              footballFieldName:footballFieldName,
+              footballFieldTimeSeries:footballFieldTimeSeries,
               targetId:targetId})}
         )
         .then(resp=>resp.text())
-        .then(resp=>console.log(resp))
+        .then(resp => {
+          if (resp === "Success deleting FF") {
+            navigation.navigate('HomeScreen', {
+              userName: userName,
+              userEmail: userEmail,
+              userId: userId,
+              targets: targets,
+            })
+          }
+          else{
+            alert(resp)
+          }
+        })    
        
   }
   
-  
+  //RetrieveValuations. Level 1.
+
 
   function retrieveValuations() {
     
-    let url = "http://10.239.3.201:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
+    let url = "http://10.239.15.244:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
@@ -579,8 +656,6 @@ const FootballField = ({ route, navigation }) => {
       })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log("valuations")
-        console.log(data)
         return data})
         
       .catch((error) => {
@@ -588,7 +663,17 @@ const FootballField = ({ route, navigation }) => {
         return [];
         });}
   
+
+    //ValuationNumbers. Level 1.
+
     function valuationNumbers (data, output, metric, stat) {
+        console.log("Cuando se entra en valuatioNumbers?")
+        console.log("data")
+        console.log(data)
+        console.log("output")
+        console.log(output)
+        console.log(metric)
+        console.log(stat)
 
 
         let valuations = [];
@@ -620,16 +705,6 @@ const FootballField = ({ route, navigation }) => {
                 valuationCenter = valuation["valuationEvAvEvRevLTM"];
               }
             }
-          } else if (metric === "EV_R") {
-            if (stat === "AV") {
-              valuationCenter = valuation["valuationEvAvEvRevLTM"];
-            } else if (stat === "HIGH") {
-              valuationCenter = valuation["valuationEvHighEvRevLTM"];
-            } else if (stat === "MED") {
-              valuationCenter = valuation["valuationEvAvEvRevLTM"];
-            } else {
-              valuationCenter = valuation["valuationEvAvEvRevLTM"];
-            }
         } else if (output === "MULT") {
           if (metric === "EV_E") {
             if (stat === "AV") {
@@ -649,7 +724,9 @@ const FootballField = ({ route, navigation }) => {
             } else if (stat === "MED") {
               valuationCenter = valuation["valuationMultAvEvRevLTM"];
             } else {
+              //console.log("manin deberia estar aqui")
               valuationCenter = valuation["valuationMultAvEvRevLTM"];
+              //console.log(valuation["valuationMultAvEvRevLTM"])
             }
           }
         }
@@ -668,22 +745,29 @@ const FootballField = ({ route, navigation }) => {
     }
     
   
+  //UseEffect. Level 1.
 
   
   useEffect(() => {
     async function getValuations() {
       let data = await retrieveValuations();
-      console.log("data")
-      console.log(data)
-      let val=valuationNumbers(data, footballFieldOutput, valuationMetric, valuationStat)
-      console.log(val)
+      /*console.log("data")
+      console.log(data)*/
+      let val=valuationNumbers(data,footballFieldOutput, valuationMetric, valuationStat)
+      //console.log(val)
       setTableValues(val)
       setValuations(val);
+      setData(data)
     }
     getValuations();
   }, []);
 
-
+  useEffect(() => {
+    let val = valuationNumbers(data, footballFieldOutput, valuationMetric, valuationStat);
+    //console.log("en este useffect")
+    setTableValues(val);
+    setValuations(val);
+  }, [data, footballFieldOutput, valuationMetric, valuationStat]);
   /*
   useEffect(() => {
     async function getFootballField() {
@@ -695,8 +779,11 @@ const FootballField = ({ route, navigation }) => {
     getFootballField();
   }, []);*/
 
+    //GenerateValuation. Level 1.
+
     function generateValuation() {
-    fetch('http://10.239.3.201:5000/valuations',{
+    console.log("generate valuation")
+    fetch('http://10.239.15.244:5000/valuations',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -712,11 +799,14 @@ const FootballField = ({ route, navigation }) => {
         )
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
+        console.log("then")
        
   }
   
+  //Update ValuationName. Level 1.
+
   const updateValuationName= () => {
-    fetch('http://10.239.3.201:5000/valuations/names',{
+    fetch('http://10.239.15.244:5000/valuations/names',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -734,9 +824,10 @@ const FootballField = ({ route, navigation }) => {
        
   }
 
+  //DeleteValuations. Level 1.
 
   const deleteValuation= () => {
-    fetch('http://10.239.242.79:5000/valuations',{
+    fetch('http://10.239.15.244:5000/valuations',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -752,26 +843,53 @@ const FootballField = ({ route, navigation }) => {
   }
 
 
-  function addComp (compSymbol)  {
-    fetch('http://10.239.3.201:5000/comps',{
-            method:'POST',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-              compSymbol:compSymbol,
-              valuationId:valuationId})}
-        )
-        .then(resp=>resp.text())
-        .then(resp=>console.log(resp))
-        generateValuation()
-        
-  }
+//trying to put this functionts of level 2 as level 1:
 
+  //AddComp. Level 1.
+/*
+  function addComp (compSymbol)  {
+    fetch('http://10.239.15.244:5000/comps',{
+      method:'POST',
+      headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        compSymbol:compSymbol,
+        valuationId:valuationId
+      })
+    })
+    .then(resp=>resp.text())
+    .then(resp => {
+      if (resp === "Successful Comps Post") {
+        fetch(`http://10.239.15.244:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((resp) => resp.json())
+        .then((data) => {
+          setComps(data);
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+          setComps([]);
+        });
+        generateValuation();
+      }
+      else {
+        alert("Unsuccessful Comp Post")
+      }
+    })  
+  }*/
+  
+
+  //DleteComp. Level 1.
 
   const deleteComp= () => {
-    fetch('http://10.239.242.79:5000/comps',{
+    fetch('http://10.239.15.244:5000/comps',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -786,14 +904,17 @@ const FootballField = ({ route, navigation }) => {
         
   }
 
+  //Return level 0
+
   return (
+    
       <SafeAreaView style={{ flex: 2, alignItems: 'center', backgroundColor: '#000' }}>
         <View style={{ flex: 1, backgroundColor: '#FFF', height: 0.4*(windowHeight), width: valuationWidth, borderRadius: 10 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 10 }}>
             <Text style={{ marginTop: 10, marginLeft: 10 }}>{ffName}</Text>
             <Text style={{ marginTop: 10 }}>{targetSymbol}</Text>
           </View>
-          {table.length > 0 && (
+          {Object.keys(table).length > 0 && (
             footballFieldOutput === "EV" ? (
               footballFieldScale === "billions" ? (
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 20 }}>
@@ -810,9 +931,9 @@ const FootballField = ({ route, navigation }) => {
               )
             ) : (
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 20 }}>
-                <Text>{table.minRange}</Text>
-                <Text>{tableMean}</Text>
-                <Text>{table.maxRange}</Text>
+                  <Text>{"X " + (table.minRange).toFixed(2)}</Text>
+                  <Text>{"X " + (tableMean).toFixed(2)}</Text>
+                  <Text>{"X " + (table.maxRange).toFixed(2)}</Text>
               </View>
             )
           )}

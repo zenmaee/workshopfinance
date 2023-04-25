@@ -1,7 +1,7 @@
 import { StyleSheet, SafeAreaView, View, Text, TouchableOpacity, Image } from 'react-native';
 
 const Profile_About = ({ route, navigation }) => {
-  const {name, email } = route.params;
+  const { footballFields, latestFF, targets, name, email, userId} = route.params;
 
 return (
 <SafeAreaView style={styles.container}>

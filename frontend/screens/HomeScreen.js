@@ -13,7 +13,7 @@ const HomeScreen = ({ route, navigation }) => {
   function retrieveFootballFields(targetId) {
     //let ffLists=[]
     //change routes: only showing last ff 
-      const url = "http://10.239.3.201:5000/footballfields/" + targetId + "/";
+      const url = "http://10.239.15.244:5000/footballfields/" + targetId + "/";
       console.log("rretrieve ffs")
       console.log(url)
       return fetch(url, {
@@ -74,6 +74,10 @@ const HomeScreen = ({ route, navigation }) => {
           {latestFootballField ? (
       <TouchableOpacity style={styles.buttons_1} onPress={() => {
         navigation.navigate('FootballField', {
+          userName:userName,
+          userEmail:userEmail,
+          userId: userId,
+          targets:targets,
           targetId: latestFootballField.targetId,
           footballFieldName: latestFootballField.footballFieldName,
           footballFieldTimeSeries: latestFootballField.footballFieldTimeSeries
@@ -92,7 +96,7 @@ const HomeScreen = ({ route, navigation }) => {
               <Text style={styles.buttonText_2}>Open Coverage List</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttons_2} onPress={() => navigation.navigate('Profile_About', { name: userName , email: userEmail})}>
+          <TouchableOpacity style={styles.buttons_2} onPress={() => navigation.navigate('Profile_About', {footballFields: footballFields , latestFF: latestFootballField, targets: targets, name: userName , email: userEmail, userId: userId})}>
               <Text style={styles.buttonText_2}>User Profile</Text>
           </TouchableOpacity>
     </SafeAreaView>

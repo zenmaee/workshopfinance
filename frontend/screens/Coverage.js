@@ -66,6 +66,7 @@ const Coverage = ({ route, navigation }) => {
                     <ScrollView contentContainerStyle={styles.scrollview} keyboardDismissMode='on-drag'>
                       {
                         footballFields.map(field => {
+                          console.log(field)
                           return (
                             <TouchableWithoutFeedback onPress={() => navigation.navigate('FootballField', { targetId: field.targetId, footballFieldName: field.footballFieldName, footballFieldTimeSeries:field.footballFieldTimeSeries,})}>
                               <View style={styles.cardList}>
@@ -110,7 +111,7 @@ const Coverage = ({ route, navigation }) => {
     const footballFieldTimeSeries = Math.floor(Date.now() * 1000).toString();
     console.log("addFootballField")
     console.log(type)
-    fetch('http://10.239.3.201:5000/footballFields',{ 
+    fetch('http://10.239.15.244:5000/footballFields',{ 
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -141,6 +142,8 @@ const Coverage = ({ route, navigation }) => {
           <ScrollView contentContainerStyle={styles.scrollview} /*keyboardDismissMode='on-drag'*/>
             {
               targets.map(field => {
+                
+                console.log(field)
                 return (
                   <TouchableOpacity style={styles.cardList}>
                     <Card>
@@ -196,11 +199,11 @@ function PrivControls({ onClose, setShowPrivateControls }) {
       subsectorName: subsectorName,
       targetRevenueLTM: targetRevenueLTM,
       targetEbitdaLTM: targetEbitdaLTM,
-      targetType:"private",
+      type:"private",
       userId: userId
     };
     console.log("priv tgts")
-    fetch('http://10.239.3.201:5000/targets/private', {
+    fetch('http://10.239.15.244:5000/targets/private', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -303,11 +306,11 @@ function PubControls({ onClose, setShowPublicControls }) {
       targetEbitdaLTM: targetData.ebitda,
       subsectorName:subsectorName,
       userId: userId,
-      targetType:"public"
+      type:"Public"
     };
 
 
-    const response = await fetch("http://10.239.3.201:5000/targets/public", {
+    const response = await fetch("http://10.239.15.244:5000/targets/public", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -327,7 +330,7 @@ function PubControls({ onClose, setShowPublicControls }) {
     console.log(targetSymbol)
     try {
       const response = await fetch(
-        "http://10.239.3.201:5000/targets/public/" + targetSymbol,
+        "http://10.239.15.244:5000/targets/public/" + targetSymbol,
         {
           method: "GET",
           headers: {
@@ -355,7 +358,7 @@ function PubControls({ onClose, setShowPublicControls }) {
             
     
           function searchTicker(input) {
-            return fetch('http://10.239.3.201:5000/ticker/' + input, {
+            return fetch('http://10.239.15.244:5000/ticker/' + input, {
               method: 'GET',
               headers: {
                 'Accept': 'application/json',
