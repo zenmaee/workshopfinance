@@ -18,7 +18,7 @@ const SignUpSignIn = ({ navigation }) => {
     const userName=resp.name
     const userEmail=resp.email
 
-    const url = 'http://10.239.21.226:5000/targets/'+userId+'/'
+    const url = 'http://10.239.233.197:5000/targets/'+userId+'/'
     console.log(url)
     return fetch(url, {
       method: "GET",
@@ -47,7 +47,7 @@ const SignUpSignIn = ({ navigation }) => {
 
           console.log("email")
           console.log(email)
-          const url = 'http://10.239.21.226:5000/users/'+email
+          const url = 'http://10.239.233.197:5000/users/'+email
           return fetch(url, {
             method:'POST',
             headers:{

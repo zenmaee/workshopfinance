@@ -114,7 +114,7 @@ const FootballField = ({ route, navigation }) => {
 
 //Obtain Ticker by what the user's input. Level 1.
   function searchTicker(input) {
-    return fetch('http://10.239.21.226:5000/ticker/' + input, { 
+    return fetch('http://10.239.233.197:5000/ticker/' + input, { 
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -166,7 +166,7 @@ const FootballField = ({ route, navigation }) => {
     
     //Retrieve comps. Level 2.
     function retrieveComps() {
-      let url = `http://10.239.21.226:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`;
+      let url = `http://10.239.233.197:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`;
       return fetch(url, {
         method: 'GET',
         headers: {
@@ -234,61 +234,62 @@ const FootballField = ({ route, navigation }) => {
                   width: (valuationRender.maxValuation - valuationRender.minValuation) * pixelsPerDollar,
                   marginTop: 5,
                 }}
-      />
-    </View>
-  )} 
-              <View style={{ padding: 30 }}>
+              />
+            </View>
+          )} 
+          <View style={{ padding: 30 }}>
 
-                    <View style={{ display: 'flex', flexDirection: 'row', marginTop: 5}}>
-                      <Text style={{ flex: 2, textAlign: 'left', color: 'black', backgroundColor: 'gray', padding: 5 }}>Comp (Ticker)</Text>
-                      <Text style={{ flex: 1, color: 'black', backgroundColor: 'gray', padding: 5, marginLeft: 2 }}>Multiple</Text>
-                    </View>
-                    <ScrollView contentContainerStyle={{}} /*keyboardDismissMode='on-drag'*/>
-                      {comps.map((comp) => {
-                        return (
-                          <View style={{ display: 'flex', flexDirection: 'row', marginTop: 2 }}>
-                            <View style={{ flex: 2, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1 }}>
-                              <Text>{comp.compSymbol}</Text>
-                            </View>
-                            <View style={{ flex: 0.75, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1, marginLeft: 2 }}>
-                              {valuationMetric === 'EV_E' ? <Text>{comp.evToEbitdaLTM.toFixed(2)}</Text> : valuationMetric === 'EV_R' ? <Text>{comp.evToRevenueLTM.toFixed(2)}</Text> : null}
-                            </View>
-                            <TouchableOpacity style={{ flex: 0.25 }}>
-                              <Image style={{ height: 25, width: 20, borderRadius: 4, margin: 2 }} source={require('./delete_icon.png')}/>
-                            </TouchableOpacity>
-                          </View>
-                        );
-                      })}
+                <View style={{ display: 'flex', flexDirection: 'row', marginTop: 5}}>
+                  <Text style={{ flex: 2, textAlign: 'left', color: 'black', backgroundColor: 'gray', padding: 5 }}>Comp (Ticker)</Text>
+                  <Text style={{ flex: 0.75, color: 'black', backgroundColor: 'gray', padding: 5, marginLeft: 2 }}>Multiple</Text>
+                  <View style={{ flex: 0.25, color: 'white', height: 25, width: 20, borderRadius: 4, margin: 2 }}></View>
+                </View>
+                <ScrollView contentContainerStyle={{}} /*keyboardDismissMode='on-drag'*/>
+                  {comps.map((comp) => {
+                    return (
                       <View style={{ display: 'flex', flexDirection: 'row', marginTop: 2 }}>
-                      <View style={{ flex: 2, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1 }}>
-                        <Text>{valuationStat} {metricItems.find(item => item.value === valuationMetric)?.label}</Text>
+                        <View style={{ flex: 2, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1 }}>
+                          <Text>{comp.compSymbol}</Text>
+                        </View>
+                        <View style={{ flex: 0.75, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1, marginLeft: 2 }}>
+                          {valuationMetric === 'EV_E' ? <Text>{comp.evToEbitdaLTM.toFixed(2)}</Text> : valuationMetric === 'EV_R' ? <Text>{comp.evToRevenueLTM.toFixed(2)}</Text> : null}
+                        </View>
+                        <TouchableOpacity style={{ flex: 0.25 }}>
+                          <Image style={{ height: 25, width: 20, borderRadius: 4, margin: 2 }} source={require('./delete_icon.png')}/>
+                        </TouchableOpacity>
                       </View>
-                      <View style={{ flex: 1, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1, marginLeft: 2 }}>
-                        {valuationStat === 'Median' && (
-                          <Text>
-                            {valuationMetric === "EV_E" ? calculateMedian(comps.map(comp => comp.evToEbitdaLTM)).toFixed(2) : calculateMedian(comps.map(comp => comp.evToRevenueLTM)).toFixed(2)}
-                          </Text>
-                        )}
-                        {valuationStat === 'High' && (
-                          <Text>
-                            {valuationMetric === "EV_E" ? Math.max(...comps.map(comp => comp.evToEbitdaLTM)).toFixed(2) : Math.max(...comps.map(comp => comp.evToRevenueLTM)).toFixed(2)}
-                          </Text>
-                        )}
-                        {valuationStat === 'Low' && (
-                          <Text>
-                            {valuationMetric === "EV_E" ? Math.min(...comps.map(comp => comp.evToEbitdaLTM)).toFixed(2) : Math.min(...comps.map(comp => comp.evToRevenueLTM)).toFixed(2)}
-                          </Text>
-                        )}
-                        {valuationStat === 'Mean' && (
-                          <Text>
-                            {valuationMetric === "EV_E" ? calculateAverage(comps.map(comp => comp.evToEbitdaLTM)).toFixed(2) : calculateAverage(comps.map(comp => comp.evToRevenueLTM)).toFixed(2)}
-                          </Text>
-                        )}
-                      </View>
+                    );
+                  })}
+                  <View style={{ display: 'flex', flexDirection: 'row', marginTop: 2 }}>
+                    <View style={{ flex: 2, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1 }}>
+                      <Text>{valuationStat} {metricItems.find(item => item.value === valuationMetric)?.label}</Text>
                     </View>
-
-                    </ScrollView>
+                    <View style={{ flex: 0.75, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1, marginLeft: 2 }}>
+                      {valuationStat === 'Median' && (
+                        <Text>
+                          {valuationMetric === "EV_E" ? calculateMedian(comps.map(comp => comp.evToEbitdaLTM)).toFixed(2) : calculateMedian(comps.map(comp => comp.evToRevenueLTM)).toFixed(2)}
+                        </Text>
+                      )}
+                      {valuationStat === 'High' && (
+                        <Text>
+                          {valuationMetric === "EV_E" ? Math.max(...comps.map(comp => comp.evToEbitdaLTM)).toFixed(2) : Math.max(...comps.map(comp => comp.evToRevenueLTM)).toFixed(2)}
+                        </Text>
+                      )}
+                      {valuationStat === 'Low' && (
+                        <Text>
+                          {valuationMetric === "EV_E" ? Math.min(...comps.map(comp => comp.evToEbitdaLTM)).toFixed(2) : Math.min(...comps.map(comp => comp.evToRevenueLTM)).toFixed(2)}
+                        </Text>
+                      )}
+                      {valuationStat === 'Mean' && (
+                        <Text>
+                          {valuationMetric === "EV_E" ? calculateAverage(comps.map(comp => comp.evToEbitdaLTM)).toFixed(2) : calculateAverage(comps.map(comp => comp.evToRevenueLTM)).toFixed(2)}
+                        </Text>
+                      )}
                     </View>
+                    <View style={{ flex: 0.25, color: 'white', height: 25, width: 20, borderRadius: 4, margin: 2 }}></View>
+                </View>
+              </ScrollView>
+            </View>
         </View>
       </View>
     );
@@ -357,50 +358,49 @@ const FootballField = ({ route, navigation }) => {
       <View style={{ flex: 1, height: 200, width: 400, borderWidth: 1 }}>
           <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{ color: 'white' }}>Add Comp</Text>
-                <TextInput 
-                  style={{ marginTop: 5, margin: 10, height: 40, width: 200, padding: 5, borderRadius: 10, backgroundColor: '#FFF' }}
-                  placeholder="Company Name or Ticker"
-                  value={compSymbol}
-                  onChangeText={(text) => {
-                    //find_company_name(text);
-
-                    setCompSymbol(text);
-                  }}
-                />
-                <TouchableOpacity 
-                    title="Add Comp"
-                    onPress={() => {
-                      console.log("yesaddcomp")
-                      console.log(valuationId)
-                      fetch('http://10.239.21.226:5000/comps',{
-                        method:'POST',
-                        headers:{
-                          'Accept':'application/json',
-                          'Content-Type':'application/json'
-                        },
-                        body:JSON.stringify({
-                          compSymbol:compSymbol,
-                          valuationId:valuationId
-                        })
-                      })
-                      .then(resp=>resp.json())
-                      .then(resp => {
-                        console.log(resp)
-                        if (resp.success === "Successful Comps Post") {
-                          console.log(resp.newComp)
-                          console.log("add comp")
-                          setNewComp(1);
-                          generateValuation();
-                        }
-                        else {
-                          alert(resp.success)
-                        }
-                      })  
-                    }}
-                    
-                    >
-                      <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
-                </TouchableOpacity>
+            <TextInput 
+              style={{ marginTop: 5, margin: 10, height: 40, width: 200, padding: 5, borderRadius: 10, backgroundColor: '#FFF' }}
+              placeholder="Company Name or Ticker"
+              value={compSymbol}
+              onChangeText={(text) => {
+                //find_company_name(text);
+                setCompSymbol(text);
+              }}
+            />
+            <TouchableOpacity 
+                title="Add Comp"
+                onPress={() => {
+                  console.log("yesaddcomp")
+                  console.log(valuationId)
+                  fetch('http://10.239.233.197:5000/comps',{
+                    method:'POST',
+                    headers:{
+                      'Accept':'application/json',
+                      'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({
+                      compSymbol:compSymbol,
+                      valuationId:valuationId
+                    })
+                  })
+                  .then(resp=>resp.json())
+                  .then(resp => {
+                    console.log(resp)
+                    if (resp.success === "Successful Comps Post") {
+                      console.log(resp.newComp)
+                      console.log("add comp")
+                      setNewComp(1);
+                      generateValuation();
+                    }
+                    else {
+                      alert(resp.success)
+                    }
+                  })  
+                }}
+                
+                >
+                  <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+            </TouchableOpacity>
           </View>
           <View style={{ marginTop: 10, flexDirection: 'row', alignItems: 'center', zIndex: 200 }}>
             <Text style={{ color: 'white' }}>Metric</Text>
@@ -516,7 +516,7 @@ const FootballField = ({ route, navigation }) => {
     //AddValuation. Level2.
     const addValuation= (targetId, footballFieldTimeSeries) => {
       const valuationTS = Math.floor(Date.now() * 1000).toString();
-      fetch('http://10.239.21.226:5000/valuations',{
+      fetch('http://10.239.233.197:5000/valuations',{
               method:'POST',
               headers:{
                   'Accept':'application/json',
@@ -570,14 +570,16 @@ const FootballField = ({ route, navigation }) => {
         value={ffName}
         onChangeText={setFootballFieldName}
         onBlur={() => updateFootballFieldName(ffName)}
+        autoCapitalize = "none"
         keyboardType="default"
       />
         <TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
         placeholder="Target Name or Ticker"
         value={targetSymbol}
-        onChangeText={(text) => {
-          setTargetSymbol(text);
-        }}
+        // onChangeText={(text) => {
+        //   setTargetSymbol(text);
+        // }}
+        autoCapitalize = "none"
         keyboardType="default"
         />
       </View>
@@ -626,7 +628,7 @@ const FootballField = ({ route, navigation }) => {
   //update FootballFieldName. Level 1.
   function updateFootballFieldName(newName)  {
     setFootballFieldName(newName);
-    let url="http://10.239.21.226:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
+    let url="http://10.239.233.197:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
     fetch(url,{
             method:'PUT',
             headers:{
@@ -645,7 +647,7 @@ const FootballField = ({ route, navigation }) => {
 
   const deleteFootballField= () => {
     console.log("tryna delete ff")
-    fetch('http://10.239.21.226:5000/footballFields',{
+    fetch('http://10.239.233.197:5000/footballFields',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -677,7 +679,7 @@ const FootballField = ({ route, navigation }) => {
 
   function retrieveValuations() {
     
-    let url = "http://10.239.21.226:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
+    let url = "http://10.239.233.197:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
     return fetch(url, {
       method: "GET",
       headers: {
@@ -818,7 +820,7 @@ const FootballField = ({ route, navigation }) => {
 
     function generateValuation() {
     console.log("generate valuation")
-    fetch('http://10.239.21.226:5000/valuations',{
+    fetch('http://10.239.233.197:5000/valuations',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -841,7 +843,7 @@ const FootballField = ({ route, navigation }) => {
   //Update ValuationName. Level 1.
 
   const updateValuationName= () => {
-    fetch('http://10.239.21.226:5000/valuations/names',{
+    fetch('http://10.239.233.197:5000/valuations/names',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -862,7 +864,7 @@ const FootballField = ({ route, navigation }) => {
   //DeleteValuations. Level 1.
 
   const deleteValuation= () => {
-    fetch('http://10.239.21.226:5000/valuations',{
+    fetch('http://10.239.233.197:5000/valuations',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -883,7 +885,7 @@ const FootballField = ({ route, navigation }) => {
   //AddComp. Level 1.
 /*
   function addComp (compSymbol)  {
-    fetch('http://10.239.21.226:5000/comps',{
+    fetch('http://10.239.233.197:5000/comps',{
       method:'POST',
       headers:{
         'Accept':'application/json',
@@ -897,7 +899,7 @@ const FootballField = ({ route, navigation }) => {
     .then(resp=>resp.text())
     .then(resp => {
       if (resp === "Successful Comps Post") {
-        fetch(`http://10.239.21.226:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`, {
+        fetch(`http://10.239.233.197:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -924,7 +926,7 @@ const FootballField = ({ route, navigation }) => {
   //DleteComp. Level 1.
 
   const deleteComp= () => {
-    fetch('http://10.239.21.226:5000/comps',{
+    fetch('http://10.239.233.197:5000/comps',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
