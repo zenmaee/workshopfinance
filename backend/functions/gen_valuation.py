@@ -255,7 +255,11 @@ def add_VALUATION(footballFieldId, iex_api_key, valuationTimeSeries):
         "footballFieldId":footballFieldId,
         "valuationName":valuationName,
         "valuationTimeSeries":valuationTimeSeries,
-        "valuationType":valuationType
+        "valuationType":valuationType,
+        "color":"#94c0cc",
+        "spread":0.1,
+        "metric":"EV_R",
+        "stat":"Mean"
 
     }]
 

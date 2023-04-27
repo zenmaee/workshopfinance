@@ -1,7 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Button, ScrollView, Text, View, TextInput, SafeAreaView, TouchableOpacity, Dimensions, Image } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker'
-
+//COLORS OF BARS:
+//BLUE: #94c0cc
+//ORANGE: #fad48b
+//GREEN: #bcdf8a
+//LIME: #f5f9ad
 
 //Original function level 0.
 const FootballField = ({ route, navigation }) => {
@@ -30,7 +34,7 @@ const FootballField = ({ route, navigation }) => {
   //VALUATION CONTROLS
   // const [footballFieldMetric, setFootballFieldMetric]=useState("EV_E")
   const [openMetric, setOpenMetric]=useState(false);
-  const [valuationMetric, setValuationMetric]=useState("EV_R");
+  const [valuationMetric, setValuationMetric]=useState();
   const [metricItems, setMetricItems]=useState([
     { label: "EV/Revenue (LTM)", value: "EV_R" }, 
     { label: "EV/EBITDA (LTM)", value: "EV_E" }
@@ -38,7 +42,7 @@ const FootballField = ({ route, navigation }) => {
 
   // const [valuationStat, setValuationStat]=useState("")
   const [openStat, setOpenStat]=useState(false);
-  const [valuationStat, setValuationStat]=useState("Mean");
+  const [valuationStat, setValuationStat]=useState();
   const [statItems, setStatItems]=useState([
     { label: "Mean", value: "Mean" }, 
     { label: "Median", value: "Median" },
@@ -537,6 +541,10 @@ const FootballField = ({ route, navigation }) => {
               onAdd()
               setValuationTimeSeries(valuationTS)
               setValuationId(targetId+"-"+footballFieldTimeSeries+"-"+valuationTS)
+              setValuationStat()
+              setValuationMetric()
+              setValuationSpread()
+              setValuationColor()
               //navigation.navigate('Coverage', { userId: resp});
             }
           })     
@@ -575,9 +583,9 @@ const FootballField = ({ route, navigation }) => {
         <TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
         placeholder="Target Name or Ticker"
         value={targetSymbol}
-        onChangeText={(text) => {
-          setTargetSymbol(text);
-        }}
+        //onChangeText={(text) => {
+          //setTargetSymbol(text);
+        //}}
         keyboardType="default"
         />
       </View>
@@ -697,7 +705,7 @@ const FootballField = ({ route, navigation }) => {
 
     //ValuationNumbers. Level 1.
 
-    function valuationNumbers (data, output, metric, stat) {
+    function valuationNumbers (data, output) {
         console.log("Cuando se entra en valuatioNumbers?")
         console.log("data")
         console.log(data)
@@ -715,44 +723,44 @@ const FootballField = ({ route, navigation }) => {
         for (let valuation of data) {
           let valuationName = valuation["valuationName"];
           if (output === "EV") {
-            if (metric === "EV_E") {
-              if (stat === "AV") {
+            if (valuation["metric"] === "EV_E") {
+              if (valuation["stat"] === "AV") {
                 valuationCenter = valuation["valuationEvAvEvEbitdaLTM"];
-              } else if (stat === "HIGH") {
+              } else if (valuation["stat"] === "HIGH") {
                 valuationCenter = valuation["valuationEvHighEvEbitdaLTM"];
-              } else if (stat === "MED") {
+              } else if (valuation["stat"] === "MED") {
                 valuationCenter = valuation["valuationEvAvEvEbitdaLTM"];
               } else {
                 valuationCenter = valuation["valuationEvAvEvEbitdaLTM"];
               }
-            } else if (metric === "EV_R") {
-              if (stat === "AV") {
+            } else if (valuation["metric"] === "EV_R") {
+              if (valuation["stat"] === "AV") {
                 valuationCenter = valuation["valuationEvAvEvRevLTM"];
-              } else if (stat === "HIGH") {
+              } else if (valuation["stat"] === "HIGH") {
                 valuationCenter = valuation["valuationEvHighEvRevLTM"];
-              } else if (stat === "MED") {
+              } else if (valuation["stat"] === "MED") {
                 valuationCenter = valuation["valuationEvAvEvRevLTM"];
               } else {
                 valuationCenter = valuation["valuationEvAvEvRevLTM"];
               }
             }
         } else if (output === "MULT") {
-          if (metric === "EV_E") {
-            if (stat === "AV") {
+          if (valuation["metric"] === "EV_E") {
+            if (valuation["stat"] === "AV") {
               valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
-            } else if (stat === "HIGH") {
+            } else if (valuation["stat"] === "HIGH") {
               valuationCenter = valuation["valuationMultHighEvEbitdaLTM"];
-            } else if (stat === "MED") {
+            } else if (valuation["stat"] === "MED") {
               valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
             } else {
               valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
             }
-          } else if (metric === "EV_R") {
-            if (stat === "AV") {
+          } else if (valuation["metric"] === "EV_R") {
+            if (valuation["stat"] === "AV") {
               valuationCenter = valuation["valuationMultAvEvRevLTM"];
-            } else if (stat === "HIGH") {
+            } else if (valuation["stat"] === "HIGH") {
               valuationCenter = valuation["valuationMultHighEvRevLTM"];
-            } else if (stat === "MED") {
+            } else if (valuation["stat"] === "MED") {
               valuationCenter = valuation["valuationMultAvEvRevLTM"];
             } else {
               //console.log("manin deberia estar aqui")
@@ -770,7 +778,11 @@ const FootballField = ({ route, navigation }) => {
           minValuation: minValuation,
           maxValuation: maxValuation,
           footballFieldId: valuation["footballFieldId"],
-          valuationTimeSeries: valuation["valuationTimeSeries"]
+          valuationTimeSeries: valuation["valuationTimeSeries"],
+          metric: valuation["metric"],
+          stat: valuation["stat"],
+          color: valuation["color"],
+          spread: valuation["spread"]
         };
         valuations.push(valuation);
       }
@@ -788,7 +800,7 @@ const FootballField = ({ route, navigation }) => {
       console.log(data)
       console.log("en este primer useffect")
 
-      let val=valuationNumbers(data,footballFieldOutput, valuationMetric, valuationStat)
+      let val=valuationNumbers(data,footballFieldOutput)
       //console.log(val)
       setTableValues(val)
       setValuations(val);
@@ -798,7 +810,7 @@ const FootballField = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
-    let val = valuationNumbers(data, footballFieldOutput, valuationMetric, valuationStat);
+    let val = valuationNumbers(data, footballFieldOutput);
     console.log("en este segundo useffect")
     setTableValues(val);
     setValuations(val);

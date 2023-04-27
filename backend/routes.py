@@ -74,6 +74,8 @@ def add_valuations():
     valuationTimeSeries=request.json['valuationTimeSeries']
 
     footballFieldId=targetId+"-"+footballFieldTimeSeries
+
+    #stat=
     
     #Then we send it to the database
     add_VALUATION(footballFieldId,iex_api_key, valuationTimeSeries)
@@ -124,7 +126,7 @@ def retrieve_comps(valuationId):
 
 @app.route('/footballfields/<targetId>/', methods=['GET'])
 def retrieve_footballfields_bytarget(targetId):
-    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS/"+targetId+"?last=3&token="+iex_api_key
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS/"+targetId+"?last=100&token="+iex_api_key
     resp = requests.get(url).json()
     return resp
 
