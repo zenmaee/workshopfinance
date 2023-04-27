@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { StyleSheet, Button, ScrollView, Text, View, TextInput, SafeAreaView, TouchableOpacity, Dimensions, Image } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker'
 //COLORS OF BARS:
@@ -9,6 +9,7 @@ import DropDownPicker from 'react-native-dropdown-picker'
 
 //Original function level 0.
 const FootballField = ({ route, navigation }) => {
+
   const {userName, userEmail, userId,targets, targetId, footballFieldName,footballFieldTimeSeries} = route.params; //Params we obtain from other screens
   const targetSymbol = targetId.split("-")[1] //tgtSymbol obtained
   const [footballFieldId, setFootballFieldId]=useState("")
@@ -29,8 +30,6 @@ const FootballField = ({ route, navigation }) => {
     { label: "Billions", value: "billions" }
   ])
  
-
-
   //VALUATION CONTROLS
   // const [footballFieldMetric, setFootballFieldMetric]=useState("EV_E")
   const [openMetric, setOpenMetric]=useState(false);
@@ -86,6 +85,7 @@ const FootballField = ({ route, navigation }) => {
 
 
   //setTableValues: Function to generate table in which valuations will be drawn. Level 1.
+  //useStates: table, tableMean, tableRange, pixelsPerDollar
   function setTableValues(valuations){
     console.log("reseting table values")
     const tab = {
@@ -165,6 +165,7 @@ const FootballField = ({ route, navigation }) => {
   }
 
 //Comp controls. Level 1.
+//valuationTimeSeries, newComp, valuationRender, valuationHeight, pixelsPerDollar
   function CompControls() {
     const [comps, setComps] = useState([]);
     
@@ -222,7 +223,8 @@ const FootballField = ({ route, navigation }) => {
     //return of CompsControl.
     console.log("valuationRender")
     console.log(valuationRender)
-   
+
+
     return (
       
       <View>
@@ -249,6 +251,8 @@ const FootballField = ({ route, navigation }) => {
                     </View>
                     <ScrollView contentContainerStyle={{}} /*keyboardDismissMode='on-drag'*/>
                       {comps.map((comp) => {
+                        console.log("comps")
+                        console.log(comp)
                         return (
                           <View style={{ display: 'flex', flexDirection: 'row', marginTop: 2 }}>
                             <View style={{ flex: 2, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1 }}>
@@ -325,7 +329,11 @@ const FootballField = ({ route, navigation }) => {
                                                         setShowCompControls(true); 
                                                         setValuationRender(valuation);
                                                         setValuationId(valuation.footballFieldId+"-"+valuation.valuationTimeSeries)
-                                                        setValuationTimeSeries(valuation.valuationTimeSeries)}}>
+                                                        setValuationTimeSeries(valuation.valuationTimeSeries)
+                                                        setValuationMetric(valuation.metric)
+                                                        setValuationSpread(valuation.spread)
+                                                        setValuationColor(valuation.color)
+                                                        setValuationStat(valuation.stat)}}>
                     <View
                       style={{
                         marginStart: (valuation.minValuation - table.minRange) * pixelsPerDollar,
@@ -356,6 +364,87 @@ const FootballField = ({ route, navigation }) => {
 
   //Fuction ValuationControls.Level 1.
   function ValuationControls({ onClose}) {
+    
+    
+    const updateValuationMetric = useCallback(() => {
+      fetch('http://10.239.21.226:5000/valuations/metric',{
+          method:'PUT',
+          headers:{
+            'Accept':'application/json',
+            'Content-Type':'application/json'
+          },
+          body:JSON.stringify({
+            footballFieldId:targetId+"-"+footballFieldTimeSeries,
+            valuationTimeSeries:valuationTimeSeries,
+            metric:valuationMetric
+          })
+        })
+        //we'll see later  
+      }, [valuationMetric, valuationTimeSeries]);
+
+      const updateValuationStat = useCallback(() => {
+      fetch('http://10.239.21.226:5000/valuations/stat',{
+          method:'PUT',
+          headers:{
+            'Accept':'application/json',
+            'Content-Type':'application/json'
+          },
+          body:JSON.stringify({
+            footballFieldId:targetId+"-"+footballFieldTimeSeries,
+            valuationTimeSeries:valuationTimeSeries,
+            metric:valuationStat
+          })
+        })
+
+      
+      }, [valuationStat, valuationTimeSeries]);
+
+      const changeSpread = useCallback((action) => {
+      if (action === "increase"){
+        if (valuationSpread<=0.5){
+          setValuationSpread(valuationSpread+0.05)
+        }
+        else{
+          alert("Max Spread: 50%")
+        }
+      }else{
+        if (valuationSpread>=0){
+          setValuationSpread(valuationSpread-0.05)
+        }
+        else{
+          alert("Min Spread: 0%")
+        }        
+      }
+      fetch('http://10.239.21.226:5000/valuations/spread',{
+          method:'PUT',
+          headers:{
+            'Accept':'application/json',
+            'Content-Type':'application/json'
+          },
+          body:JSON.stringify({
+            footballFieldId:targetId+"-"+footballFieldTimeSeries,
+            valuationTimeSeries:valuationTimeSeries,
+            metric:valuationSpread
+          })
+        })
+      }, [valuationSpread]);
+    
+      const changeColor = useCallback(() => {
+      setValuationColor(color)
+      fetch('http://10.239.21.226:5000/valuations/color',{
+          method:'PUT',
+          headers:{
+            'Accept':'application/json',
+            'Content-Type':'application/json'
+          },
+          body:JSON.stringify({
+            footballFieldId:targetId+"-"+footballFieldTimeSeries,
+            valuationTimeSeries:valuationTimeSeries,
+            color:color
+          })
+        })
+      }, [valuationColor]);
+
     console.log("valuationControls")
     return(
       <View style={{ flex: 1, height: 200, width: 400, borderWidth: 1 }}>
@@ -408,18 +497,6 @@ const FootballField = ({ route, navigation }) => {
           </View>
           <View style={{ marginTop: 10, flexDirection: 'row', alignItems: 'center', zIndex: 200 }}>
             <Text style={{ color: 'white' }}>Metric</Text>
-            {/* <InlinePicker
-              selectedValue={footballFieldOutput}
-              onValueChange={(itemValue, itemIndex) =>
-                setFootballFieldOutput(itemValue)}
-              options = {[
-                { label: "EV/Revenue (LTM)",
-                  value: "EV_R"
-                }, {
-                  label: "EV/EBITDA (LTM)",
-                  value: "EV_E"
-                },
-              ]}/> */}
               <View style={{ marginLeft: 20 }}>
                 <DropDownPicker
                   style={{ backgroundColor: 'white', height: 45, width: 300 }}
@@ -431,6 +508,7 @@ const FootballField = ({ route, navigation }) => {
                   setValue={setValuationMetric}
                   items={metricItems}
                   setItems={setMetricItems}
+                  onChangeValue={updateValuationMetric()}
                 />
               </View> 
           </View>
@@ -447,54 +525,40 @@ const FootballField = ({ route, navigation }) => {
                   setValue={setValuationStat}
                   items={statItems}
                   setItems={setStatItems}
+                  onChangeValue={updateValuationStat()}
+
                 />
               </View> 
-            {/* <InlinePicker
-              selectedValue={footballFieldOutput}
-              onValueChange={(itemValue, itemIndex) =>
-                setFootballFieldOutput(itemValue)}
-              options = {[
-                { label: "Mean",
-                  value: "Mean"
-                }, {
-                  label: "Median",
-                  value: "Median"
-                },
-                { label: "High",
-                value: "High"
-              }, {
-                label: "Low",
-                value: "Low"
-              },
-              ]}/> */}
           </View>
           <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Spread</Text>
-            <TouchableOpacity
+            
+            <TouchableOpacity onPress={() =>changeSpread("decrease")}
               title="Decrease Spread">
-              <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./minus_sign.png')}/>
+              <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./minus_sign.png') }/>
             </TouchableOpacity>
-            <Text style={{ backgroundColor: 'white', fontSize: 15 }}>10%</Text>
-            <TouchableOpacity
+            <Text style={{ backgroundColor: 'white', fontSize: 15 }}>{valuationSpread*100}%</Text>
+            <TouchableOpacity onPress={() =>changeSpread("increase")}
               title="Increase Spread">
-              <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_sign.png')}/>
+              <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_sign.png') }/>
             </TouchableOpacity>
           </View>
+
           <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Color</Text>
-            <TouchableOpacity
+            <TouchableOpacity onPress={() =>changeColor("#94c0cc")}
               title="Blue">
               <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./blue_color.png')}/>
             </TouchableOpacity>
-            <TouchableOpacity
+            <TouchableOpacity onPress={() =>changeColor("#bcdf8a")}
               title="Green">
               <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./green_color.png')}/>
             </TouchableOpacity>
-            <TouchableOpacity
+            <TouchableOpacity onPress={() =>changeColor("#fad48b")}
               title="Orange">
               <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./orange_color.png')}/>
             </TouchableOpacity>
-            <TouchableOpacity
+            <TouchableOpacity onPress={() =>changeColor("#f5f9ad")}
               title="Yellow">
               <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./yellow_color.png')}/>
             </TouchableOpacity>
@@ -541,10 +605,10 @@ const FootballField = ({ route, navigation }) => {
               onAdd()
               setValuationTimeSeries(valuationTS)
               setValuationId(targetId+"-"+footballFieldTimeSeries+"-"+valuationTS)
-              setValuationStat()
-              setValuationMetric()
-              setValuationSpread()
-              setValuationColor()
+              setValuationStat("Mean")
+              setValuationMetric("EV_R")
+              setValuationSpread(0.1)
+              setValuationColor("#94c0cc")
               //navigation.navigate('Coverage', { userId: resp});
             }
           })     
@@ -711,14 +775,11 @@ const FootballField = ({ route, navigation }) => {
         console.log(data)
         console.log("output")
         console.log(output)
-        console.log(metric)
-        console.log(stat)
+
 
 
         let valuations = [];
         let valuationCenter;
-        let valuationColor="red"
-        let valuationSpread=10
         
         for (let valuation of data) {
           let valuationName = valuation["valuationName"];
@@ -770,8 +831,8 @@ const FootballField = ({ route, navigation }) => {
           }
         }
       
-        let minValuation = valuationCenter - valuationCenter * valuationSpread / 100;
-        let maxValuation = valuationCenter + valuationCenter * valuationSpread / 100;
+        let minValuation = valuationCenter - valuationCenter * valuation["spread"];
+        let maxValuation = valuationCenter + valuationCenter * valuation["spread"];
         valuation = {
           name: valuationName,
           color: valuationColor,

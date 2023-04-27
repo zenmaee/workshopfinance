@@ -94,6 +94,58 @@ def update_valuation_names():
 
     return "Successful PUT"
 
+@app.route('/valuations/metric', methods = ['PUT'])
+def update_valuation_metric():
+    
+    #This UPDATE will only change the valuation name. No recalculation should be done
+
+    footballFieldId=request.json['footballFieldId']
+    valuationTimeSeries=request.json['valuationTimeSeries']
+    metric=request.json['metric']
+
+    r=update_VALUATION_METRIC(footballFieldId,valuationTimeSeries,metric,iex_api_key)
+
+    return r
+
+@app.route('/valuations/stat', methods = ['PUT'])
+def update_valuation_stat():
+    
+    #This UPDATE will only change the valuation name. No recalculation should be done
+
+    footballFieldId=request.json['footballFieldId']
+    valuationTimeSeries=request.json['valuationTimeSeries']
+    stat=request.json['stat']
+
+    r=update_VALUATION_STAT(footballFieldId,valuationTimeSeries,stat,iex_api_key)
+
+    return r
+
+@app.route('/valuations/spread', methods = ['PUT'])
+def update_valuation_spread():
+    
+    #This UPDATE will only change the valuation name. No recalculation should be done
+
+    footballFieldId=request.json['footballFieldId']
+    valuationTimeSeries=request.json['valuationTimeSeries']
+    spread=request.json['spread']
+
+    r=update_VALUATION_SPREAD(footballFieldId,valuationTimeSeries,spread,iex_api_key)
+
+    return r
+
+@app.route('/valuations/color', methods = ['PUT'])
+def update_valuation_color():
+    
+    #This UPDATE will only change the valuation name. No recalculation should be done
+
+    footballFieldId=request.json['footballFieldId']
+    valuationTimeSeries=request.json['valuationTimeSeries']
+    color=request.json['color']
+
+    r=update_VALUATION_COLOR(footballFieldId,valuationTimeSeries,color,iex_api_key)
+
+    return r
+
 @app.route('/valuations', methods = ['PUT'])
 def generate_valuations():
     #When a user changes the valuation fields, the only one that will re-generate a new valuation is the asOfDate

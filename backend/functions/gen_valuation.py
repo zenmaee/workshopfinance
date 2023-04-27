@@ -281,4 +281,94 @@ def update_VALUATION_NAME(targetId,footballFieldTimeSeries,valuationTimeSeries,v
     r=requests.post(url, json=valuation)
     return r
 
+def update_VALUATION_METRIC(footballFieldId,valuationTimeSeries,metric,iex_api_key):
+    
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
+    print("url")
+    print(url)
+    print("metric")
+    print(metric)
+    valuation=requests.get(url).json()
+    valuation[0]['metric']=metric
 
+    #url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
+    url="https://workshopfinance.iex.cloud/v1/record/WORKSHOPFINANCE/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
+    r=requests.post(url, json=valuation)
+    if r.status_code==200:
+        ret="Successful Metric Update"
+        
+    else:
+        ret="Unsuccessful Metric Update"
+
+    print(ret)
+    return ret
+
+
+
+def update_VALUATION_STAT(footballFieldId,valuationTimeSeries,stat,iex_api_key):
+    
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
+    print("url")
+    print(url)
+    print("stat")
+    print(stat)
+    valuation=requests.get(url).json()
+    valuation[0]['stat']=stat
+
+    #url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
+    url="https://workshopfinance.iex.cloud/v1/record/WORKSHOPFINANCE/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
+    r=requests.post(url, json=valuation)
+    if r.status_code==200:
+        ret="Successful Stat Update"
+        
+    else:
+        ret="Unsuccessful Stat Update"
+
+    print(ret)
+    return ret
+
+
+def update_VALUATION_SPREAD(footballFieldId,valuationTimeSeries,spread,iex_api_key):
+    
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
+    print("url")
+    print(url)
+    print("spread")
+    print(spread)
+    valuation=requests.get(url).json()
+    valuation[0]['spread']=spread
+
+    #url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
+    url="https://workshopfinance.iex.cloud/v1/record/WORKSHOPFINANCE/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
+    r=requests.post(url, json=valuation)
+    if r.status_code==200:
+        ret="Successful Spread Update"
+        
+    else:
+        ret="Unsuccessful Spread Update"
+
+    print(ret)
+    return ret
+
+
+def update_VALUATION_COLOR(footballFieldId,valuationTimeSeries,color,iex_api_key):
+    
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
+    print("url")
+    print(url)
+    print("color")
+    print(color)
+    valuation=requests.get(url).json()
+    valuation[0]['color']=color
+
+    #url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
+    url="https://workshopfinance.iex.cloud/v1/record/WORKSHOPFINANCE/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
+    r=requests.post(url, json=valuation)
+    if r.status_code==200:
+        ret="Successful Color Update"
+        
+    else:
+        ret="Unsuccessful Color Update"
+
+    print(ret)
+    return ret
