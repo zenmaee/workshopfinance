@@ -42,14 +42,23 @@ def add_FOOTBALLFIELD(targetId,footballFieldType,footballFieldTimeSeries,iex_api
 def update_FF_NAME(targetId, footballFieldTimeSeries,footballFieldName,iex_api_key):
     
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS/"+targetId+"/"+footballFieldTimeSeries+"?token="+iex_api_key
+    print(url)
     footballField=requests.get(url).json()
+    print(footballField)
     footballField[0]['footballFieldName']=footballFieldName
     print("Ff")
     print(footballField)
-    url="https://workshopfinance.iex.cloud/v1/record/WORKSHOPFINANCE/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
+    url="https://workshopfinance.iex.cloud/v1/record/WORKSHOPFINANCE/FOOTBALLFIELDS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
     print(footballField)
     r=requests.post(url, json=footballField)
-    return r
+    
+    if r.status_code==200:
+       ret="Successful FF Name update"
+    else:
+      ret="Unsuccessful FF Name update"
+
+    print(ret)
+    return ret
 
 def delete_FOOTBALLFIELD(iex_api_key, footballFieldTimeSeries, targetId):
   #1. Obtain valuations of that FF

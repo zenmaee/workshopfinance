@@ -413,7 +413,7 @@ const [deletedComp, setDeletedComp] = useState();
   //Fuction ValuationControls.Level 1.
   function ValuationControls({ onClose}) {
     
-
+    let symbol
     
     const updateValuation = useCallback(() => {
       console.log("Valuation")
@@ -556,52 +556,58 @@ const [deletedComp, setDeletedComp] = useState();
       }updateValuation();
 
       }, [valuationSpread]);*/
-  
+      
+    function addComp(compSymbol){
+      console.log("compSymbol")
+      console.log(compSymbol)
+      fetch('http://10.239.21.226:5000/comps',{
+          method:'POST',
+          headers:{
+            'Accept':'application/json',
+            'Content-Type':'application/json'
+          },
+          body:JSON.stringify({
+            compSymbol:compSymbol,
+            valuationId:valuationId
+          })
+        })
+        .then(resp=>resp.json())
+        .then(resp => {
+          console.log(resp)
+          if (resp.success === "Successful Comps Post") {
+            console.log(resp.newComp)
+            console.log("add comp")
+            setCompSymbol(compSymbol)
+            setNewComp(1);
+            generateValuation();
+          }
+          else {
+            alert(resp.success)
+          }
+        })
+    }
 
     console.log("valuationControls")
     return(
+
       <View style={{ flex: 1, height: 200, width: 400, borderWidth: 1 }}>
           <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{ color: 'white' }}>Add Comp</Text>
                 <TextInput 
                   style={{ marginTop: 5, margin: 10, height: 40, width: 200, padding: 5, borderRadius: 10, backgroundColor: '#FFF' }}
                   placeholder="Company Name or Ticker"
-                  value={compSymbol}
-                  onChangeText={(text) => {
-                    //find_company_name(text);
-
-                    setCompSymbol(text);
-                  }}
+                  //value={compSymbol}
+                  
+                  onSubmitEditing={(event) => addComp(event.nativeEvent.text)}
+                  onChangeText={(text)=> symbol=text}
                 />
                 <TouchableOpacity 
                     title="Add Comp"
                     onPress={() => {
                       console.log("yesaddcomp")
                       console.log(valuationId)
-                      fetch('http://10.239.21.226:5000/comps',{
-                        method:'POST',
-                        headers:{
-                          'Accept':'application/json',
-                          'Content-Type':'application/json'
-                        },
-                        body:JSON.stringify({
-                          compSymbol:compSymbol,
-                          valuationId:valuationId
-                        })
-                      })
-                      .then(resp=>resp.json())
-                      .then(resp => {
-                        console.log(resp)
-                        if (resp.success === "Successful Comps Post") {
-                          console.log(resp.newComp)
-                          console.log("add comp")
-                          setNewComp(1);
-                          generateValuation();
-                        }
-                        else {
-                          alert(resp.success)
-                        }
-                      })  
+                      addComp(symbol)
+                        
                     }}
                     
                     >
@@ -728,6 +734,32 @@ const [deletedComp, setDeletedComp] = useState();
 
  //FootballFieldControls. Level1.   
   function FootballFieldControls({ onAdd }) {
+    function updateFootballFieldName(newName)  {
+      console.log("here")
+      let url="http://10.239.21.226:5000/footballFields/names"
+      fetch(url,{
+              method:'PUT',
+              headers:{
+                  'Accept':'application/json',
+                  'Content-Type':'application/json'
+              },
+              body:JSON.stringify({
+                targetId:targetId,
+                footballFieldTimeSeries:footballFieldTimeSeries,
+                footballFieldName:newName
+                })}
+          )
+          .then(resp=>resp.text())
+          .then(resp => {
+            if (resp === "Successful FF Name update") {
+              console.log(resp)
+              setFootballFieldName(newName);
+
+              //navigation.navigate('Coverage', { userId: resp});
+            }
+          })  
+    }
+
     //ReThink this
     //AddValuation. Level2.
     const addValuation= (targetId, footballFieldTimeSeries) => {
@@ -786,12 +818,13 @@ const [deletedComp, setDeletedComp] = useState();
           borderRadius: 10, 
           backgroundColor: '#FFF'
         }}
-        placeholder="Football Field Name"
-        value={ffName}
-        onChangeText={(text) => updateFootballFieldName(text)}
-        //onSubmitEditing={(text) => updateFootballFieldName(text)}
-        keyboardType="default"
+        placeholder={ffName}
+        //value={ffName}
+        //onChangeText={(text) => updateFootballFieldName(text)}
+        onSubmitEditing={(event) => updateFootballFieldName(event.nativeEvent.text)}
+        //keyboardType="default"
       />
+
         {/*<TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
         placeholder="Target Name or Ticker"
         value={targetSymbol}
@@ -844,7 +877,7 @@ const [deletedComp, setDeletedComp] = useState();
   }
   
   //update FootballFieldName. Level 1.
-  function updateFootballFieldName(newName)  {
+  /*function updateFootballFieldName(newName)  {
     setFootballFieldName(newName);
     let url="http://10.239.21.226:5000/footballFields/names"
     fetch(url,{
@@ -861,7 +894,7 @@ const [deletedComp, setDeletedComp] = useState();
         )
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
-  }
+  }*/
 
   //delete FootballField. Level 1.
 
