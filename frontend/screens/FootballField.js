@@ -939,49 +939,88 @@ const [changeValuation, setChangeValuation]=useState()
       
         let minValuation = valuationCenter - valuationCenter * valuation["spread"];
         let maxValuation = valuationCenter + valuationCenter * valuation["spread"];
-        valuation = {
-          name: valuationName,
-          color: valuationColor,
-          minValuation: minValuation,
-          maxValuation: maxValuation,
-          footballFieldId: valuation["footballFieldId"],
-          valuationTimeSeries: valuation["valuationTimeSeries"],
-          metric: valuation["metric"],
-          stat: valuation["stat"],
-          color: valuation["color"],
-          spread: valuation["spread"]
-        };
-        valuations.push(valuation);
-      }
-      return valuations;
+        if (valuationColor === "") {
+          valuation = {
+            name: valuationName,
+            color: valuationColor,
+            minValuation: minValuation,
+            maxValuation: maxValuation,
+            footballFieldId: valuation["footballFieldId"],
+            valuationTimeSeries: valuation["valuationTimeSeries"],
+            metric: valuation["metric"],
+            stat: valuation["stat"],
+            spread: valuation["spread"],
+            color:valuation["color"]
+          };
+        } else {
+          valuation = {
+            name: valuationName,
+            color: valuationColor,
+            minValuation: minValuation,
+            maxValuation: maxValuation,
+            footballFieldId: valuation["footballFieldId"],
+            valuationTimeSeries: valuation["valuationTimeSeries"],
+            metric: valuationMetric,
+            stat: valuationStat,
+            spread: valuationSpread,
+            color: valuationColor
+          };
+        }
+        
+        valuations.push(valuation);}
+        
+        return valuations;
     }
     
   
   //UseEffect. Level 1.
 
+  useEffect(() => {
+    const delay = setTimeout(async () => {
+      async function getValuations() {
+        let data = await retrieveValuations();
+        console.log("dataKLK")
+        console.log(data)
+        console.log("en este primer useeffect")
+        //BLUE: #94c0cc
+        //ORANGE: #fad48b
+        //GREEN: #bcdf8a
+        //LIME: #f5f9ad
+        let val=valuationNumbers(data,footballFieldOutput)
+        console.log("color:")
+        console.log(valuationColor)
+        console.log("val:")
+        console.log(val)
+        setTableValues(val)
+        setValuations(val);
+        let targetValuation = val.find(v => v.valuationTimeSeries === valuationTimeSeries);
+        console.log("targetValuation")
+        console.log(targetValuation)
+        console.log("valuationRender")
+        console.log(valuationRender)
+
+        if (targetValuation !== undefined) {
+          setValuationRender(targetValuation);
+        }
+      }
+      getValuations();
+    }, 500); // wait for 0.2 seconds before calling getValuations()
   
+    return () => clearTimeout(delay); // cleanup function to clear the timeout on unmounting
+  }, [data, footballFieldOutput, valuationMetric, valuationStat, valuationSpread,valuationColor]);
+  
+  /*
   useEffect(() => {
-    async function getValuations() {
-      let data = await retrieveValuations();
-      console.log("dataKLK")
-      console.log(data)
-      console.log("en este primer useffect")
-
-      let val=valuationNumbers(data,footballFieldOutput)
-      //console.log(val)
-      setTableValues(val)
-      setValuations(val);
-      setData(data)
-    }
-    getValuations();
-  }, []);
-
-  useEffect(() => {
+    
     let val = valuationNumbers(data, footballFieldOutput);
     console.log("en este segundo useffect")
     setTableValues(val);
     setValuations(val);
-  }, [data, footballFieldOutput, valuationMetric, valuationStat]);
+    console.log("val:")
+    console.log(val)
+
+    //nuevoValuatoionRender es val[valuationTimeSeries]
+  }, [data, footballFieldOutput, valuationMetric, valuationStat, valuationSpread,valuationColor]);*/
 
     //GenerateValuation. Level 1.
 
