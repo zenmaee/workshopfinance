@@ -12,7 +12,6 @@ const FootballField = ({ route, navigation }) => {
 
   const {userName, userEmail, userId,targets, targetId, footballFieldName,footballFieldTimeSeries} = route.params; //Params we obtain from other screens
   const targetSymbol = targetId.split("-")[1] //tgtSymbol obtained
-  const [footballFieldId, setFootballFieldId]=useState("")
   // const [footballFieldOutput, setFootballFieldOutput]=useState("EV") // Picker value
   
   //Preparing pickers and inputs:-FootballFieldControls
@@ -59,7 +58,7 @@ const FootballField = ({ route, navigation }) => {
   // const [valuationMetric, setValuationMetric]=useState("EV_E")
   // const [valuationStat, setValuationStat]=useState("AV")
   const [valuationTimeSeries, setValuationTimeSeries]=useState("")
-  const [valuationSpread, setValuationSpread]=useState("")
+  const [valuationSpread, setValuationSpread]=useState()
   const [valuationColor, setValuationColor]=useState("")
   const [valuationName, setValuationName]=useState("")
   const [compSymbol, setCompSymbol]=useState("")
@@ -82,6 +81,13 @@ const FootballField = ({ route, navigation }) => {
   const windowHeight = Dimensions.get('window').height;
   const valuationWidth = windowWidth-20;
   const valuationHeight = 20;
+//
+const [newMetric, setNewMetric]=useState()
+const [newStat, setNewStat]=useState()
+const [newSpread, setNewSpread]=useState()
+const [newColor, setNewColor]=useState()
+const [changeValuation, setChangeValuation]=useState()
+
 
 
   //setTableValues: Function to generate table in which valuations will be drawn. Level 1.
@@ -365,9 +371,18 @@ const FootballField = ({ route, navigation }) => {
   //Fuction ValuationControls.Level 1.
   function ValuationControls({ onClose}) {
     
+
     
-    const updateValuationMetric = useCallback(() => {
-      fetch('http://10.239.21.226:5000/valuations/metric',{
+    const updateValuation = useCallback(() => {
+      console.log("Valuation")
+      console.log(valuationMetric)
+      console.log(valuationSpread)
+      console.log(valuationColor)
+      console.log(valuationStat)
+
+
+      
+      fetch('http://10.239.21.226:5000/valuations/changes',{
           method:'PUT',
           headers:{
             'Accept':'application/json',
@@ -376,13 +391,92 @@ const FootballField = ({ route, navigation }) => {
           body:JSON.stringify({
             footballFieldId:targetId+"-"+footballFieldTimeSeries,
             valuationTimeSeries:valuationTimeSeries,
-            metric:valuationMetric
+            metric:valuationMetric,
+            spread:valuationSpread,
+            stat:valuationStat,
+            color:valuationColor
           })
         })
         //we'll see later  
-      }, [valuationMetric, valuationTimeSeries]);
+      }, [changeValuation]);
 
+
+        console.log("valuationOfMetric")
+        console.log(valuationMetric)
+        console.log("metric2")
+        console.log(newMetric)
+        if (newMetric===1){
+          fetch('http://10.239.21.226:5000/valuations/metric',{
+            method:'PUT',
+            headers:{
+              'Accept':'application/json',
+              'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              footballFieldId:targetId+"-"+footballFieldTimeSeries,
+              valuationTimeSeries:valuationTimeSeries,
+              metric:valuationMetric,
+            })
+          })
+          setNewMetric(0)
+          console.log("metric3")
+          console.log(newMetric)
+        }
+        else if (newStat===1){
+
+          fetch('http://10.239.21.226:5000/valuations/stat',{
+              method:'PUT',
+              headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+              },
+              body:JSON.stringify({
+                footballFieldId:targetId+"-"+footballFieldTimeSeries,
+                valuationTimeSeries:valuationTimeSeries,
+                stat:valuationStat
+              })
+            })
+    
+          setNewStat(0)
+          }else if (newColor===1){
+
+            fetch('http://10.239.21.226:5000/valuations/color',{
+                method:'PUT',
+                headers:{
+                  'Accept':'application/json',
+                  'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                  footballFieldId:targetId+"-"+footballFieldTimeSeries,
+                  valuationTimeSeries:valuationTimeSeries,
+                  color:valuationColor
+                })
+              })
+      
+            setNewColor(0)
+            }
+            else if (newSpread===1){
+
+              fetch('http://10.239.21.226:5000/valuations/spread',{
+                  method:'PUT',
+                  headers:{
+                    'Accept':'application/json',
+                    'Content-Type':'application/json'
+                  },
+                  body:JSON.stringify({
+                    footballFieldId:targetId+"-"+footballFieldTimeSeries,
+                    valuationTimeSeries:valuationTimeSeries,
+                    spread:valuationSpread
+                  })
+                })
+        
+              setNewSpread(0)
+              }
+          //we'll see later  
+/*
       const updateValuationStat = useCallback(() => {
+        if (newStat===1){
+
       fetch('http://10.239.21.226:5000/valuations/stat',{
           method:'PUT',
           headers:{
@@ -392,58 +486,35 @@ const FootballField = ({ route, navigation }) => {
           body:JSON.stringify({
             footballFieldId:targetId+"-"+footballFieldTimeSeries,
             valuationTimeSeries:valuationTimeSeries,
-            metric:valuationStat
+            stat:valuationStat
           })
         })
 
-      
-      }, [valuationStat, valuationTimeSeries]);
+      setNewStat(0)
+      }
+    }, [valuationStat, valuationTimeSeries]);*/
 
-      const changeSpread = useCallback((action) => {
+      /*const changeSpread = useCallback((action) => {
+        console.log("type of spread")
+        console.log(typeof valuationSpread);
       if (action === "increase"){
         if (valuationSpread<=0.5){
-          setValuationSpread(valuationSpread+0.05)
+          setValuationSpread(parseInt((valuationSpread + 0.05).toFixed(2)))
         }
         else{
           alert("Max Spread: 50%")
         }
       }else{
         if (valuationSpread>=0){
-          setValuationSpread(valuationSpread-0.05)
-        }
+      
+          setValuationSpread(parseInt((valuationSpread - 0.05).toFixed(2)))        }
         else{
           alert("Min Spread: 0%")
         }        
-      }
-      fetch('http://10.239.21.226:5000/valuations/spread',{
-          method:'PUT',
-          headers:{
-            'Accept':'application/json',
-            'Content-Type':'application/json'
-          },
-          body:JSON.stringify({
-            footballFieldId:targetId+"-"+footballFieldTimeSeries,
-            valuationTimeSeries:valuationTimeSeries,
-            metric:valuationSpread
-          })
-        })
-      }, [valuationSpread]);
-    
-      const changeColor = useCallback(() => {
-      setValuationColor(color)
-      fetch('http://10.239.21.226:5000/valuations/color',{
-          method:'PUT',
-          headers:{
-            'Accept':'application/json',
-            'Content-Type':'application/json'
-          },
-          body:JSON.stringify({
-            footballFieldId:targetId+"-"+footballFieldTimeSeries,
-            valuationTimeSeries:valuationTimeSeries,
-            color:color
-          })
-        })
-      }, [valuationColor]);
+      }updateValuation();
+
+      }, [valuationSpread]);*/
+  
 
     console.log("valuationControls")
     return(
@@ -505,11 +576,15 @@ const FootballField = ({ route, navigation }) => {
                   setOpen={setOpenMetric}
                   onOpen={() => setOpenStat(false)}
                   value={valuationMetric}
-                  setValue={setValuationMetric}
+                  setValue={(value) => {
+                    console.log("metric of valuation")
+                    console.log(valuationMetric)
+                    setNewMetric(1)
+                    setValuationMetric(value);
+                  }}
                   items={metricItems}
                   setItems={setMetricItems}
-                  onChangeValue={updateValuationMetric()}
-                />
+             />
               </View> 
           </View>
           <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center', zIndex: 100 }}>
@@ -522,10 +597,15 @@ const FootballField = ({ route, navigation }) => {
                   setOpen={setOpenStat}
                   onOpen={() => setOpenMetric(false)}
                   value={valuationStat}
-                  setValue={setValuationStat}
+                  setValue={(value) => {
+                    console.log("stat of valuation")
+                    console.log(valuationStat)
+                    setNewStat(1)
+                    setValuationStat(value);
+                  }}
                   items={statItems}
                   setItems={setStatItems}
-                  onChangeValue={updateValuationStat()}
+                  
 
                 />
               </View> 
@@ -533,32 +613,58 @@ const FootballField = ({ route, navigation }) => {
           <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Spread</Text>
             
-            <TouchableOpacity onPress={() =>changeSpread("decrease")}
-              title="Decrease Spread">
+            <TouchableOpacity 
+                  onPress={() => {
+                    setNewSpread(1);
+                    if (valuationSpread>0.05){
+                      console.log("valuationSpread")
+                      console.log(valuationSpread)
+
+                      setValuationSpread(parseFloat((valuationSpread - 0.05).toFixed(2)))        }
+                    else{
+                      alert("Min Spread: 5%")
+                    }
+                  }} 
+                  title="Decrease Spread"
+                >
               <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./minus_sign.png') }/>
             </TouchableOpacity>
             <Text style={{ backgroundColor: 'white', fontSize: 15 }}>{valuationSpread*100}%</Text>
-            <TouchableOpacity onPress={() =>changeSpread("increase")}
-              title="Increase Spread">
+            <TouchableOpacity 
+                  onPress={() => {
+                    setNewSpread(1);
+                    if (valuationSpread < 0.5) {
+                      setValuationSpread(parseFloat((valuationSpread + 0.05).toFixed(2)));
+                    } else {
+                      alert("Max Spread: 50%");
+                  }}} 
+                  title="Increase Spread"
+                >
               <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_sign.png') }/>
             </TouchableOpacity>
           </View>
 
           <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Color</Text>
-            <TouchableOpacity onPress={() =>changeColor("#94c0cc")}
+            <TouchableOpacity onPress={() => {setNewColor(1);setValuationColor("#94c0cc");}} 
               title="Blue">
-              <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./blue_color.png')}/>
+              <Image style={{height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5}} 
+                      source={require('./blue_color.png')} 
+                    />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() =>changeColor("#bcdf8a")}
-              title="Green">
-              <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./green_color.png')}/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() =>changeColor("#fad48b")}
+
+            <TouchableOpacity onPress={() => {setNewColor(1);setValuationColor("#bcdf8a");}} 
+            title="Green">
+            <Image style={{height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5}} 
+                    source={require('./green_color.png')} 
+                  />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {setNewColor(1);setValuationColor("#fad48b");}} 
               title="Orange">
               <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./orange_color.png')}/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() =>changeColor("#f5f9ad")}
+            <TouchableOpacity onPress={() => {setNewColor(1);setValuationColor("#f5f9ad");}} 
+
               title="Yellow">
               <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./yellow_color.png')}/>
             </TouchableOpacity>
@@ -876,16 +982,6 @@ const FootballField = ({ route, navigation }) => {
     setTableValues(val);
     setValuations(val);
   }, [data, footballFieldOutput, valuationMetric, valuationStat]);
-  /*
-  useEffect(() => {
-    async function getFootballField() {
-      let footballField = await retrieveFootballField();
-      setFootballFieldName(footballField[0]);
-      setTargetSymbol(footballField[1]);
-
-    }
-    getFootballField();
-  }, []);*/
 
     //GenerateValuation. Level 1.
 
@@ -912,7 +1008,7 @@ const FootballField = ({ route, navigation }) => {
   }
   
   //Update ValuationName. Level 1.
-
+/*
   const updateValuationName= () => {
     fetch('http://10.239.21.226:5000/valuations/names',{
             method:'PUT',
@@ -930,7 +1026,7 @@ const FootballField = ({ route, navigation }) => {
         .then(resp=>resp.text())
         .then(resp=>console.log(resp))
        
-  }
+  }*/
 
   //DeleteValuations. Level 1.
 
@@ -950,48 +1046,6 @@ const FootballField = ({ route, navigation }) => {
        
   }
 
-
-//trying to put this functionts of level 2 as level 1:
-
-  //AddComp. Level 1.
-/*
-  function addComp (compSymbol)  {
-    fetch('http://10.239.21.226:5000/comps',{
-      method:'POST',
-      headers:{
-        'Accept':'application/json',
-        'Content-Type':'application/json'
-      },
-      body:JSON.stringify({
-        compSymbol:compSymbol,
-        valuationId:valuationId
-      })
-    })
-    .then(resp=>resp.text())
-    .then(resp => {
-      if (resp === "Successful Comps Post") {
-        fetch(`http://10.239.21.226:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        })
-        .then((resp) => resp.json())
-        .then((data) => {
-          setComps(data);
-        })
-        .catch((error) => {
-          console.error('Error fetching data:', error);
-          setComps([]);
-        });
-        generateValuation();
-      }
-      else {
-        alert("Unsuccessful Comp Post")
-      }
-    })  
-  }*/
   
 
   //DleteComp. Level 1.

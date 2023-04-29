@@ -94,6 +94,22 @@ def update_valuation_names():
 
     return "Successful PUT"
 
+@app.route('/valuations/changes', methods = ['PUT'])
+def update_valuation_changes():
+    
+    #This UPDATE will only change the valuation name. No recalculation should be done
+
+    footballFieldId=request.json['footballFieldId']
+    valuationTimeSeries=request.json['valuationTimeSeries']
+    metric=request.json['metric']
+    spread=request.json['spread']
+    stat=request.json['stat']
+    color=request.json['color']
+
+    r=update_VALUATION_CHANGES(footballFieldId,valuationTimeSeries,metric,spread, stat, color, iex_api_key)
+
+    return r
+
 @app.route('/valuations/metric', methods = ['PUT'])
 def update_valuation_metric():
     
@@ -111,7 +127,7 @@ def update_valuation_metric():
 def update_valuation_stat():
     
     #This UPDATE will only change the valuation name. No recalculation should be done
-
+    print(request)
     footballFieldId=request.json['footballFieldId']
     valuationTimeSeries=request.json['valuationTimeSeries']
     stat=request.json['stat']
@@ -141,7 +157,8 @@ def update_valuation_color():
     footballFieldId=request.json['footballFieldId']
     valuationTimeSeries=request.json['valuationTimeSeries']
     color=request.json['color']
-
+    print("chaning color")
+    print(color)
     r=update_VALUATION_COLOR(footballFieldId,valuationTimeSeries,color,iex_api_key)
 
     return r
@@ -150,6 +167,7 @@ def update_valuation_color():
 def generate_valuations():
     #When a user changes the valuation fields, the only one that will re-generate a new valuation is the asOfDate
     #This put will lead to a new valuation generation
+    print("generating valuation")
     targetId=request.json['targetId']
     footballFieldTimeSeries=request.json['footballFieldTimeSeries']
     valuationTimeSeries=request.json['valuationTimeSeries']
@@ -159,9 +177,9 @@ def generate_valuations():
     desired_multiples=["evToEbitdaLTM", "evToRevenueLTM"]
     #Ver cómo coger valuationId
     #Ver cómo coger basketofcomps
-    generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeSeries, iex_api_key, footballFieldTimeSeries)
+    r=generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeSeries, iex_api_key, footballFieldTimeSeries)
 
-    return "Successful PUT"
+    return r
 
 @app.route('/valuations/<footballFieldId>', methods=['GET'])
 def retrieve_valuations(footballFieldId):

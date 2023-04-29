@@ -120,12 +120,17 @@ def update_VALUATION(footballFieldId, multiples,ev,valuationTimeSeries,iex_api_k
     #valuation[0]['valuationCompsDate']=valuationCompsDate
     print("valuation")
     print(valuation)
-   
-    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
+    url="https://workshopfinance.iex.cloud/v1/record/WORKSHOPFINANCE/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
     #url="https://workspace.iex.cloud/v1/datasets/workshopfinance/VALUATIONS?token=sk_cd4257e5aa684ab6a245c13b45f0e204"
     r=requests.post(url, json=valuation)
     print(r)
-    return r
+    print("updating valuation")
+    if r.status_code==200:
+        ret="Successful Valuation Generation"
+    else:
+        ret="Unuccessful Valuation Generation"
+
+    return ret
     
 
 
@@ -234,13 +239,17 @@ def generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeS
     ev=output[1]
     
     
-    update_VALUATION(footballFieldId, multiples, ev,valuationTimeSeries,iex_api_key)
+    r=update_VALUATION(footballFieldId, multiples, ev,valuationTimeSeries,iex_api_key)
+    print(r)
+    return r
 
 def add_VALUATION(footballFieldId, iex_api_key, valuationTimeSeries):
     now = datetime.now()
     #timeDateCreated = now.strftime("%m/%d/%Y %H:%M:%S")# timeDateCreated value has to be fixed, can not be editted. It contains the
     #timeDateCreated = timeDateCreated[:6]+timeDateCreated[8:-3] #time and date of when the valuation was generated for the first time
     #valuationCompsDate=now.strftime("%m/%d/%Y")
+    timeDateCreated = now.strftime("%m/%d/%Y %H:%M:%S")# timeDateCreated value has to be fixed, can not be editted. It contains the
+    timeDateCreated = timeDateCreated[:6]+timeDateCreated[8:-3] 
     valuationType="COMPS"
     
     url_valuation_name="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/?last=100&token="+iex_api_key
@@ -256,6 +265,7 @@ def add_VALUATION(footballFieldId, iex_api_key, valuationTimeSeries):
         "valuationName":valuationName,
         "valuationTimeSeries":valuationTimeSeries,
         "valuationType":valuationType,
+        "timeDateCreated":timeDateCreated,
         "color":"#94c0cc",
         "spread":0.1,
         "metric":"EV_R",
@@ -265,6 +275,7 @@ def add_VALUATION(footballFieldId, iex_api_key, valuationTimeSeries):
 
     #POST into the VALUATIONS dataset
     r = requests.post(url, json=valuation)
+    print("adding valuation")
 
     return r
 
@@ -277,16 +288,44 @@ def update_VALUATION_NAME(targetId,footballFieldTimeSeries,valuationTimeSeries,v
     valuation[0]['valuationName']=valuationName
 
     #url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
-    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
+    
+    url="https://workshopfinance.iex.cloud/v1/record/WORKSHOPFINANCE/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
     r=requests.post(url, json=valuation)
     return r
+
+def update_VALUATION_CHANGES(footballFieldId,valuationTimeSeries,metric,spread, stat, color, iex_api_key):
+    
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
+    print("url")
+    print(url)
+    print("updating metric")
+    print(metric)
+    valuation=requests.get(url).json()
+    valuation[0]['metric']=metric
+    valuation[0]['spread']=spread
+    valuation[0]['stat']=stat
+    valuation[0]['color']=color
+
+
+    #url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
+    url="https://workshopfinance.iex.cloud/v1/record/WORKSHOPFINANCE/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
+    r=requests.post(url, json=valuation)
+    if r.status_code==200:
+        ret="Successful Changes Update"
+        
+    else:
+        ret="Unsuccessful Changes Update"
+
+    print(ret)
+    return ret
+
 
 def update_VALUATION_METRIC(footballFieldId,valuationTimeSeries,metric,iex_api_key):
     
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
     print("url")
     print(url)
-    print("metric")
+    print("updating metric")
     print(metric)
     valuation=requests.get(url).json()
     valuation[0]['metric']=metric
@@ -310,7 +349,7 @@ def update_VALUATION_STAT(footballFieldId,valuationTimeSeries,stat,iex_api_key):
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
     print("url")
     print(url)
-    print("stat")
+    print("updating stat")
     print(stat)
     valuation=requests.get(url).json()
     valuation[0]['stat']=stat
@@ -333,7 +372,7 @@ def update_VALUATION_SPREAD(footballFieldId,valuationTimeSeries,spread,iex_api_k
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
     print("url")
     print(url)
-    print("spread")
+    print("updating spread")
     print(spread)
     valuation=requests.get(url).json()
     valuation[0]['spread']=spread
@@ -356,7 +395,7 @@ def update_VALUATION_COLOR(footballFieldId,valuationTimeSeries,color,iex_api_key
     url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
     print("url")
     print(url)
-    print("color")
+    print("updating color")
     print(color)
     valuation=requests.get(url).json()
     valuation[0]['color']=color

@@ -38,4 +38,3 @@ else:
 
 #add_USERDATA('Ignacio','lastName','email@email.com','password', iex_api_key)
 
-delete_FOOTBALLFIELD(iex_api_key, "1681858646838000", "24a151fa94eec621a25698a61954dc0274d602656ce4dd02fd425a91a8dfe0e4-KO")
