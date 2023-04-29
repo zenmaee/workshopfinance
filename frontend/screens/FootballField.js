@@ -65,6 +65,8 @@ const FootballField = ({ route, navigation }) => {
   const [valuations, setValuations] = useState([]);
   const [data, setData] = useState([]);
   const [newComp, setNewComp] = useState()
+  const [newDeleteComp, setNewDeleteComp] = useState()
+
 
 
   //
@@ -88,6 +90,7 @@ const [newSpread, setNewSpread]=useState()
 const [newColor, setNewColor]=useState()
 const [changeValuation, setChangeValuation]=useState()
 
+const [deletedComp, setDeletedComp] = useState();
 
 
   //setTableValues: Function to generate table in which valuations will be drawn. Level 1.
@@ -174,7 +177,9 @@ const [changeValuation, setChangeValuation]=useState()
 //valuationTimeSeries, newComp, valuationRender, valuationHeight, pixelsPerDollar
   function CompControls() {
     const [comps, setComps] = useState([]);
-    
+
+    console.log("comps")
+    console.log(comps)
     //Retrieve comps. Level 2.
     function retrieveComps() {
       let url = `http://10.239.21.226:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`;
@@ -205,10 +210,15 @@ const [changeValuation, setChangeValuation]=useState()
           console.log("ey aqui estoy tu")
           setNewComp(0)
           console.log(data)
+        } else if (newDeleteComp === 1) {
+          console.log("ey aqui estoy tu")
+          setNewDeleteComp(0)
+          console.log(data)
         }
       }
+      
       getComps();
-    }, [CompControls, newComp])
+    }, [CompControls, newComp, newDeleteComp])
     
   
     //Calculation of stats. Level 2.
@@ -229,7 +239,31 @@ const [changeValuation, setChangeValuation]=useState()
     //return of CompsControl.
     console.log("valuationRender")
     console.log(valuationRender)
-
+    
+  const deleteComp= (compSymbol) => {
+    
+    fetch('http://10.239.21.226:5000/comps',{
+            method:'DELETE',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              valuationId:targetId+"-"+footballFieldTimeSeries+"-"+valuationTimeSeries,
+              compSymbol:compSymbol})}
+        )
+        .then(resp=>resp.text())
+        .then(resp => {
+          if (resp === "Success deleting Comp") {
+            setNewDeleteComp(1);
+            generateValuation();          }
+          else{
+            alert(resp)
+          }
+        })   
+        setComps(comps.filter((comp) => comp.compSymbol !== compSymbol)) 
+       
+  }
 
     return (
       
@@ -259,6 +293,10 @@ const [changeValuation, setChangeValuation]=useState()
                       {comps.map((comp) => {
                         console.log("comps")
                         console.log(comp)
+                        console.log("newComp")
+                        console.log(newComp)
+                        console.log(deletedComp)
+                        if (comp.compSymbol !== deletedComp) {
                         return (
                           <View style={{ display: 'flex', flexDirection: 'row', marginTop: 2 }}>
                             <View style={{ flex: 2, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1 }}>
@@ -267,11 +305,15 @@ const [changeValuation, setChangeValuation]=useState()
                             <View style={{ flex: 0.75, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1, marginLeft: 2 }}>
                               {valuationMetric === 'EV_E' ? <Text>{comp.evToEbitdaLTM.toFixed(2)}</Text> : valuationMetric === 'EV_R' ? <Text>{comp.evToRevenueLTM.toFixed(2)}</Text> : null}
                             </View>
-                            <TouchableOpacity style={{ flex: 0.25 }}>
+                            <TouchableOpacity style={{ flex: 0.25 }} onPress={() => {
+                                                                              deleteComp(comp.compSymbol);                                                                              setDeletedComp(comp.compSymbol);
+                                                                              ;                                                                            }}>
                               <Image style={{ height: 25, width: 20, borderRadius: 4, margin: 2 }} source={require('./delete_icon.png')}/>
                             </TouchableOpacity>
                           </View>
                         );
+                      }else{
+                      }
                       })}
                       <View style={{ display: 'flex', flexDirection: 'row', marginTop: 2 }}>
                       <View style={{ flex: 2, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1 }}>
@@ -305,7 +347,7 @@ const [changeValuation, setChangeValuation]=useState()
                     </View>
         </View>
       </View>
-    );
+    )
   }
 
 
@@ -676,7 +718,7 @@ const [changeValuation, setChangeValuation]=useState()
             }}>
               <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Back to Football Field Controls</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ backgroundColor: 'red', padding: 5, borderRadius: 5 }} >
+            <TouchableOpacity style={{ backgroundColor: 'red', padding: 5, borderRadius: 5 }} onPress={() => {deleteValuation()}}>
               <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Delete</Text>
             </TouchableOpacity>
           </View>
@@ -746,18 +788,18 @@ const [changeValuation, setChangeValuation]=useState()
         }}
         placeholder="Football Field Name"
         value={ffName}
-        onChangeText={setFootballFieldName}
-        onBlur={() => updateFootballFieldName(ffName)}
+        onChangeText={(text) => updateFootballFieldName(text)}
+        //onSubmitEditing={(text) => updateFootballFieldName(text)}
         keyboardType="default"
       />
-        <TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
+        {/*<TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
         placeholder="Target Name or Ticker"
         value={targetSymbol}
         //onChangeText={(text) => {
           //setTargetSymbol(text);
         //}}
         keyboardType="default"
-        />
+      />*/}
       </View>
 
       <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center', zIndex: 200 }}>
@@ -804,7 +846,7 @@ const [changeValuation, setChangeValuation]=useState()
   //update FootballFieldName. Level 1.
   function updateFootballFieldName(newName)  {
     setFootballFieldName(newName);
-    let url="http://10.239.21.226:5000/footballFields/names/" + targetId +"/"+ footballFieldTimeSeries;
+    let url="http://10.239.21.226:5000/footballFields/names"
     fetch(url,{
             method:'PUT',
             headers:{
@@ -812,6 +854,8 @@ const [changeValuation, setChangeValuation]=useState()
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
+              targetId:targetId,
+              footballFieldTimeSeries:footballFieldTimeSeries,
               footballFieldName:newName
               })}
         )
@@ -1077,33 +1121,26 @@ const [changeValuation, setChangeValuation]=useState()
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-              footballFieldName:footballFieldName,
-              targetId:targetId})}
+              footballFieldId:targetId+"-"+footballFieldTimeSeries,
+              valuationTimeSeries:valuationTimeSeries})}
         )
         .then(resp=>resp.text())
-        .then(resp=>console.log(resp))
+        .then(resp => {
+          if (resp === "Success deleting Valuation") {
+            setShowValuationControls(false); setShowCompControls(false);
+          }
+          else{
+            alert(resp)
+          }
+        })    
        
   }
+  
 
   
 
   //DleteComp. Level 1.
 
-  const deleteComp= () => {
-    fetch('http://10.239.21.226:5000/comps',{
-            method:'DELETE',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-              footballFieldName:footballFieldName,
-              targetId:targetId})}
-        )
-        .then(resp=>resp.text())
-        .then(resp=>console.log(resp))
-        
-  }
 
   //Return level 0
 

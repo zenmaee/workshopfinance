@@ -411,3 +411,50 @@ def update_VALUATION_COLOR(footballFieldId,valuationTimeSeries,color,iex_api_key
 
     print(ret)
     return ret
+
+def delete_VALUATION(footballFieldId, valuationTimeSeries, iex_api_key):
+    valuationId=footballFieldId+"-"+valuationTimeSeries
+    url_comps = "https://workshopfinance.iex.cloud/v1/data/WORKSHOPFINANCE/COMPS/" +valuationId +"?last=200&token=" + iex_api_key
+    comps=requests.get(url_comps).json()
+    print("comps")
+    print(comps)
+
+    if comps!=[]:
+        for comp in comps:
+            url_delete="https://WORKSHOPFINANCE.iex.cloud/v1/data/WORKSHOPFINANCE/COMPS/" +valuationId + "/" + comp['compSymbol']+ "?&token=" + iex_api_key
+            r=requests.delete(url_delete)
+            print(r)
+            if r.status_code==200:
+                print("ok")
+                continue
+            else:
+                ret="Error deleting comps from valuations"
+                print (ret)
+                return ret
+            
+    
+    url_delete = "https://WORKSHOPFINANCE.iex.cloud/v1/data/WORKSHOPFINANCE/VALUATIONS/" + footballFieldId + "/" + valuationTimeSeries + "?&token="+iex_api_key
+    r=requests.delete(url_delete)
+    if r.status_code==200:
+        ret = "Success deleting Valuation"
+        print(ret)
+        return ret
+    else:
+        ret =  "Error deleting Valuation"
+        print(ret)
+        return ret    
+
+
+def delete_COMP( valuationId, compSymbol,iex_api_key):
+  print("url_delete_comps")
+  url = "https://WORKSHOPFINANCE.iex.cloud/v1/data/WORKSHOPFINANCE/COMPS/" + valuationId + "/" + compSymbol + "?&token="+iex_api_key
+  print(url)
+  r = requests.delete(url)
+  if r.status_code==200:
+        ret = "Success deleting Comp"
+        print(ret)
+        return ret
+  else:
+        ret =  "Error deleting Comp"
+        print(ret)
+        return ret    

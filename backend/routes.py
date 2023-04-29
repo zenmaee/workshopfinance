@@ -206,7 +206,6 @@ def retrieve_footballfields(targetId, footballFieldTimeSeries):
     resp = requests.get(url).json()
     return resp
 
-@app.route('/valuations', methods = ['DELETE'])
 
 @app.route('/comps', methods = ['POST'])
 def add_comps():
@@ -217,15 +216,29 @@ def add_comps():
     print(r)
     return r
 
-@app.route('/footballFields/names/<targetId>/<footballFieldTimeSeries>', methods = ['PUT'])
-def update_ff_names(targetId, footballFieldTimeSeries):
+@app.route('/comps', methods=['DELETE'])
+def delete_comps():
+    valuationId = request.json['valuationId']
+    compSymbol = request.json['compSymbol']
+    
+    r=delete_COMP(valuationId, compSymbol, iex_api_key)
+    
+    return r
+
+
+@app.route('/footballFields/names', methods = ['PUT'])
+def update_ff_names():
     
     #This UPDATE will only change the footballfield name. No recalculation should be done
     footballFieldName=request.json['footballFieldName']
+    targetId=request.json['targetId']
+    footballFieldTimeSeries=request.json['footballFieldTimeSeries']
+
+
     print("footballFieldName")
     print(footballFieldName)
     r=update_FF_NAME(targetId, footballFieldTimeSeries,footballFieldName,iex_api_key)
-    return "Successful PUT"
+    return r
 
 @app.route('/targets/<type>', methods=['POST'])
 def add_targets(type):
@@ -300,6 +313,15 @@ def delete_footballfields():
     
     print("delete ffs")
     r=delete_FOOTBALLFIELD(iex_api_key, footballFieldTimeSeries, targetId)
+    
+    return r
+@app.route('/valuations', methods=['DELETE'])
+def delete_valuations():
+    footballFieldId = request.json['footballFieldId']
+    valuationTimeSeries = request.json['valuationTimeSeries']
+    
+    print("delete ffs")
+    r=delete_VALUATION(footballFieldId, valuationTimeSeries, iex_api_key)
     
     return r
 
