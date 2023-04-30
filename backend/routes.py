@@ -94,22 +94,6 @@ def update_valuation_names():
 
     return "Successful PUT"
 
-@app.route('/valuations/changes', methods = ['PUT'])
-def update_valuation_changes():
-    
-    #This UPDATE will only change the valuation name. No recalculation should be done
-
-    footballFieldId=request.json['footballFieldId']
-    valuationTimeSeries=request.json['valuationTimeSeries']
-    metric=request.json['metric']
-    spread=request.json['spread']
-    stat=request.json['stat']
-    color=request.json['color']
-
-    r=update_VALUATION_CHANGES(footballFieldId,valuationTimeSeries,metric,spread, stat, color, iex_api_key)
-
-    return r
-
 @app.route('/valuations/metric', methods = ['PUT'])
 def update_valuation_metric():
     
