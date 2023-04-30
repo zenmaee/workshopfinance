@@ -95,6 +95,8 @@ def update_VALUATION(footballFieldId, multiples,ev,valuationTimeSeries,iex_api_k
     valuation=requests.get(url).json()
     print("valuation0")
     print(valuation)
+    print("multiples")
+    print(multiples)
     #Depending on the desired stat, we will want one row of multiples/ev or another.
     #However, even though the stat is changed, no recalculations should be made. All possible calculation should already be made
     #If Output=Mult:
