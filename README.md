@@ -18,13 +18,14 @@
 
   * #### Python related backend challenges: Finance concepts were slightly challenging to implement. [This link](https://www.investopedia.com/terms/c/comparable-company-analysis-cca.asp#:~:text=A%20comparable%20company%20analysis%20(CCA)%20is%20a%20process%20used%20to,%2C%20such%20as%20EV%2FEBITDA.) will give you an easy overview of the finance concepts implemented by us. 
 
-  * #### Other backend challenges: Othe than the core challenges listed above we had a smooth sail in terms of backend developments. 
-
-
-
+  * #### Other backend challenges: Other than the core challenges listed above we had a smooth sail in terms of backend developments. 
 
 
 * ### Frontend 
+ * #### Lack of Component Vocabulary: This project was our first time developing a mobile application in ReactNative and required a large amount of trial and error with the components we chose to implement to achieve specific requirements. For example, when searching for a picker we first used an inline iOS picker but later found a dropdown picker which was much more compact and suited our UI needs much better.
+ 
+ * #### Expertise as a Resource: The team connected with a ReactNative expert months into the project which was an invaluable resource, allowing us to discuss functionality hurdles we encountered, such as hiding/showing components controlled by buttons and displaying user inputs in the form of arrays. This sped up the development process exponentially.
+
 
 ## The Current State of the project
 #### Currently we have a fully working MVP of the application. We, a team of four engineers, worked in cohesion to deliver this MVP. 
