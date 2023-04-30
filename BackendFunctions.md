@@ -1,6 +1,4 @@
-# The Engineering Addendum
-
-# Suyash's Functions
+# Backend's Functions
 #### This is a list of all functions I worked on. It also gives a brief description of what each function is about. Any "Gotchas" faced by me are also highlighted here.  
 
 
