@@ -285,10 +285,12 @@ const [deletedComp, setDeletedComp] = useState();
   )} 
               <View style={{ padding: 30 }}>
 
-                    <View style={{ display: 'flex', flexDirection: 'row', marginTop: 5}}>
-                      <Text style={{ flex: 2, textAlign: 'left', color: 'black', backgroundColor: 'gray', padding: 5 }}>Comp (Ticker)</Text>
-                      <Text style={{ flex: 1, color: 'black', backgroundColor: 'gray', padding: 5, marginLeft: 2 }}>Multiple</Text>
-                    </View>
+              <View style={{ display: 'flex', flexDirection: 'row', marginTop: 5}}>
+                  <Text style={{ flex: 2, textAlign: 'left', color: 'black', backgroundColor: 'gray', padding: 5 }}>Comp (Ticker)</Text>
+                  <Text style={{ flex: 0.75, color: 'black', backgroundColor: 'gray', padding: 5, marginLeft: 2 }}>Multiple</Text>
+                  <View style={{ flex: 0.25, color: 'white', height: 25, width: 20, borderRadius: 4, margin: 2 }}></View>
+                </View>
+
                     <ScrollView contentContainerStyle={{}} /*keyboardDismissMode='on-drag'*/>
                       {comps.map((comp) => {
                         console.log("comps")
@@ -298,19 +300,19 @@ const [deletedComp, setDeletedComp] = useState();
                         console.log(deletedComp)
                         if (comp.compSymbol !== deletedComp) {
                         return (
-                          <View style={{ display: 'flex', flexDirection: 'row', marginTop: 2 }}>
-                            <View style={{ flex: 2, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1 }}>
-                              <Text>{comp.compSymbol}</Text>
-                            </View>
-                            <View style={{ flex: 0.75, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1, marginLeft: 2 }}>
+                      <View style={{ display: 'flex', flexDirection: 'row', marginTop: 2 }}>
+                        <View style={{ flex: 2, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1 }}>
+                          <Text>{comp.compSymbol}</Text>
+                        </View>
+                        <View style={{ flex: 0.71, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1, marginLeft: 2 }}>
                               {valuationMetric === 'EV_E' ? <Text>{comp.evToEbitdaLTM.toFixed(2)}</Text> : valuationMetric === 'EV_R' ? <Text>{comp.evToRevenueLTM.toFixed(2)}</Text> : null}
-                            </View>
-                            <TouchableOpacity style={{ flex: 0.25 }} onPress={() => {
+                              </View>
+                            <TouchableOpacity style={{ flex: 0.29  }} onPress={() => {
                                                                               deleteComp(comp.compSymbol);                                                                              setDeletedComp(comp.compSymbol);
                                                                               ;                                                                            }}>
-                              <Image style={{ height: 25, width: 20, borderRadius: 4, margin: 2 }} source={require('./delete_icon.png')}/>
-                            </TouchableOpacity>
-                          </View>
+                          <Image style={{ height: 25, width: 20, borderRadius: 4, margin: 2 }} source={require('./delete_icon.png')}/>
+                        </TouchableOpacity>
+                      </View>
                         );
                       }else{
                       }
@@ -341,6 +343,7 @@ const [deletedComp, setDeletedComp] = useState();
                           </Text>
                         )}
                       </View>
+                      <View style={{ flex: 0.25, color: "white", height: 25, width: 20, borderRadius: 4, margin: 2 }}></View>
                     </View>
 
                     </ScrollView>
@@ -1013,6 +1016,14 @@ const [deletedComp, setDeletedComp] = useState();
       
         let minValuation = valuationCenter - valuationCenter * valuation["spread"];
         let maxValuation = valuationCenter + valuationCenter * valuation["spread"];
+
+        console.log("minValuation:" + valuationName)
+        console.log(minValuation)
+
+        console.log("maxValuation:"+valuationName)
+        console.log(maxValuation)
+
+
         if (valuationColor === "") {
           valuation = {
             name: valuationName,
