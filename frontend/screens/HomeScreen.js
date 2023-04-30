@@ -72,6 +72,15 @@ const HomeScreen = ({ route, navigation }) => {
 
           {latestFootballField ? (
       <TouchableOpacity style={styles.buttons_1} onPress={() => {
+        console.log("userName"+userName)
+        console.log("userEmail"+userEmail)
+        console.log("userId"+userId)
+        console.log("targets"+targets)
+        console.log("targetId"+latestFootballField.targetId)
+        console.log("footballFieldId"+latestFootballField.footballFieldName)
+        console.log("footballFieldTimeSeries"+ latestFootballField.footballFieldTimeSeries)
+
+        
         navigation.navigate('FootballField', {
           userName:userName,
           userEmail:userEmail,

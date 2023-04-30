@@ -120,12 +120,17 @@ def update_VALUATION(footballFieldId, multiples,ev,valuationTimeSeries,iex_api_k
     #valuation[0]['valuationCompsDate']=valuationCompsDate
     print("valuation")
     print(valuation)
-   
-    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
+    url="https://workshopfinance.iex.cloud/v1/record/WORKSHOPFINANCE/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
     #url="https://workspace.iex.cloud/v1/datasets/workshopfinance/VALUATIONS?token=sk_cd4257e5aa684ab6a245c13b45f0e204"
     r=requests.post(url, json=valuation)
     print(r)
-    return r
+    print("updating valuation")
+    if r.status_code==200:
+        ret="Successful Valuation Generation"
+    else:
+        ret="Unuccessful Valuation Generation"
+
+    return ret
     
 
 
@@ -234,13 +239,17 @@ def generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeS
     ev=output[1]
     
     
-    update_VALUATION(footballFieldId, multiples, ev,valuationTimeSeries,iex_api_key)
+    r=update_VALUATION(footballFieldId, multiples, ev,valuationTimeSeries,iex_api_key)
+    print(r)
+    return r
 
 def add_VALUATION(footballFieldId, iex_api_key, valuationTimeSeries):
     now = datetime.now()
     #timeDateCreated = now.strftime("%m/%d/%Y %H:%M:%S")# timeDateCreated value has to be fixed, can not be editted. It contains the
     #timeDateCreated = timeDateCreated[:6]+timeDateCreated[8:-3] #time and date of when the valuation was generated for the first time
     #valuationCompsDate=now.strftime("%m/%d/%Y")
+    timeDateCreated = now.strftime("%m/%d/%Y %H:%M:%S")# timeDateCreated value has to be fixed, can not be editted. It contains the
+    timeDateCreated = timeDateCreated[:6]+timeDateCreated[8:-3] 
     valuationType="COMPS"
     
     url_valuation_name="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/?last=100&token="+iex_api_key
@@ -255,12 +264,18 @@ def add_VALUATION(footballFieldId, iex_api_key, valuationTimeSeries):
         "footballFieldId":footballFieldId,
         "valuationName":valuationName,
         "valuationTimeSeries":valuationTimeSeries,
-        "valuationType":valuationType
+        "valuationType":valuationType,
+        "timeDateCreated":timeDateCreated,
+        "color":"#94c0cc",
+        "spread":0.1,
+        "metric":"EV_R",
+        "stat":"Mean"
 
     }]
 
     #POST into the VALUATIONS dataset
     r = requests.post(url, json=valuation)
+    print("adding valuation")
 
     return r
 
@@ -273,8 +288,149 @@ def update_VALUATION_NAME(targetId,footballFieldTimeSeries,valuationTimeSeries,v
     valuation[0]['valuationName']=valuationName
 
     #url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
-    url="https://cloud.iexapis.com/v1/record/workshopfinance/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
+    
+    url="https://workshopfinance.iex.cloud/v1/record/WORKSHOPFINANCE/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
     r=requests.post(url, json=valuation)
     return r
 
 
+
+
+def update_VALUATION_METRIC(footballFieldId,valuationTimeSeries,metric,iex_api_key):
+    
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
+    print("url")
+    print(url)
+    print("updating metric")
+    print(metric)
+    valuation=requests.get(url).json()
+    valuation[0]['metric']=metric
+
+    #url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
+    url="https://workshopfinance.iex.cloud/v1/record/WORKSHOPFINANCE/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
+    r=requests.post(url, json=valuation)
+    if r.status_code==200:
+        ret="Successful Metric Update"
+        
+    else:
+        ret="Unsuccessful Metric Update"
+
+    print(ret)
+    return ret
+
+
+
+def update_VALUATION_STAT(footballFieldId,valuationTimeSeries,stat,iex_api_key):
+    
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
+    print("url")
+    print(url)
+    print("updating stat")
+    print(stat)
+    valuation=requests.get(url).json()
+    valuation[0]['stat']=stat
+
+    #url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
+    url="https://workshopfinance.iex.cloud/v1/record/WORKSHOPFINANCE/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
+    r=requests.post(url, json=valuation)
+    if r.status_code==200:
+        ret="Successful Stat Update"
+        
+    else:
+        ret="Unsuccessful Stat Update"
+
+    print(ret)
+    return ret
+
+
+def update_VALUATION_SPREAD(footballFieldId,valuationTimeSeries,spread,iex_api_key):
+    
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
+    print("url")
+    print(url)
+    print("updating spread")
+    print(spread)
+    valuation=requests.get(url).json()
+    valuation[0]['spread']=spread
+
+    #url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
+    url="https://workshopfinance.iex.cloud/v1/record/WORKSHOPFINANCE/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
+    r=requests.post(url, json=valuation)
+    if r.status_code==200:
+        ret="Successful Spread Update"
+        
+    else:
+        ret="Unsuccessful Spread Update"
+
+    print(ret)
+    return ret
+
+
+def update_VALUATION_COLOR(footballFieldId,valuationTimeSeries,color,iex_api_key):
+    
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
+    print("url")
+    print(url)
+    print("updating color")
+    print(color)
+    valuation=requests.get(url).json()
+    valuation[0]['color']=color
+
+    #url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
+    url="https://workshopfinance.iex.cloud/v1/record/WORKSHOPFINANCE/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
+    r=requests.post(url, json=valuation)
+    if r.status_code==200:
+        ret="Successful Color Update"
+        
+    else:
+        ret="Unsuccessful Color Update"
+
+    print(ret)
+    return ret
+
+def delete_VALUATION(footballFieldId, valuationTimeSeries, iex_api_key):
+    valuationId=footballFieldId+"-"+valuationTimeSeries
+    url_comps = "https://workshopfinance.iex.cloud/v1/data/WORKSHOPFINANCE/COMPS/" +valuationId +"?last=200&token=" + iex_api_key
+    comps=requests.get(url_comps).json()
+    print("comps")
+    print(comps)
+
+    if comps!=[]:
+        for comp in comps:
+            url_delete="https://WORKSHOPFINANCE.iex.cloud/v1/data/WORKSHOPFINANCE/COMPS/" +valuationId + "/" + comp['compSymbol']+ "?&token=" + iex_api_key
+            r=requests.delete(url_delete)
+            print(r)
+            if r.status_code==200:
+                print("ok")
+                continue
+            else:
+                ret="Error deleting comps from valuations"
+                print (ret)
+                return ret
+            
+    
+    url_delete = "https://WORKSHOPFINANCE.iex.cloud/v1/data/WORKSHOPFINANCE/VALUATIONS/" + footballFieldId + "/" + valuationTimeSeries + "?&token="+iex_api_key
+    r=requests.delete(url_delete)
+    if r.status_code==200:
+        ret = "Success deleting Valuation"
+        print(ret)
+        return ret
+    else:
+        ret =  "Error deleting Valuation"
+        print(ret)
+        return ret    
+
+
+def delete_COMP( valuationId, compSymbol,iex_api_key):
+  print("url_delete_comps")
+  url = "https://WORKSHOPFINANCE.iex.cloud/v1/data/WORKSHOPFINANCE/COMPS/" + valuationId + "/" + compSymbol + "?&token="+iex_api_key
+  print(url)
+  r = requests.delete(url)
+  if r.status_code==200:
+        ret = "Success deleting Comp"
+        print(ret)
+        return ret
+  else:
+        ret =  "Error deleting Comp"
+        print(ret)
+        return ret    

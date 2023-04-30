@@ -74,6 +74,8 @@ def add_valuations():
     valuationTimeSeries=request.json['valuationTimeSeries']
 
     footballFieldId=targetId+"-"+footballFieldTimeSeries
+
+    #stat=
     
     #Then we send it to the database
     add_VALUATION(footballFieldId,iex_api_key, valuationTimeSeries)
@@ -92,10 +94,64 @@ def update_valuation_names():
 
     return "Successful PUT"
 
+@app.route('/valuations/metric', methods = ['PUT'])
+def update_valuation_metric():
+    
+    #This UPDATE will only change the valuation name. No recalculation should be done
+
+    footballFieldId=request.json['footballFieldId']
+    valuationTimeSeries=request.json['valuationTimeSeries']
+    metric=request.json['metric']
+
+    r=update_VALUATION_METRIC(footballFieldId,valuationTimeSeries,metric,iex_api_key)
+
+    return r
+
+@app.route('/valuations/stat', methods = ['PUT'])
+def update_valuation_stat():
+    
+    #This UPDATE will only change the valuation name. No recalculation should be done
+    print(request)
+    footballFieldId=request.json['footballFieldId']
+    valuationTimeSeries=request.json['valuationTimeSeries']
+    stat=request.json['stat']
+
+    r=update_VALUATION_STAT(footballFieldId,valuationTimeSeries,stat,iex_api_key)
+
+    return r
+
+@app.route('/valuations/spread', methods = ['PUT'])
+def update_valuation_spread():
+    
+    #This UPDATE will only change the valuation name. No recalculation should be done
+
+    footballFieldId=request.json['footballFieldId']
+    valuationTimeSeries=request.json['valuationTimeSeries']
+    spread=request.json['spread']
+
+    r=update_VALUATION_SPREAD(footballFieldId,valuationTimeSeries,spread,iex_api_key)
+
+    return r
+
+@app.route('/valuations/color', methods = ['PUT'])
+def update_valuation_color():
+    
+    #This UPDATE will only change the valuation name. No recalculation should be done
+
+    footballFieldId=request.json['footballFieldId']
+    valuationTimeSeries=request.json['valuationTimeSeries']
+    color=request.json['color']
+    print("chaning color")
+    print(color)
+    r=update_VALUATION_COLOR(footballFieldId,valuationTimeSeries,color,iex_api_key)
+
+    return r
+
 @app.route('/valuations', methods = ['PUT'])
 def generate_valuations():
     #When a user changes the valuation fields, the only one that will re-generate a new valuation is the asOfDate
     #This put will lead to a new valuation generation
+    print("generating valuation")
     targetId=request.json['targetId']
     footballFieldTimeSeries=request.json['footballFieldTimeSeries']
     valuationTimeSeries=request.json['valuationTimeSeries']
@@ -105,9 +161,9 @@ def generate_valuations():
     desired_multiples=["evToEbitdaLTM", "evToRevenueLTM"]
     #Ver cómo coger valuationId
     #Ver cómo coger basketofcomps
-    generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeSeries, iex_api_key, footballFieldTimeSeries)
+    r=generate_valuation(targetId, targetSymbol, desired_multiples, valuationTimeSeries, iex_api_key, footballFieldTimeSeries)
 
-    return "Successful PUT"
+    return r
 
 @app.route('/valuations/<footballFieldId>', methods=['GET'])
 def retrieve_valuations(footballFieldId):
@@ -124,7 +180,7 @@ def retrieve_comps(valuationId):
 
 @app.route('/footballfields/<targetId>/', methods=['GET'])
 def retrieve_footballfields_bytarget(targetId):
-    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS/"+targetId+"?last=3&token="+iex_api_key
+    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS/"+targetId+"?last=100&token="+iex_api_key
     resp = requests.get(url).json()
     return resp
 
@@ -134,7 +190,6 @@ def retrieve_footballfields(targetId, footballFieldTimeSeries):
     resp = requests.get(url).json()
     return resp
 
-@app.route('/valuations', methods = ['DELETE'])
 
 @app.route('/comps', methods = ['POST'])
 def add_comps():
@@ -145,15 +200,29 @@ def add_comps():
     print(r)
     return r
 
-@app.route('/footballFields/names/<targetId>/<footballFieldTimeSeries>', methods = ['PUT'])
-def update_ff_names(targetId, footballFieldTimeSeries):
+@app.route('/comps', methods=['DELETE'])
+def delete_comps():
+    valuationId = request.json['valuationId']
+    compSymbol = request.json['compSymbol']
+    
+    r=delete_COMP(valuationId, compSymbol, iex_api_key)
+    
+    return r
+
+
+@app.route('/footballFields/names', methods = ['PUT'])
+def update_ff_names():
     
     #This UPDATE will only change the footballfield name. No recalculation should be done
     footballFieldName=request.json['footballFieldName']
+    targetId=request.json['targetId']
+    footballFieldTimeSeries=request.json['footballFieldTimeSeries']
+
+
     print("footballFieldName")
     print(footballFieldName)
     r=update_FF_NAME(targetId, footballFieldTimeSeries,footballFieldName,iex_api_key)
-    return "Successful PUT"
+    return r
 
 @app.route('/targets/<type>', methods=['POST'])
 def add_targets(type):
@@ -228,6 +297,15 @@ def delete_footballfields():
     
     print("delete ffs")
     r=delete_FOOTBALLFIELD(iex_api_key, footballFieldTimeSeries, targetId)
+    
+    return r
+@app.route('/valuations', methods=['DELETE'])
+def delete_valuations():
+    footballFieldId = request.json['footballFieldId']
+    valuationTimeSeries = request.json['valuationTimeSeries']
+    
+    print("delete ffs")
+    r=delete_VALUATION(footballFieldId, valuationTimeSeries, iex_api_key)
     
     return r
 
