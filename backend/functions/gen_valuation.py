@@ -293,31 +293,7 @@ def update_VALUATION_NAME(targetId,footballFieldTimeSeries,valuationTimeSeries,v
     r=requests.post(url, json=valuation)
     return r
 
-def update_VALUATION_CHANGES(footballFieldId,valuationTimeSeries,metric,spread, stat, color, iex_api_key):
-    
-    url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"?token="+iex_api_key
-    print("url")
-    print(url)
-    print("updating metric")
-    print(metric)
-    valuation=requests.get(url).json()
-    valuation[0]['metric']=metric
-    valuation[0]['spread']=spread
-    valuation[0]['stat']=stat
-    valuation[0]['color']=color
 
-
-    #url="https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS?&token="+iex_api_key
-    url="https://workshopfinance.iex.cloud/v1/record/WORKSHOPFINANCE/VALUATIONS?duplicateKeyHandling=replace&wait=true&token="+iex_api_key
-    r=requests.post(url, json=valuation)
-    if r.status_code==200:
-        ret="Successful Changes Update"
-        
-    else:
-        ret="Unsuccessful Changes Update"
-
-    print(ret)
-    return ret
 
 
 def update_VALUATION_METRIC(footballFieldId,valuationTimeSeries,metric,iex_api_key):
