@@ -13,7 +13,6 @@ const HomeScreen = ({ route, navigation }) => {
   function retrieveFootballFields(targetId) {
     //let ffLists=[]
     //change routes: only showing last ff 
-      const url = "http://10.239.233.197:5000/footballfields/" + targetId + "/";
       console.log("rretrieve ffs")
       console.log(url)
       return fetch(url, {
