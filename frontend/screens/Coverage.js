@@ -16,7 +16,6 @@ const Coverage = ({ route, navigation }) => {
 
   function TabFootballField() {
 /*   const [footballFields, setFootballFields] = useState([])
-
     function retrieveFootballFields(targetId) {
       //let ffLists=[]
       //change routes: only showing last ff 
@@ -32,7 +31,6 @@ const Coverage = ({ route, navigation }) => {
           .then((resp) => resp.json())
           .then((data) => {
             
-
             return data})
         
           .catch((error) => {
@@ -111,7 +109,7 @@ const Coverage = ({ route, navigation }) => {
     const footballFieldTimeSeries = Math.floor(Date.now() * 1000).toString();
     console.log("addFootballField")
     console.log(type)
-    fetch('http://10.239.248.166:5000/footballFields',{ 
+    fetch('http://10.239.21.226:5000/footballFields',{ 
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -208,7 +206,7 @@ function PrivControls({ onClose, setShowPrivateControls }) {
       userId: userId
     };
     console.log("priv tgts")
-    fetch('http://10.239.248.166:5000/targets/private', {
+    fetch('http://10.239.21.226:5000/targets/private', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -315,7 +313,7 @@ function PubControls({ onClose, setShowPublicControls }) {
     };
 
 
-    const response = await fetch("http://10.239.248.166:5000/targets/public", {
+    const response = await fetch("http://10.239.21.226:5000/targets/public", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -335,7 +333,7 @@ function PubControls({ onClose, setShowPublicControls }) {
     console.log(targetSymbol)
     try {
       const response = await fetch(
-        "http://10.239.248.166:5000/targets/public/" + targetSymbol,
+        "http://10.239.21.226:5000/targets/public/" + targetSymbol,
         {
           method: "GET",
           headers: {
@@ -362,54 +360,55 @@ function PubControls({ onClose, setShowPublicControls }) {
   }
             
     
-          function searchTicker(input) {
-              method: 'GET',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-            })
-            .then((data) => {
-              return data;
-            })
-            .catch((error) => {
-              console.error("Error fetching data:", error);
-              return [];
-            });
-          }
-          
-          function find_company_name(input) {
-            let res_company = [];
-            let res_ticker = [];
+  function searchTicker(input) {
+    return fetch('http://10.239.21.226:5000/ticker/' + input, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+      return [];
+    });
+  }
+  
+  function find_company_name(input) {
+    let res_company = [];
+    let res_ticker = [];
 
-            try {
-              res_ticker = searchTicker(input);
-            } catch (error) {
-              // handle runtime error, type error, or name error
-            }
-            // Since `searchTicker` returns a Promise, we need to handle it asynchronously
-            Promise.all([res_company, res_ticker])
-              .then(([companyResults, tickerResults]) => {
-                console.log("res_ticker")
-                console.log(res_ticker)
-                res_company = companyResults;
-                res_ticker = tickerResults;
-                res_ticker = res_ticker.sort();
-                res_company.sort(function(a, b) {
-                  return a[1] - b[1];
-                });
-                let res = res_company.concat(res_ticker);
-                let res_final = [...new Set(res)];
-                console.log("input")
-                console.log(input)
-                console.log(res_final)
-                return res_final;
-              })
-              .catch((error) => {
-                console.error("Error:", error);
-                return [];
-              });
-          }
+    try {
+      res_ticker = searchTicker(input);
+    } catch (error) {
+      // handle runtime error, type error, or name error
+    }
+    // Since `searchTicker` returns a Promise, we need to handle it asynchronously
+    Promise.all([res_company, res_ticker])
+      .then(([companyResults, tickerResults]) => {
+        console.log("res_ticker")
+        console.log(res_ticker)
+        res_company = companyResults;
+        res_ticker = tickerResults;
+        res_ticker = res_ticker.sort();
+        res_company.sort(function(a, b) {
+          return a[1] - b[1];
+        });
+        let res = res_company.concat(res_ticker);
+        let res_final = [...new Set(res)];
+        console.log("input")
+        console.log(input)
+        console.log(res_final)
+        return res_final;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        return [];
+      });
+  }
           
     return (
       <View styles={styles.controls}>
