@@ -1,6 +1,6 @@
 # The Engineering Addendum
-#### The engineering addendum has been created for any person beginning to work on Workshop Finance by Brendan Cahill. The purpose of this document is to save any future team weeks of detective work just and make develpers familiar with the current satus of work done. This document will present a walkthrough of any hurdles faced by the team.
-#####  The intention of this document is to save time for developers working on this project and to give them a headstart on all the current progress made. It is expectec that any developer working on this project should update the engineering addendum to solve the purpose this document serves. 
+#### The engineering addendum has been created for any person beginning to work on Workshop Finance by Brendan Cahill. The purpose of this document is to save any future team weeks of detective work just and make developers familiar with the current status of work done. This document will present a walkthrough of any hurdles faced by the team.
+#####  The intention of this document is to save time for developers working on this project and to give them a headstart on all the current progress made. It is expected that any developer working on this project should update the engineering addendum to solve the purpose this document serves. 
 
 <br/>
 
