@@ -61,7 +61,7 @@ const Coverage = ({ route, navigation }) => {
             console.log(footballFields)
 
             return (
-              <SafeAreaView style={{ flex: 2, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
+              <SafeAreaView style={{ flex: 2, width = "100%", justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
                 <View style={styles.arrayview}>
                     <ScrollView contentContainerStyle={styles.scrollview} keyboardDismissMode='on-drag'>
                       {
@@ -137,7 +137,7 @@ const Coverage = ({ route, navigation }) => {
 
 
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
+    <SafeAreaView style={{ flex: 1, width = "100%", justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
       <View style={styles.arrayview}>
           <ScrollView contentContainerStyle={styles.scrollview} /*keyboardDismissMode='on-drag'*/>
             {
@@ -231,7 +231,7 @@ function PrivControls({ onClose, setShowPrivateControls }) {
           onPress={() => {
             addPrivateTarget(targetName, sectorName, subsectorName, targetRevenueLTM,targetEbitdaLTM)
           }}>
-            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+            <Image style={{ aspectRatio: 1/1, width: "10%", borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
         </TouchableOpacity>
       <TextInput
         style={{flex:1, width: "100%"}}
@@ -255,7 +255,7 @@ function PrivControls({ onClose, setShowPrivateControls }) {
         onChangeText={(text) => setSubsectorName(text)}
       />
       <View style={{flexDirection: "row", alignItems: 'center'}}>
-        <View style={{ marginRight: 5, width: 150 }}>
+        <View style={{ marginRight: 5, width: "50%" }}>
           <TextInput
           mode='outlined'
           placeholder="Revenue (LTM)"
@@ -263,7 +263,7 @@ function PrivControls({ onClose, setShowPrivateControls }) {
           onChangeText={(value) => setTargetRevenueLTM(value)}
           />
         </View>
-        <View style={{ width: 135 }}>
+        <View style={{ width: "50%" }}>
           <TextInput
           mode='outlined'
           placeholder="EBITDA (LTM)"
@@ -276,14 +276,14 @@ function PrivControls({ onClose, setShowPrivateControls }) {
           onPress={() => {
             addPrivateTarget(targetName, sectorName, subsectorName, targetRevenueLTM, targetEbitdaLTM)
           }}>
-            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+            <Image style={{ height: "10%", aspectRatio: 1/1, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
         </TouchableOpacity>
         <TouchableOpacity 
           title="Delete Selected Target"
           onPress={() => {
             onClose()
           }}>
-            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./delete_icon.png')}/>
+            <Image style={{ height: "10%", aspectRatio: 1/1, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./delete_icon.png')}/>
         </TouchableOpacity>
       </View> 
     </View>
@@ -424,10 +424,10 @@ function PubControls({ onClose, setShowPublicControls }) {
 
 
       <View style={{flexDirection: "row", alignItems: 'center'}}>
-        <View style={{ marginRight: 5, width: 150 }}>
+        <View style={{ marginRight: 5, width: "50%" }}>
     
         </View>
-        <View style={{ width: 135 }}>
+        <View style={{ width: "40%" }}>
 
         </View>
         <TouchableOpacity 
@@ -435,14 +435,14 @@ function PubControls({ onClose, setShowPublicControls }) {
           onPress={() => {
             getTargetData()
           }}>
-            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+            <Image style={{ height: "10%", aspectRatio: 1/1, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
         </TouchableOpacity>
         <TouchableOpacity 
           title="Delete Selected Target"
           onPress={() => {
             onClose()
           }}>
-            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./delete_icon.png')}/>
+            <Image style={{ height: "10%", aspectRatio: 1/1, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./delete_icon.png')}/>
         </TouchableOpacity>
       </View> 
     </View>
@@ -560,8 +560,9 @@ const styles = StyleSheet.create({
   },
   button_3: {
     left: 10,
-    width: 150,
-    height: 50,
+    width: "50%", //150
+    aspectRatio: 1/3,
+    //height: 50,
     borderRadius: 4, 
     paddingVertical: 7,
     paddingHorizontal: 20,
