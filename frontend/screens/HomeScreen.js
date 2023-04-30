@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
       alignItems: "center"
     },
     buttons_1: {
+      flex: 1,
       fontSize: 16,
       width: 200,
       borderRadius: 4, 
@@ -127,6 +128,7 @@ const styles = StyleSheet.create({
       elevation: 5
     },
     buttons_2: {
+      flex: 1,
       fontSize: 16,
       width: 200,
       borderRadius: 4, 
@@ -143,9 +145,11 @@ const styles = StyleSheet.create({
       elevation: 5
     },
     wfLogo: {
-      top: 55,
-      height: 100,
-      width: 350
+      top: 15%, //55,
+      //flex: 1,
+      //height: 100,
+      width: "100%", //350
+      aspectRation: 5/1
     },
     buttonText_1: {
         fontFamily: "Avenir Next", 

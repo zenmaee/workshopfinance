@@ -61,7 +61,7 @@ const Coverage = ({ route, navigation }) => {
             console.log(footballFields)
 
             return (
-              <SafeAreaView style={{ flex: 2, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
+              <SafeAreaView style={{ flex: 2, width = "100%", justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
                 <View style={styles.arrayview}>
                     <ScrollView contentContainerStyle={styles.scrollview}>
                       {
@@ -137,7 +137,7 @@ const Coverage = ({ route, navigation }) => {
 
 
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
+    <SafeAreaView style={{ flex: 1, width = "100%", justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
       <View style={styles.arrayview}>
           <ScrollView contentContainerStyle={styles.scrollview} keyboardDismissMode='on-drag'>
             {
@@ -168,9 +168,6 @@ const Coverage = ({ route, navigation }) => {
 
       </View>
 
-      
-
-
       {/* <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
             <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
               <Text style={styles.buttonText_1}>Coverage</Text>
@@ -187,8 +184,6 @@ const Coverage = ({ route, navigation }) => {
     </SafeAreaView>
   );
 }
-
-
 
 function PrivControls({ onClose, setShowPrivateControls }) {
   const [targetName, setTargetName] = useState ("");
@@ -236,29 +231,31 @@ function PrivControls({ onClose, setShowPrivateControls }) {
           onPress={() => {
             addPrivateTarget(targetName, sectorName, subsectorName, targetRevenueLTM,targetEbitdaLTM)
           }}>
-            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+            <Image style={{ aspectRatio: 1/1, width: "10%", borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
         </TouchableOpacity>
       <TextInput
-        style={{ width: 400 }}
+        style={{flex:1, width: "100%"}}
         mode='outlined'
         placeholder="Target Name"
         value={ targetName }
         onChangeText={(text) => setTargetName(text)}
       />
       <TextInput
+        style={{flex:1, width: "100%"}}
         mode='outlined'
         placeholder="Target Sector"
         value={ sectorName }
         onChangeText={(text) => setSectorName(text)}
       />
       <TextInput
+        style={{flex:1, width: "100%"}}
         mode='outlined'
         placeholder="Target Subsector"
         value={ subsectorName }
         onChangeText={(text) => setSubsectorName(text)}
       />
       <View style={{flexDirection: "row", alignItems: 'center'}}>
-        <View style={{ marginRight: 5, width: 150 }}>
+        <View style={{ marginRight: 5, width: "50%" }}>
           <TextInput
           mode='outlined'
           placeholder="Revenue (LTM)"
@@ -266,7 +263,7 @@ function PrivControls({ onClose, setShowPrivateControls }) {
           onChangeText={(value) => setTargetRevenueLTM(value)}
           />
         </View>
-        <View style={{ width: 135 }}>
+        <View style={{ width: "50%" }}>
           <TextInput
           mode='outlined'
           placeholder="EBITDA (LTM)"
@@ -279,14 +276,14 @@ function PrivControls({ onClose, setShowPrivateControls }) {
           onPress={() => {
             addPrivateTarget(targetName, sectorName, subsectorName, targetRevenueLTM, targetEbitdaLTM)
           }}>
-            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+            <Image style={{ height: "10%", aspectRatio: 1/1, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
         </TouchableOpacity>
         <TouchableOpacity 
           title="Delete Selected Target"
           onPress={() => {
             onClose()
           }}>
-            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./delete_icon.png')}/>
+            <Image style={{ height: "10%", aspectRatio: 1/1, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./delete_icon.png')}/>
         </TouchableOpacity>
       </View> 
     </View>
@@ -426,10 +423,10 @@ function PubControls({ onClose, setShowPublicControls }) {
 
 
       <View style={{flexDirection: "row", alignItems: 'center'}}>
-        <View style={{ marginRight: 5, width: 150 }}>
+        <View style={{ marginRight: 5, width: "50%" }}>
     
         </View>
-        <View style={{ width: 135 }}>
+        <View style={{ width: "40%" }}>
 
         </View>
         <TouchableOpacity 
@@ -437,14 +434,14 @@ function PubControls({ onClose, setShowPublicControls }) {
           onPress={() => {
             getTargetData()
           }}>
-            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+            <Image style={{ height: "10%", aspectRatio: 1/1, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
         </TouchableOpacity>
         <TouchableOpacity 
           title="Delete Selected Target"
           onPress={() => {
             onClose()
           }}>
-            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./delete_icon.png')}/>
+            <Image style={{ height: "10%", aspectRatio: 1/1, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./delete_icon.png')}/>
         </TouchableOpacity>
       </View> 
     </View>
@@ -493,8 +490,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   arrayview: {
-    marginTop: 5,
-    flex: 1
+    marginTop: "5%",
+    flex: 5,
+    width: "100%"
+    
   },
   scrollview: {
     alignItems: 'center',
@@ -507,20 +506,20 @@ const styles = StyleSheet.create({
     flex: 1,
     // height: Dimensions.get('window').height / 8,
     marginVertical: 2.5,
-    width: 400
+    width: "100%"
   },
   bottomButtons: {
     position: 'absolute',
     bottom: 30
   },
-  viewcontrols: {
+  viewcontrols: { //for buttons
     flex: 1,
-    height: Dimensions.get('window').height / 2.5,
-    width: Dimensions.get('window').width * 0.95,
+    //height: "40%", //Dimensions.get('window').height / 2.5,
+    width: "95%",
   },
   controls: {
-    height: Dimensions.get('window').height / 2.5,
-    width: Dimensions.get('window').width * 0.95,
+    height: "40%", //Dimensions.get('window').height / 2.5,
+    width: "95%",
     borderWidth: 1,
     borderColor: '#FFF',
     backgroundColor: '#FFF'
@@ -559,8 +558,9 @@ const styles = StyleSheet.create({
   },
   button_3: {
     left: 10,
-    width: 150,
-    height: 50,
+    width: "50%", //150
+    aspectRatio: 1/3,
+    //height: 50,
     borderRadius: 4, 
     paddingVertical: 7,
     paddingHorizontal: 20,
