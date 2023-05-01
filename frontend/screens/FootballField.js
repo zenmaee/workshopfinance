@@ -111,6 +111,10 @@ const [deletedComp, setDeletedComp] = useState();
     
     tab.maxRange = Math.max(...tab.maxValuations);
     tab.minRange = Math.min(...tab.minValuations);
+    console.log("tab.maxRange")
+    console.log(tab.maxRange)
+    console.log("tab.minRange")
+    console.log(tab.minRange)
     
     const tableRange = tab.maxRange - tab.minRange;
     const tableMean = (tab.maxRange + tab.minRange) / 2;
@@ -1013,7 +1017,11 @@ const [deletedComp, setDeletedComp] = useState();
             }
           }
         }
-      
+        console.log("valuationCenter"+ valuationName)
+        console.log(valuationCenter)
+        console.log("valuation[spread]"+ valuationName)
+        console.log(valuation["spread"])
+
         let minValuation = valuationCenter - valuationCenter * valuation["spread"];
         let maxValuation = valuationCenter + valuationCenter * valuation["spread"];
 
