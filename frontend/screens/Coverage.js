@@ -507,7 +507,7 @@ const styles = StyleSheet.create({
     flex: 1,
     //height: Dimensions.get('window').height / 8,
     marginTop: "5%",
-    width: 100%,
+    width: "100%",
     aspectRatio: 3/1
   },
   bottomButtons: {
