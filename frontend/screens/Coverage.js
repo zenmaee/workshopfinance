@@ -504,7 +504,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // height: Dimensions.get('window').height / 8,
     marginVertical: 2.5,
-    width: 400
+    width: "100%"
   },
   bottomButtons: {
     position: 'absolute',
