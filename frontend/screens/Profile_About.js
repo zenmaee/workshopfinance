@@ -26,19 +26,19 @@ return (
       <Text style={{ color: '#FFF', marginTop: 5 }}>Workshop Finance is an innovative tool for visualizing the results from multiple valuation methodologies. For any questions, contact us at brendan@workshopfinance.com.</Text>
     </View>
   </View>
-  {/* <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
-    <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate(navigation.navigate('Coverage', { footballFields: footballFields , latestFF: latestFootballField, targets: targets, name: userName , email: userEmail, userId: userId}))}>
+  <View style={[styles.bottomButtons, { flexDirection:"row" }]}>                                                    
+    <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage', { footballFields: footballFields , latestFF: latestFF, targets: targets, name: name , email: email, userId: userId})}>
       <Text style={styles.buttonText_1}>Coverage</Text>
     </TouchableOpacity>
-
-    <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { targetId: latestFF.targetId, footballFieldName:latestFF.footballFieldName,footballFieldTimeSeries:latestFF.footballFieldTimeSeries})}>
+                                                                                              
+    <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', {userName:name, userEmail:email, userId:userId,targets:targets, targetId: latestFF.targetId, footballFieldName:latestFF.footballFieldName,footballFieldTimeSeries:latestFF.footballFieldTimeSeries, footballFields:footballFields, latestFF:latestFF})}>
       <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
     </TouchableOpacity>
 
-    <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { name: name , email: email})}>
+    <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About')}>
       <Text style={styles.buttonText_1}>Profile</Text>
     </TouchableOpacity>
-  </View> */}
+  </View>
 </SafeAreaView>
 );
 }

@@ -10,7 +10,7 @@ import DropDownPicker from 'react-native-dropdown-picker'
 //Original function level 0.
 const FootballField = ({ route, navigation }) => {
 
-  const {userName, userEmail, userId,targets, targetId, footballFieldName,footballFieldTimeSeries} = route.params; //Params we obtain from other screens
+  const {userName, userEmail, userId,targets, targetId, footballFieldName,footballFieldTimeSeries, footballFields, latestFF} = route.params; //Params we obtain from other screens
   const targetSymbol = targetId.split("-")[1] //tgtSymbol obtained
   // const [footballFieldOutput, setFootballFieldOutput]=useState("EV") // Picker value
   
@@ -66,6 +66,8 @@ const FootballField = ({ route, navigation }) => {
   const [data, setData] = useState([]);
   const [newComp, setNewComp] = useState()
   const [newDeleteComp, setNewDeleteComp] = useState()
+  const [reRender, setReRender] = useState()
+
 
 
 
@@ -722,10 +724,25 @@ const [deletedComp, setDeletedComp] = useState();
             </TouchableOpacity>
           </View>
           <View style={{ justifyContent: 'space-between', marginTop: 5, flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableOpacity 
-            onPress={() => {
-              onClose()
-            }}>
+          <TouchableOpacity 
+              onPress={() => {
+                //onClose();
+                //setReRender(1)
+                navigation.navigate('FootballField', {
+                  userName: userName,
+                  userEmail: userEmail,
+                  userId: userId,
+                  targets: targets,
+                  targetId: targetId,
+                  footballFieldName: footballFieldName,
+                  footballFieldTimeSeries: footballFieldTimeSeries,
+                  footballFields: footballFields,
+                  latestFF: latestFF
+                });
+                onClose();
+              }}
+            >
+
               <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Back to Football Field Controls</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ backgroundColor: 'red', padding: 5, borderRadius: 5 }} onPress={() => {deleteValuation()}}>
@@ -739,7 +756,18 @@ const [deletedComp, setDeletedComp] = useState();
  //FootballFieldControls. Level1.   
   function FootballFieldControls({ onAdd }) {
     function updateFootballFieldName(newName)  {
-      console.log("here")
+      console.log("footballFields")
+      console.log(footballFields)
+      for (let i = 0; i < footballFields.length; i++) {
+        const field = footballFields[i];
+        if (field.targetId === targetId && field.footballFieldTimeSeries === footballFieldTimeSeries) {
+          field.footballFieldName = newName;
+          break; // Stop iterating once we find a match
+        }
+      }
+      console.log("footballFields2")
+      console.log(footballFields)
+
       let url="http://10.239.21.226:5000/footballFields/names"
       fetch(url,{
               method:'PUT',
@@ -757,6 +785,7 @@ const [deletedComp, setDeletedComp] = useState();
           .then(resp => {
             if (resp === "Successful FF Name update") {
               console.log(resp)
+
               setFootballFieldName(newName);
 
               //navigation.navigate('Coverage', { userId: resp});
@@ -937,6 +966,8 @@ const [deletedComp, setDeletedComp] = useState();
   function retrieveValuations() {
     
     let url = "http://10.239.21.226:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
+    console.log("url valuations:")
+    console.log(url)
     return fetch(url, {
       method: "GET",
       headers: {
@@ -972,47 +1003,47 @@ const [deletedComp, setDeletedComp] = useState();
           let valuationName = valuation["valuationName"];
           if (output === "EV") {
             if (valuation["metric"] === "EV_E") {
-              if (valuation["stat"] === "AV") {
+              if (valuation["stat"] === "Mean") {
                 valuationCenter = valuation["valuationEvAvEvEbitdaLTM"];
-              } else if (valuation["stat"] === "HIGH") {
+              } else if (valuation["stat"] === "High") {
                 valuationCenter = valuation["valuationEvHighEvEbitdaLTM"];
-              } else if (valuation["stat"] === "MED") {
-                valuationCenter = valuation["valuationEvAvEvEbitdaLTM"];
+              } else if (valuation["stat"] === "Median") {
+                valuationCenter = valuation["valuationEvMedEvEbitdaLTM"];
               } else {
-                valuationCenter = valuation["valuationEvAvEvEbitdaLTM"];
+                valuationCenter = valuation["valuationEvLowEvEbitdaLTM"];
               }
             } else if (valuation["metric"] === "EV_R") {
-              if (valuation["stat"] === "AV") {
+              if (valuation["stat"] === "Mean") {
                 valuationCenter = valuation["valuationEvAvEvRevLTM"];
-              } else if (valuation["stat"] === "HIGH") {
+              } else if (valuation["stat"] === "High") {
                 valuationCenter = valuation["valuationEvHighEvRevLTM"];
-              } else if (valuation["stat"] === "MED") {
-                valuationCenter = valuation["valuationEvAvEvRevLTM"];
+              } else if (valuation["stat"] === "Median") {
+                valuationCenter = valuation["valuationEvMedEvRevLTM"];
               } else {
-                valuationCenter = valuation["valuationEvAvEvRevLTM"];
+                valuationCenter = valuation["valuationEvLowEvRevLTM"];
               }
             }
         } else if (output === "MULT") {
           if (valuation["metric"] === "EV_E") {
-            if (valuation["stat"] === "AV") {
+            if (valuation["stat"] === "Mean") {
               valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
-            } else if (valuation["stat"] === "HIGH") {
+            } else if (valuation["stat"] === "High") {
               valuationCenter = valuation["valuationMultHighEvEbitdaLTM"];
-            } else if (valuation["stat"] === "MED") {
-              valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
+            } else if (valuation["stat"] === "Median") {
+              valuationCenter = valuation["valuationMultMedEvEbitdaLTM"];
             } else {
-              valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
+              valuationCenter = valuation["valuationMultLowEvEbitdaLTM"];
             }
           } else if (valuation["metric"] === "EV_R") {
-            if (valuation["stat"] === "AV") {
+            if (valuation["stat"] === "Mean") {
               valuationCenter = valuation["valuationMultAvEvRevLTM"];
-            } else if (valuation["stat"] === "HIGH") {
+            } else if (valuation["stat"] === "High") {
               valuationCenter = valuation["valuationMultHighEvRevLTM"];
-            } else if (valuation["stat"] === "MED") {
-              valuationCenter = valuation["valuationMultAvEvRevLTM"];
+            } else if (valuation["stat"] === "Median") {
+              valuationCenter = valuation["valuationMultMedEvRevLTM"];
             } else {
               //console.log("manin deberia estar aqui")
-              valuationCenter = valuation["valuationMultAvEvRevLTM"];
+              valuationCenter = valuation["valuationMultLowEvRevLTM"];
               //console.log(valuation["valuationMultAvEvRevLTM"])
             }
           }
@@ -1032,10 +1063,9 @@ const [deletedComp, setDeletedComp] = useState();
         console.log(maxValuation)
 
 
-        if (valuationColor === "") {
+        //if (valuationColor === "") {
           valuation = {
             name: valuationName,
-            color: valuationColor,
             minValuation: minValuation,
             maxValuation: maxValuation,
             footballFieldId: valuation["footballFieldId"],
@@ -1045,10 +1075,10 @@ const [deletedComp, setDeletedComp] = useState();
             spread: valuation["spread"],
             color:valuation["color"]
           };
-        } else {
+        /*} else {
+          console.log("huele aqui")
           valuation = {
             name: valuationName,
-            color: valuationColor,
             minValuation: minValuation,
             maxValuation: maxValuation,
             footballFieldId: valuation["footballFieldId"],
@@ -1058,7 +1088,7 @@ const [deletedComp, setDeletedComp] = useState();
             spread: valuationSpread,
             color: valuationColor
           };
-        }
+        }*/
         
         valuations.push(valuation);}
         
@@ -1072,7 +1102,7 @@ const [deletedComp, setDeletedComp] = useState();
     const delay = setTimeout(async () => {
       async function getValuations() {
         let data = await retrieveValuations();
-        console.log("dataKLK")
+        console.log("data vakuations:")
         console.log(data)
         console.log("en este primer useeffect")
         //BLUE: #94c0cc
@@ -1236,17 +1266,17 @@ const [deletedComp, setDeletedComp] = useState();
               <Text style={{ color: 'black', backgroundColor: 'light-gray', borderTopLeftRadius: 10, borderTopRightRadius: 10  }}> Multiple</Text>
             </View>
         </View> */}
-        {/* <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
-          <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
+         <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
+          <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage', {footballFields:footballFields, latestFF:latestFF, targets:targets, name:userName, email:userEmail, userId:userId})}>
             <Text style={styles.buttonText_1}>Coverage</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { targetId: latestFF.targetId, footballFieldName:latestFF.footballFieldName,footballFieldTimeSeries:latestFF.footballFieldTimeSeries})}>
+          <TouchableOpacity style={styles.button_2}>
             <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button_3}>
+          <TouchableOpacity style={styles.button_3}onPress={() => navigation.navigate('Profile_About', {footballFields:footballFields, latestFF:latestFF, targets:targets, name: userName , email: userEmail, userId:userId})}>
             <Text style={styles.buttonText_1}>Profile</Text>
           </TouchableOpacity>
-        </View> */}
+        </View>
     </SafeAreaView>
   );
 }

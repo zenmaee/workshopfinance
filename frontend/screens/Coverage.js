@@ -65,8 +65,9 @@ const Coverage = ({ route, navigation }) => {
                       {
                         footballFields.map(field => {
                           console.log(field)
-                          return (
-                            <TouchableWithoutFeedback onPress={() => navigation.navigate('FootballField', { targetId: field.targetId, footballFieldName: field.footballFieldName, footballFieldTimeSeries:field.footballFieldTimeSeries,})}>
+                          return (                                  
+
+                            <TouchableWithoutFeedback onPress={() => navigation.navigate('FootballField', {userName:name, userEmail:email, userId:userId,targets:targets, targetId: field.targetId, footballFieldName: field.footballFieldName, footballFieldTimeSeries:field.footballFieldTimeSeries,footballFields:footballFields, latestFF:latestFF})}>
                               <View style={styles.cardList}>
                                 <Card>
                                   <Card.Content>
@@ -82,19 +83,17 @@ const Coverage = ({ route, navigation }) => {
                       }
                     </ScrollView>
                 </View>
-                {/* <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
-                      <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
+                {<View style={[styles.bottomButtons, { flexDirection:"row" }]}>
+                      <TouchableOpacity style={styles.button_1}>
                         <Text style={styles.buttonText_1}>Coverage</Text>
                       </TouchableOpacity>
-            
-                      <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { targetId: latestFF.targetId, footballFieldName:latestFF.footballFieldName,footballFieldTimeSeries:latestFF.footballFieldTimeSeries})}>
+                      <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', {userName:name, userEmail:email, userId:userId,targets:targets, targetId: latestFF.targetId, footballFieldName:latestFF.footballFieldName,footballFieldTimeSeries:latestFF.footballFieldTimeSerie, footballFields:footballFields, latestFF:latestFF})}>
                         <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
                       </TouchableOpacity>
-            
-                      <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { name: name , email: email})}>
+                      <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', {footballFields:footballFields, latestFF:latestFF, targets:targets, name: name , email: email, userId:userId})}>
                         <Text style={styles.buttonText_1}>Profile</Text>
                       </TouchableOpacity>
-                </View> */}
+                </View>}
               </SafeAreaView>
             );
     }
@@ -127,7 +126,15 @@ const Coverage = ({ route, navigation }) => {
           console.log("eii")
           console.log(resp)
             let targetId=userId+"-"+symbol
-            navigation.navigate('FootballField', { targetId: targetId, footballFieldName:resp.success, footballFieldTimeSeries:footballFieldTimeSeries})
+            //La resp de esto tiene que ser el FF que me ha llegado
+            //const mergedArr = [...footballFields, ...resp.success];
+            //const newFFs = Array.from(new Set(mergedArr.map(JSON.stringify))).map(JSON.parse);
+            footballFields.push(resp.success[0])
+            console.log("FF Name:")
+            console.log(resp.success[0]["footballFieldName"])
+            
+
+            navigation.navigate('FootballField', {userName:name, userEmail:email, userId:userId,targets:targets, targetId: targetId, footballFieldName:resp.success[0]["footballFieldName"], footballFieldTimeSeries:footballFieldTimeSeries, footballFields:footballFields, latestFF:resp.success[0]})
             //navigation.navigate('Coverage', { userId: resp});
           
         })     
@@ -163,25 +170,18 @@ const Coverage = ({ route, navigation }) => {
       <View style={styles.viewcontrols}>
       {showPrivateControls ? <PrivControls onClose={() => { setShowPrivateControls(false)}} setShowPrivateControls={setShowPrivateControls} /> : <Button title="New Private Target" onPress={() => { setShowPrivateControls(true)}}/>}
       {showPublicControls ? <PubControls onClose={() => { setShowPublicControls(false)}} setShowPublicControls={setShowPublicControls} /> : <Button title="New Public Target" onPress={() => { setShowPublicControls(true)}}/>}
-
+      {<View style={[styles.bottomButtons, { flexDirection:"row" }]}>
+                      <TouchableOpacity style={styles.button_1}>
+                        <Text style={styles.buttonText_1}>Coverage</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', {userName:name, userEmail:email, userId:userId,targets:targets, targetId: latestFF.targetId, footballFieldName:latestFF.footballFieldName,footballFieldTimeSeries:latestFF.footballFieldTimeSerie, footballFields:footballFields, latestFF:latestFF})}>
+                        <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', {footballFields:footballFields, latestFF:latestFF, targets:targets, name: name , email: email, userId:userId})}>
+                        <Text style={styles.buttonText_1}>Profile</Text>
+                      </TouchableOpacity>
+                </View>}
       </View>
-
-      
-
-
-      {/* <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
-            <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
-              <Text style={styles.buttonText_1}>Coverage</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { targetId: latestFF.targetId, footballFieldName:latestFF.footballFieldName,footballFieldTimeSeries:latestFF.footballFieldTimeSeries})}>
-              <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { name: name , email: email})}>
-                <Text style={styles.buttonText_1}>Profile</Text>
-            </TouchableOpacity>
-      </View> */}
     </SafeAreaView>
   );
 }
