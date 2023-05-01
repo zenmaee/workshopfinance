@@ -35,7 +35,7 @@ return (
       <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
     </TouchableOpacity>
 
-    <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About')}>
+    <TouchableOpacity style={styles.button_3}>
       <Text style={styles.buttonText_1}>Profile</Text>
     </TouchableOpacity>
   </View>
