@@ -1014,7 +1014,7 @@ const styles = StyleSheet.create({
   },
   buttonLogo: {
     //height: 45,
-    width: 10%,
+    width: "10%",
     aspectRatio: 1
   }
 });
