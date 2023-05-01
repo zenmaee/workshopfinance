@@ -5,6 +5,7 @@ import Profile_About from "./screens/Profile_About";
 import SignUpSignIn from "./screens/SignUpSignIn";
 import SignUp from "./screens/SignUp";
 import HomeScreen from "./screens/HomeScreen";
+import Valuation from "./screens/Valuation";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 //import { NetworkInfo } from "react-native-network-info";
@@ -73,6 +74,26 @@ export default function App() {
               },
             }}
           />
+          <Stack.Screen
+            name="Valuation"
+            component={Valuation}
+            options={{
+              headerTitle: (props) => ( 
+                <Image
+                  style={{ width: 200, height: 50 }}
+                  source={require('./screens/logo_dark.png')}
+                  resizeMode='contain'
+                />
+              ),
+              headerTitleStyle: { 
+                flex: 1, textAlign: 'center' 
+              },
+              headerStyle: {
+                backgroundColor: '#000'
+              },
+            }}
+          />
+
           <Stack.Screen
             name="Coverage"
             component={Coverage}

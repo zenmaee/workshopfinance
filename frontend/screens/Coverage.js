@@ -16,7 +16,6 @@ const Coverage = ({ route, navigation }) => {
 
   function TabFootballField() {
 /*   const [footballFields, setFootballFields] = useState([])
-
     function retrieveFootballFields(targetId) {
       //let ffLists=[]
       //change routes: only showing last ff 
@@ -32,7 +31,6 @@ const Coverage = ({ route, navigation }) => {
           .then((resp) => resp.json())
           .then((data) => {
             
-
             return data})
         
           .catch((error) => {
@@ -61,7 +59,7 @@ const Coverage = ({ route, navigation }) => {
             console.log(footballFields)
 
             return (
-              <SafeAreaView style={{ flex: 2, width = "100%", justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
+              <SafeAreaView style={{ flex: 2, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
                 <View style={styles.arrayview}>
                     <ScrollView contentContainerStyle={styles.scrollview}>
                       {
@@ -137,7 +135,7 @@ const Coverage = ({ route, navigation }) => {
 
 
   return (
-    <SafeAreaView style={{ flex: 1, width = "100%", justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
+    <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
       <View style={styles.arrayview}>
           <ScrollView contentContainerStyle={styles.scrollview} keyboardDismissMode='on-drag'>
             {
@@ -168,15 +166,16 @@ const Coverage = ({ route, navigation }) => {
 
       </View>
 
+      
+
+
       {/* <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
             <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
               <Text style={styles.buttonText_1}>Coverage</Text>
             </TouchableOpacity>
-
             <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { targetId: latestFF.targetId, footballFieldName:latestFF.footballFieldName,footballFieldTimeSeries:latestFF.footballFieldTimeSeries})}>
               <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
             </TouchableOpacity>
-
             <TouchableOpacity style={styles.button_3} onPress={() => navigation.navigate('Profile_About', { name: name , email: email})}>
                 <Text style={styles.buttonText_1}>Profile</Text>
             </TouchableOpacity>
@@ -184,6 +183,8 @@ const Coverage = ({ route, navigation }) => {
     </SafeAreaView>
   );
 }
+
+
 
 function PrivControls({ onClose, setShowPrivateControls }) {
   const [targetName, setTargetName] = useState ("");
@@ -231,31 +232,29 @@ function PrivControls({ onClose, setShowPrivateControls }) {
           onPress={() => {
             addPrivateTarget(targetName, sectorName, subsectorName, targetRevenueLTM,targetEbitdaLTM)
           }}>
-            <Image style={{ aspectRatio: 1/1, width: "10%", borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
         </TouchableOpacity>
       <TextInput
-        style={{flex:1, width: "100%"}}
+        style={{ width: 400 }}
         mode='outlined'
         placeholder="Target Name"
         value={ targetName }
         onChangeText={(text) => setTargetName(text)}
       />
       <TextInput
-        style={{flex:1, width: "100%"}}
         mode='outlined'
         placeholder="Target Sector"
         value={ sectorName }
         onChangeText={(text) => setSectorName(text)}
       />
       <TextInput
-        style={{flex:1, width: "100%"}}
         mode='outlined'
         placeholder="Target Subsector"
         value={ subsectorName }
         onChangeText={(text) => setSubsectorName(text)}
       />
       <View style={{flexDirection: "row", alignItems: 'center'}}>
-        <View style={{ marginRight: 5, width: "50%" }}>
+        <View style={{ marginRight: 5, width: 150 }}>
           <TextInput
           mode='outlined'
           placeholder="Revenue (LTM)"
@@ -263,7 +262,7 @@ function PrivControls({ onClose, setShowPrivateControls }) {
           onChangeText={(value) => setTargetRevenueLTM(value)}
           />
         </View>
-        <View style={{ width: "50%" }}>
+        <View style={{ width: 135 }}>
           <TextInput
           mode='outlined'
           placeholder="EBITDA (LTM)"
@@ -276,14 +275,14 @@ function PrivControls({ onClose, setShowPrivateControls }) {
           onPress={() => {
             addPrivateTarget(targetName, sectorName, subsectorName, targetRevenueLTM, targetEbitdaLTM)
           }}>
-            <Image style={{ height: "10%", aspectRatio: 1/1, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
         </TouchableOpacity>
         <TouchableOpacity 
           title="Delete Selected Target"
           onPress={() => {
             onClose()
           }}>
-            <Image style={{ height: "10%", aspectRatio: 1/1, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./delete_icon.png')}/>
+            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./delete_icon.png')}/>
         </TouchableOpacity>
       </View> 
     </View>
@@ -359,54 +358,55 @@ function PubControls({ onClose, setShowPublicControls }) {
   }
             
     
-          function searchTicker(input) {
-              method: 'GET',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-            })
-            .then((data) => {
-              return data;
-            })
-            .catch((error) => {
-              console.error("Error fetching data:", error);
-              return [];
-            });
-          }
-          
-          function find_company_name(input) {
-            let res_company = [];
-            let res_ticker = [];
+  function searchTicker(input) {
+    return fetch('http://10.239.248.166:5000/ticker/' + input, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+      return [];
+    });
+  }
+  
+  function find_company_name(input) {
+    let res_company = [];
+    let res_ticker = [];
 
-            try {
-              res_ticker = searchTicker(input);
-            } catch (error) {
-              // handle runtime error, type error, or name error
-            }
-            // Since `searchTicker` returns a Promise, we need to handle it asynchronously
-            Promise.all([res_company, res_ticker])
-              .then(([companyResults, tickerResults]) => {
-                console.log("res_ticker")
-                console.log(res_ticker)
-                res_company = companyResults;
-                res_ticker = tickerResults;
-                res_ticker = res_ticker.sort();
-                res_company.sort(function(a, b) {
-                  return a[1] - b[1];
-                });
-                let res = res_company.concat(res_ticker);
-                let res_final = [...new Set(res)];
-                console.log("input")
-                console.log(input)
-                console.log(res_final)
-                return res_final;
-              })
-              .catch((error) => {
-                console.error("Error:", error);
-                return [];
-              });
-          }
+    try {
+      res_ticker = searchTicker(input);
+    } catch (error) {
+      // handle runtime error, type error, or name error
+    }
+    // Since `searchTicker` returns a Promise, we need to handle it asynchronously
+    Promise.all([res_company, res_ticker])
+      .then(([companyResults, tickerResults]) => {
+        console.log("res_ticker")
+        console.log(res_ticker)
+        res_company = companyResults;
+        res_ticker = tickerResults;
+        res_ticker = res_ticker.sort();
+        res_company.sort(function(a, b) {
+          return a[1] - b[1];
+        });
+        let res = res_company.concat(res_ticker);
+        let res_final = [...new Set(res)];
+        console.log("input")
+        console.log(input)
+        console.log(res_final)
+        return res_final;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        return [];
+      });
+  }
           
     return (
       <View styles={styles.controls}>
@@ -423,10 +423,10 @@ function PubControls({ onClose, setShowPublicControls }) {
 
 
       <View style={{flexDirection: "row", alignItems: 'center'}}>
-        <View style={{ marginRight: 5, width: "50%" }}>
+        <View style={{ marginRight: 5, width: 150 }}>
     
         </View>
-        <View style={{ width: "40%" }}>
+        <View style={{ width: 135 }}>
 
         </View>
         <TouchableOpacity 
@@ -434,14 +434,14 @@ function PubControls({ onClose, setShowPublicControls }) {
           onPress={() => {
             getTargetData()
           }}>
-            <Image style={{ height: "10%", aspectRatio: 1/1, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
         </TouchableOpacity>
         <TouchableOpacity 
           title="Delete Selected Target"
           onPress={() => {
             onClose()
           }}>
-            <Image style={{ height: "10%", aspectRatio: 1/1, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./delete_icon.png')}/>
+            <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./delete_icon.png')}/>
         </TouchableOpacity>
       </View> 
     </View>
@@ -490,10 +490,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   arrayview: {
-    marginTop: "5%",
-    flex: 5,
-    width: "100%"
-    
+    marginTop: 5,
+    flex: 1
   },
   scrollview: {
     alignItems: 'center',
@@ -506,20 +504,20 @@ const styles = StyleSheet.create({
     flex: 1,
     // height: Dimensions.get('window').height / 8,
     marginVertical: 2.5,
-    width: "100%"
+    width: 400
   },
   bottomButtons: {
     position: 'absolute',
     bottom: 30
   },
-  viewcontrols: { //for buttons
+  viewcontrols: {
     flex: 1,
-    //height: "40%", //Dimensions.get('window').height / 2.5,
-    width: "95%",
+    height: Dimensions.get('window').height / 2.5,
+    width: Dimensions.get('window').width * 0.95,
   },
   controls: {
-    height: "40%", //Dimensions.get('window').height / 2.5,
-    width: "95%",
+    height: Dimensions.get('window').height / 2.5,
+    width: Dimensions.get('window').width * 0.95,
     borderWidth: 1,
     borderColor: '#FFF',
     backgroundColor: '#FFF'
@@ -558,9 +556,8 @@ const styles = StyleSheet.create({
   },
   button_3: {
     left: 10,
-    width: "50%", //150
-    aspectRatio: 1/3,
-    //height: 50,
+    width: 150,
+    height: 50,
     borderRadius: 4, 
     paddingVertical: 7,
     paddingHorizontal: 20,

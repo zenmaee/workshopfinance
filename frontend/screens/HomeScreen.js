@@ -13,6 +13,7 @@ const HomeScreen = ({ route, navigation }) => {
   function retrieveFootballFields(targetId) {
     //let ffLists=[]
     //change routes: only showing last ff 
+      const url = "http://10.239.248.166:5000/footballfields/" + targetId + "/";
       console.log("rretrieve ffs")
       console.log(url)
       return fetch(url, {
@@ -72,6 +73,15 @@ const HomeScreen = ({ route, navigation }) => {
 
           {latestFootballField ? (
       <TouchableOpacity style={styles.buttons_1} onPress={() => {
+        console.log("userName"+userName)
+        console.log("userEmail"+userEmail)
+        console.log("userId"+userId)
+        console.log("targets"+targets)
+        console.log("targetId"+latestFootballField.targetId)
+        console.log("footballFieldId"+latestFootballField.footballFieldName)
+        console.log("footballFieldTimeSeries"+ latestFootballField.footballFieldTimeSeries)
+
+        
         navigation.navigate('FootballField', {
           userName:userName,
           userEmail:userEmail,
@@ -111,7 +121,6 @@ const styles = StyleSheet.create({
       alignItems: "center"
     },
     buttons_1: {
-      flex: 1,
       fontSize: 16,
       width: 200,
       borderRadius: 4, 
@@ -128,7 +137,6 @@ const styles = StyleSheet.create({
       elevation: 5
     },
     buttons_2: {
-      flex: 1,
       fontSize: 16,
       width: 200,
       borderRadius: 4, 
@@ -145,11 +153,9 @@ const styles = StyleSheet.create({
       elevation: 5
     },
     wfLogo: {
-      top: 15%, //55,
-      //flex: 1,
-      //height: 100,
-      width: "100%", //350
-      aspectRation: 5/1
+      top: 55,
+      height: 100,
+      width: 350
     },
     buttonText_1: {
         fontFamily: "Avenir Next", 

@@ -93,10 +93,9 @@ const SignUpSignIn = ({ navigation }) => {
                   </View>
               </TouchableOpacity>
           </View>
-
           <Text style={[styles.buttonText, { textAlign: "center", marginVertical: 10 }]}>or</Text> */}
 
-          <View style={{flex:1, width:"100%", marginTop: 150 }}>
+          <View style={{ marginTop: 150 }}>
               <Text style={styles.inputTitle}>Email</Text>
               <TextInput
                 style={styles.input}
@@ -109,7 +108,7 @@ const SignUpSignIn = ({ navigation }) => {
               <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View> 
 
-          <View style={{flex:1, width:"100%", marginTop: 15}}>
+          <View style={{ marginTop: 15}}>
               <Text style={styles.inputTitle}>Password</Text>
               <TextInput
                 style={styles.input}
@@ -137,7 +136,7 @@ const SignUpSignIn = ({ navigation }) => {
               <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           
-          <View style={{flex:1, width:"100%", marginTop: 10 }}>
+          <View style={{ marginTop: 10 }}>
             <Text style={styles.buttonText}>
                 Don't have an account?   
                 <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
@@ -163,7 +162,7 @@ const styles = StyleSheet.create({
         fontFamily: "Avenir Next"
     },
     container: {
-      //flex: 1,
+      flex: 1,
       backgroundColor: '#000',
       alignItems: "center"
     },
@@ -183,11 +182,9 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     wfLogo: {
-      flex:1,
       top: "10%", //100,
       //height: 100,
-      width: "100%", //350
-      aspectRatio: 5/1
+      width: "100%" //350
     },
     logo: {
       height: 18,
