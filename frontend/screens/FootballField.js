@@ -83,8 +83,9 @@ const FootballField = ({ route, navigation }) => {
   //Preparing table and screen sizes
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
-  const valuationWidth = windowWidth-20;
-  const valuationHeight = 20;
+  const valuationWidth = "95%"//windowWidth-20;
+  const valuationWidthLess = "85%";
+  const valuationHeight = "10%" //20;
 //
 const [newMetric, setNewMetric]=useState()
 const [newStat, setNewStat]=useState()
@@ -133,7 +134,7 @@ const [deletedComp, setDeletedComp] = useState();
 
 //Obtain Ticker by what the user's input. Level 1.
   function searchTicker(input) {
-    return fetch('http://10.239.21.226:5000/ticker/' + input, { 
+    return fetch('http://10.239.248.166:5000/ticker/' + input, { 
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -188,7 +189,7 @@ const [deletedComp, setDeletedComp] = useState();
     console.log(comps)
     //Retrieve comps. Level 2.
     function retrieveComps() {
-      let url = `http://10.239.21.226:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`;
+      let url = `http://10.239.248.166:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`;
       return fetch(url, {
         method: 'GET',
         headers: {
@@ -248,7 +249,7 @@ const [deletedComp, setDeletedComp] = useState();
     
   const deleteComp= (compSymbol) => {
     
-    fetch('http://10.239.21.226:5000/comps',{
+    fetch('http://10.239.248.166:5000/comps',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -433,7 +434,7 @@ const [deletedComp, setDeletedComp] = useState();
 
 
       
-      fetch('http://10.239.21.226:5000/valuations/changes',{
+      fetch('http://10.239.248.166:5000/valuations/changes',{
           method:'PUT',
           headers:{
             'Accept':'application/json',
@@ -457,7 +458,7 @@ const [deletedComp, setDeletedComp] = useState();
         console.log("metric2")
         console.log(newMetric)
         if (newMetric===1){
-          fetch('http://10.239.21.226:5000/valuations/metric',{
+          fetch('http://10.239.248.166:5000/valuations/metric',{
             method:'PUT',
             headers:{
               'Accept':'application/json',
@@ -475,7 +476,7 @@ const [deletedComp, setDeletedComp] = useState();
         }
         else if (newStat===1){
 
-          fetch('http://10.239.21.226:5000/valuations/stat',{
+          fetch('http://10.239.248.166:5000/valuations/stat',{
               method:'PUT',
               headers:{
                 'Accept':'application/json',
@@ -491,7 +492,7 @@ const [deletedComp, setDeletedComp] = useState();
           setNewStat(0)
           }else if (newColor===1){
 
-            fetch('http://10.239.21.226:5000/valuations/color',{
+            fetch('http://10.239.248.166:5000/valuations/color',{
                 method:'PUT',
                 headers:{
                   'Accept':'application/json',
@@ -508,7 +509,7 @@ const [deletedComp, setDeletedComp] = useState();
             }
             else if (newSpread===1){
 
-              fetch('http://10.239.21.226:5000/valuations/spread',{
+              fetch('http://10.239.248.166:5000/valuations/spread',{
                   method:'PUT',
                   headers:{
                     'Accept':'application/json',
@@ -527,7 +528,7 @@ const [deletedComp, setDeletedComp] = useState();
 /*
       const updateValuationStat = useCallback(() => {
         if (newStat===1){
-      fetch('http://10.239.21.226:5000/valuations/stat',{
+      fetch('http://10.239.248.166:5000/valuations/stat',{
           method:'PUT',
           headers:{
             'Accept':'application/json',
@@ -566,7 +567,7 @@ const [deletedComp, setDeletedComp] = useState();
     function addComp(compSymbol){
       console.log("compSymbol")
       console.log(compSymbol)
-      fetch('http://10.239.21.226:5000/comps',{
+      fetch('http://10.239.248.166:5000/comps',{
           method:'POST',
           headers:{
             'Accept':'application/json',
@@ -596,11 +597,11 @@ const [deletedComp, setDeletedComp] = useState();
     console.log("valuationControls")
     return(
 
-      <View style={{ flex: 1, height: 200, width: 400, borderWidth: 1 }}>
+      <View style={{ flex: 1, height: "50%", width: "100%", borderWidth: 1 }}>
           <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{ color: 'white' }}>Add Comp</Text>
                 <TextInput 
-                  style={{ marginTop: 5, margin: 10, height: 40, width: 200, padding: 5, borderRadius: 10, backgroundColor: '#FFF' }}
+                  style={{ marginTop: 5, margin: 10, height: "15%", width: "100%", padding: 5, borderRadius: 10, backgroundColor: '#FFF' }}
                   placeholder="Company Name or Ticker"
                   //value={compSymbol}
                   
@@ -617,15 +618,15 @@ const [deletedComp, setDeletedComp] = useState();
                     }}
                     
                     >
-                      <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+                      <Image style={{ aspectRatio: 1, width: "10%", borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
                 </TouchableOpacity>
           </View>
           <View style={{ marginTop: 10, flexDirection: 'row', alignItems: 'center', zIndex: 200 }}>
             <Text style={{ color: 'white' }}>Metric</Text>
               <View style={{ marginLeft: 20 }}>
                 <DropDownPicker
-                  style={{ backgroundColor: 'white', height: 45, width: 300 }}
-                  containerStyle={{ width: 300 }}
+                  style={{ backgroundColor: 'white', aspectRatio: 300/45, width: "90%"  }}
+                  containerStyle={{ width: "80%" }}
                   open={openMetric}
                   setOpen={setOpenMetric}
                   onOpen={() => setOpenStat(false)}
@@ -645,8 +646,8 @@ const [deletedComp, setDeletedComp] = useState();
             <Text style={{ color: 'white' }}>Stat</Text>
               <View style={{ marginLeft: 20 }}>
                 <DropDownPicker
-                  style={{ backgroundColor: 'white', height: 45, width: 300 }}
-                  containerStyle={{ width: 300 }}
+                  style={{ backgroundColor: 'white', aspectRatio: 300/40, width: "90%" }}
+                  containerStyle={{ width: "90%" }}
                   open={openStat}
                   setOpen={setOpenStat}
                   onOpen={() => setOpenMetric(false)}
@@ -681,7 +682,7 @@ const [deletedComp, setDeletedComp] = useState();
                   }} 
                   title="Decrease Spread"
                 >
-              <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./minus_sign.png') }/>
+              <Image style={{ width: "5%", aspectRatio: 1, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./minus_sign.png') }/>
             </TouchableOpacity>
             <Text style={{ backgroundColor: 'white', fontSize: 15 }}>{valuationSpread*100}%</Text>
             <TouchableOpacity 
@@ -694,7 +695,7 @@ const [deletedComp, setDeletedComp] = useState();
                   }}} 
                   title="Increase Spread"
                 >
-              <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_sign.png') }/>
+              <Image style={{ aspectRatio: 1, width: "5%", borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_sign.png') }/>
             </TouchableOpacity>
           </View>
 
@@ -702,25 +703,25 @@ const [deletedComp, setDeletedComp] = useState();
             <Text style={{ color: 'white' }}>Color</Text>
             <TouchableOpacity onPress={() => {setNewColor(1);setValuationColor("#94c0cc");}} 
               title="Blue">
-              <Image style={{height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5}} 
+              <Image style={{aspectRatio: 40/25, width: "9%", borderRadius: 4, marginTop: 5, marginLeft: 5}} 
                       source={require('./blue_color.png')} 
                     />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => {setNewColor(1);setValuationColor("#bcdf8a");}} 
             title="Green">
-            <Image style={{height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5}} 
+            <Image style={{aspectRatio: 40/25, width: "9%", borderRadius: 4, marginTop: 5, marginLeft: 5}} 
                     source={require('./green_color.png')} 
                   />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {setNewColor(1);setValuationColor("#fad48b");}} 
               title="Orange">
-              <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./orange_color.png')}/>
+              <Image style={{aspectRatio: 40/25, width: "9%", borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./orange_color.png')}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {setNewColor(1);setValuationColor("#f5f9ad");}} 
 
               title="Yellow">
-              <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./yellow_color.png')}/>
+              <Image style={{aspectRatio: 40/25, width: "9%", borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./yellow_color.png')}/>
             </TouchableOpacity>
           </View>
           <View style={{ justifyContent: 'space-between', marginTop: 5, flexDirection: 'row', alignItems: 'center' }}>
@@ -797,7 +798,7 @@ const [deletedComp, setDeletedComp] = useState();
     //AddValuation. Level2.
     const addValuation= (targetId, footballFieldTimeSeries) => {
       const valuationTS = Math.floor(Date.now() * 1000).toString();
-      fetch('http://10.239.21.226:5000/valuations',{
+      fetch('http://10.239.248.166:5000/valuations',{
               method:'POST',
               headers:{
                   'Accept':'application/json',
@@ -829,7 +830,7 @@ const [deletedComp, setDeletedComp] = useState();
     //Return of FootballField controls. Level 1.
 
     return(
-    <View style={{ flex: 1, margin: 10, height: 200, width: 400, borderWidth: 1 }}>
+    <View style={{ flex: 1, margin: 10, aspectRatio: 2/1, width: "100%", borderWidth: 1 }}>
       <View style={{ alignItems: 'center' }}> 
               <TouchableOpacity 
               style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }} 
@@ -845,8 +846,9 @@ const [deletedComp, setDeletedComp] = useState();
       <TextInput 
         style={{ 
           marginTop: 10, 
-          height: 40, 
-          width: 250, 
+          aspectRatio: 250/40,
+          //height: 40, 
+          width: "60%", //250, 
           padding: 5, 
           borderRadius: 10, 
           backgroundColor: '#FFF'
@@ -858,7 +860,7 @@ const [deletedComp, setDeletedComp] = useState();
         //keyboardType="default"
       />
 
-        {/*<TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
+        {/*<TextInput style={{ marginTop: 5, aspectRatio: 250/40, width: "50%", padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
         placeholder="Target Name or Ticker"
         value={targetSymbol}
         //onChangeText={(text) => {
@@ -872,8 +874,8 @@ const [deletedComp, setDeletedComp] = useState();
         <Text style={{ color: 'white' }}>Output</Text>
         <View style={{ marginLeft: 20 }}>
           <DropDownPicker
-            style={{ backgroundColor: 'white', height: 45, width: 300 }}
-            containerStyle={{ width: 300 }}
+            style={{ bbackgroundColor: 'white', aspectRatio: 300/45, width: "90%" }}
+            containerStyle={{ width: "90%" }}
             open={openOutput}
             setOpen={setOpenOutput}
             onOpen={() => setOpenScale(false)}
@@ -888,8 +890,8 @@ const [deletedComp, setDeletedComp] = useState();
         <Text style={{ color: 'white' }}>Scale</Text>
           <View style={{ marginLeft: 20 }}>
             <DropDownPicker
-              style={{ backgroundColor: 'white', height: 45, width: 300 }}
-              containerStyle={{ width: 300 }}
+              style={{ backgroundColor: 'white', aspectRatio: 300/40, width: "90%" }}
+              containerStyle={{ width: "90%" }}
               open={openScale}
               setOpen={setOpenScale}
               onOpen={() => setOpenOutput(false)}
@@ -901,7 +903,7 @@ const [deletedComp, setDeletedComp] = useState();
           </View> 
       </View>
       <View style={{ alignItems: 'center', marginTop: 15 }}>
-        <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'red', padding: 5, borderRadius: 5, width: 200 }}onPress={() => {deleteFootballField()}}>
+        <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'red', padding: 5, borderRadius: 5, width: "50%"  }}onPress={() => {deleteFootballField()}}>
           <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Delete</Text>
         </TouchableOpacity>
       </View>
@@ -912,7 +914,7 @@ const [deletedComp, setDeletedComp] = useState();
   //update FootballFieldName. Level 1.
   /*function updateFootballFieldName(newName)  {
     setFootballFieldName(newName);
-    let url="http://10.239.21.226:5000/footballFields/names"
+    let url="http://10.239.248.166:5000/footballFields/names"
     fetch(url,{
             method:'PUT',
             headers:{
@@ -933,7 +935,7 @@ const [deletedComp, setDeletedComp] = useState();
 
   const deleteFootballField= () => {
     console.log("tryna delete ff")
-    fetch('http://10.239.21.226:5000/footballFields',{
+    fetch('http://10.239.248.166:5000/footballFields',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -1148,7 +1150,7 @@ const [deletedComp, setDeletedComp] = useState();
 
     function generateValuation() {
     console.log("generate valuation")
-    fetch('http://10.239.21.226:5000/valuations',{
+    fetch('http://10.239.248.166:5000/valuations',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -1171,7 +1173,7 @@ const [deletedComp, setDeletedComp] = useState();
   //Update ValuationName. Level 1.
 /*
   const updateValuationName= () => {
-    fetch('http://10.239.21.226:5000/valuations/names',{
+    fetch('http://10.239.248.166:5000/valuations/names',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -1192,7 +1194,7 @@ const [deletedComp, setDeletedComp] = useState();
   //DeleteValuations. Level 1.
 
   const deleteValuation= () => {
-    fetch('http://10.239.21.226:5000/valuations',{
+    fetch('http://10.239.248.166:5000/valuations',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -1225,7 +1227,7 @@ const [deletedComp, setDeletedComp] = useState();
   return (
     
       <SafeAreaView style={{ flex: 2, alignItems: 'center', backgroundColor: '#000' }}>
-        <View style={{ flex: 1, backgroundColor: '#FFF', height: 0.4*(windowHeight), width: valuationWidth, borderRadius: 10 }}>
+        <View style={{ flex: 1, backgroundColor: '#FFF', height: "40%", width: valuationWidth, borderRadius: 10 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 10 }}>
             <Text style={{ marginTop: 10, marginLeft: 10 }}>{ffName}</Text>
             <Text style={{ marginTop: 10 }}>{targetSymbol}</Text>
@@ -1233,20 +1235,20 @@ const [deletedComp, setDeletedComp] = useState();
           {Object.keys(table).length > 0 && (
             footballFieldOutput === "EV" ? (
               footballFieldScale === "billions" ? (
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 20 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidthLess, marginStart: 20 }}>
                   <Text>{"$" + (table.minRange / 1000000000).toFixed(2)}</Text>
                   <Text>{"$" + (tableMean / 1000000000).toFixed(2)}</Text>
                   <Text>{"$" + (table.maxRange / 1000000000).toFixed(2)}</Text>
                 </View>
               ) : (
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 20 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidthLess, marginStart: 20 }}>
                   <Text>{"$" + (table.minRange / 1000000).toFixed(2)}</Text>
                   <Text>{"$" + (tableMean / 1000000).toFixed(2)}</Text>
                   <Text>{"$" + (table.maxRange / 1000000).toFixed(2)}</Text>
                 </View>
               )
             ) : (
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 20 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidthLess, marginStart: 20 }}>
                   <Text>{"X " + (table.minRange).toFixed(2)}</Text>
                   <Text>{"X " + (tableMean).toFixed(2)}</Text>
                   <Text>{"X " + (table.maxRange).toFixed(2)}</Text>
@@ -1254,7 +1256,7 @@ const [deletedComp, setDeletedComp] = useState();
             )
           )}
           {/* In theory, when a valuation bar is pressed it should display the comp controls */}
-          <View style={{ backgroundColor: 'black', height: 1, width: valuationWidth-40, marginLeft: 20, marginTop: 5 }}/>
+          <View style={{ backgroundColor: 'black', height: 1, width: valuationWidthLess, marginLeft: 20, marginTop: 5 }}/>
           {showCompControls ? <CompControls/>:<FootballFieldChart onRenderComps={() => {setShowCompControls(true)}}/>} 
         </View>
         
@@ -1288,8 +1290,9 @@ const styles = StyleSheet.create({
   },
   button_1: {
     right: 10,
-    width: 150,
-    height: 50,
+    width: "50%", //150,
+    aspectRatio: 3/1,
+    //height: 50,
     borderRadius: 4, 
     paddingVertical: 7,
     paddingHorizontal: 20,
@@ -1299,8 +1302,9 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   button_2: {
-    width: 50,
-    height: 50,
+    width: "10%", //50
+    aspectRatio: 1,
+    //height: 50,
     borderRadius: 4, 
     paddingVertical: 7,
     paddingHorizontal: 20,
@@ -1311,8 +1315,9 @@ const styles = StyleSheet.create({
   },
   button_3: {
     left: 10,
-    width: 150,
-    height: 50,
+    width: "50%", //150,
+    aspectRatio: 3/1,
+    //height: 50,
     borderRadius: 4, 
     paddingVertical: 7,
     paddingHorizontal: 20,
@@ -1322,7 +1327,8 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   buttonLogo: {
-    height: 45,
-    width: 45
+    //height: 45,
+    width: "10%",
+    aspectRatio: 1
   }
 });
