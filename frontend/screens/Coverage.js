@@ -108,7 +108,7 @@ const Coverage = ({ route, navigation }) => {
     const footballFieldTimeSeries = Math.floor(Date.now() * 1000).toString();
     console.log("addFootballField")
     console.log(type)
-    fetch('http://10.239.248.166:5000/footballFields',{ 
+    fetch('http://10.239.21.226:5000/footballFields',{ 
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -206,7 +206,7 @@ function PrivControls({ onClose, setShowPrivateControls }) {
       userId: userId
     };
     console.log("priv tgts")
-    fetch('http://10.239.248.166:5000/targets/private', {
+    fetch('http://10.239.21.226:5000/targets/private', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -313,7 +313,7 @@ function PubControls({ onClose, setShowPublicControls }) {
     };
 
 
-    const response = await fetch("http://10.239.248.166:5000/targets/public", {
+    const response = await fetch("http://10.239.21.226:5000/targets/public", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -333,7 +333,7 @@ function PubControls({ onClose, setShowPublicControls }) {
     console.log(targetSymbol)
     try {
       const response = await fetch(
-        "http://10.239.248.166:5000/targets/public/" + targetSymbol,
+        "http://10.239.21.226:5000/targets/public/" + targetSymbol,
         {
           method: "GET",
           headers: {
@@ -361,7 +361,7 @@ function PubControls({ onClose, setShowPublicControls }) {
             
     
   function searchTicker(input) {
-    return fetch('http://10.239.248.166:5000/ticker/' + input, {
+    return fetch('http://10.239.21.226:5000/ticker/' + input, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

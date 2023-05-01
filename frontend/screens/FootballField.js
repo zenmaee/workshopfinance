@@ -134,7 +134,7 @@ const [deletedComp, setDeletedComp] = useState();
 
 //Obtain Ticker by what the user's input. Level 1.
   function searchTicker(input) {
-    return fetch('http://10.239.248.166:5000/ticker/' + input, { 
+    return fetch('http://10.239.21.226:5000/ticker/' + input, { 
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -189,7 +189,7 @@ const [deletedComp, setDeletedComp] = useState();
     console.log(comps)
     //Retrieve comps. Level 2.
     function retrieveComps() {
-      let url = `http://10.239.248.166:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`;
+      let url = `http://10.239.21.226:5000/comps/${targetId}-${footballFieldTimeSeries}-${valuationTimeSeries}`;
       return fetch(url, {
         method: 'GET',
         headers: {
@@ -249,7 +249,7 @@ const [deletedComp, setDeletedComp] = useState();
     
   const deleteComp= (compSymbol) => {
     
-    fetch('http://10.239.248.166:5000/comps',{
+    fetch('http://10.239.21.226:5000/comps',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -434,7 +434,7 @@ const [deletedComp, setDeletedComp] = useState();
 
 
       
-      fetch('http://10.239.248.166:5000/valuations/changes',{
+      fetch('http://10.239.21.226:5000/valuations/changes',{
           method:'PUT',
           headers:{
             'Accept':'application/json',
@@ -458,7 +458,7 @@ const [deletedComp, setDeletedComp] = useState();
         console.log("metric2")
         console.log(newMetric)
         if (newMetric===1){
-          fetch('http://10.239.248.166:5000/valuations/metric',{
+          fetch('http://10.239.21.226:5000/valuations/metric',{
             method:'PUT',
             headers:{
               'Accept':'application/json',
@@ -476,7 +476,7 @@ const [deletedComp, setDeletedComp] = useState();
         }
         else if (newStat===1){
 
-          fetch('http://10.239.248.166:5000/valuations/stat',{
+          fetch('http://10.239.21.226:5000/valuations/stat',{
               method:'PUT',
               headers:{
                 'Accept':'application/json',
@@ -492,7 +492,7 @@ const [deletedComp, setDeletedComp] = useState();
           setNewStat(0)
           }else if (newColor===1){
 
-            fetch('http://10.239.248.166:5000/valuations/color',{
+            fetch('http://10.239.21.226:5000/valuations/color',{
                 method:'PUT',
                 headers:{
                   'Accept':'application/json',
@@ -509,7 +509,7 @@ const [deletedComp, setDeletedComp] = useState();
             }
             else if (newSpread===1){
 
-              fetch('http://10.239.248.166:5000/valuations/spread',{
+              fetch('http://10.239.21.226:5000/valuations/spread',{
                   method:'PUT',
                   headers:{
                     'Accept':'application/json',
@@ -528,7 +528,7 @@ const [deletedComp, setDeletedComp] = useState();
 /*
       const updateValuationStat = useCallback(() => {
         if (newStat===1){
-      fetch('http://10.239.248.166:5000/valuations/stat',{
+      fetch('http://10.239.21.226:5000/valuations/stat',{
           method:'PUT',
           headers:{
             'Accept':'application/json',
@@ -567,7 +567,7 @@ const [deletedComp, setDeletedComp] = useState();
     function addComp(compSymbol){
       console.log("compSymbol")
       console.log(compSymbol)
-      fetch('http://10.239.248.166:5000/comps',{
+      fetch('http://10.239.21.226:5000/comps',{
           method:'POST',
           headers:{
             'Accept':'application/json',
@@ -798,7 +798,7 @@ const [deletedComp, setDeletedComp] = useState();
     //AddValuation. Level2.
     const addValuation= (targetId, footballFieldTimeSeries) => {
       const valuationTS = Math.floor(Date.now() * 1000).toString();
-      fetch('http://10.239.248.166:5000/valuations',{
+      fetch('http://10.239.21.226:5000/valuations',{
               method:'POST',
               headers:{
                   'Accept':'application/json',
@@ -914,7 +914,7 @@ const [deletedComp, setDeletedComp] = useState();
   //update FootballFieldName. Level 1.
   /*function updateFootballFieldName(newName)  {
     setFootballFieldName(newName);
-    let url="http://10.239.248.166:5000/footballFields/names"
+    let url="http://10.239.21.226:5000/footballFields/names"
     fetch(url,{
             method:'PUT',
             headers:{
@@ -935,7 +935,7 @@ const [deletedComp, setDeletedComp] = useState();
 
   const deleteFootballField= () => {
     console.log("tryna delete ff")
-    fetch('http://10.239.248.166:5000/footballFields',{
+    fetch('http://10.239.21.226:5000/footballFields',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
@@ -1150,7 +1150,7 @@ const [deletedComp, setDeletedComp] = useState();
 
     function generateValuation() {
     console.log("generate valuation")
-    fetch('http://10.239.248.166:5000/valuations',{
+    fetch('http://10.239.21.226:5000/valuations',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -1173,7 +1173,7 @@ const [deletedComp, setDeletedComp] = useState();
   //Update ValuationName. Level 1.
 /*
   const updateValuationName= () => {
-    fetch('http://10.239.248.166:5000/valuations/names',{
+    fetch('http://10.239.21.226:5000/valuations/names',{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
@@ -1194,7 +1194,7 @@ const [deletedComp, setDeletedComp] = useState();
   //DeleteValuations. Level 1.
 
   const deleteValuation= () => {
-    fetch('http://10.239.248.166:5000/valuations',{
+    fetch('http://10.239.21.226:5000/valuations',{
             method:'DELETE',
             headers:{
                 'Accept':'application/json',
