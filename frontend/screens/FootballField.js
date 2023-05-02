@@ -13,7 +13,9 @@ const FootballField = ({ route, navigation }) => {
   const {userName, userEmail, userId,targets, targetId, footballFieldName,footballFieldTimeSeries, footballFields, latestFF} = route.params; //Params we obtain from other screens
   const targetSymbol = targetId.split("-")[1] //tgtSymbol obtained
   // const [footballFieldOutput, setFootballFieldOutput]=useState("EV") // Picker value
-  
+  console.log("footballFields")
+
+  console.log(targetId)
   //Preparing pickers and inputs:-FootballFieldControls
   const [openOutput, setOpenOutput] = useState(false);
   const [footballFieldOutput, setFootballFieldOutput]=useState("EV")
@@ -83,9 +85,8 @@ const FootballField = ({ route, navigation }) => {
   //Preparing table and screen sizes
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
-  const valuationWidth = "95%"//windowWidth-20;
-  const valuationWidthLess = "85%";
-  const valuationHeight = "10%" //20;
+  const valuationWidth = windowWidth-20;
+  const valuationHeight = 20;
 //
 const [newMetric, setNewMetric]=useState()
 const [newStat, setNewStat]=useState()
@@ -597,11 +598,11 @@ const [deletedComp, setDeletedComp] = useState();
     console.log("valuationControls")
     return(
 
-      <View style={{ flex: 1, height: "50%", width: "100%", borderWidth: 1 }}>
-          <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{ flex: 1, width: "100%", borderWidth: 1 }}>
+          <View style={{width:"100%", justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{ color: 'white' }}>Add Comp</Text>
                 <TextInput 
-                  style={{ marginTop: 5, margin: 10, height: "15%", width: "100%", padding: 5, borderRadius: 10, backgroundColor: '#FFF' }}
+                  style={{ marginTop: 5, margin: 10, width: "60%", padding: 5, borderRadius: 10, backgroundColor: '#FFF' }}
                   placeholder="Company Name or Ticker"
                   //value={compSymbol}
                   
@@ -618,15 +619,15 @@ const [deletedComp, setDeletedComp] = useState();
                     }}
                     
                     >
-                      <Image style={{ aspectRatio: 1, width: "10%", borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+                      <Image style={{width: Dimensions.get('window').width/12, height: Dimensions.get('window').width/12, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
                 </TouchableOpacity>
           </View>
-          <View style={{ marginTop: 10, flexDirection: 'row', alignItems: 'center', zIndex: 200 }}>
+          <View style={{flex:1, width:"100%", marginTop: 10, flexDirection: 'row', alignItems: 'center', zIndex: 200 }}>
             <Text style={{ color: 'white' }}>Metric</Text>
               <View style={{ marginLeft: 20 }}>
                 <DropDownPicker
-                  style={{ backgroundColor: 'white', aspectRatio: 300/45, width: "90%"  }}
-                  containerStyle={{ width: "80%" }}
+                  style={{ backgroundColor: 'white',  width: "100%" }}
+                  containerStyle={{ width: 300 }}
                   open={openMetric}
                   setOpen={setOpenMetric}
                   onOpen={() => setOpenStat(false)}
@@ -642,12 +643,12 @@ const [deletedComp, setDeletedComp] = useState();
              />
               </View> 
           </View>
-          <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center', zIndex: 100 }}>
+          <View style={{flex:1, width:"100%",  marginTop: 15, flexDirection: 'row', alignItems: 'center', zIndex: 100 }}>
             <Text style={{ color: 'white' }}>Stat</Text>
               <View style={{ marginLeft: 20 }}>
                 <DropDownPicker
-                  style={{ backgroundColor: 'white', aspectRatio: 300/40, width: "90%" }}
-                  containerStyle={{ width: "90%" }}
+                  style={{ backgroundColor: 'white', width: "100%" }}
+                  containerStyle={{ width: 300 }}
                   open={openStat}
                   setOpen={setOpenStat}
                   onOpen={() => setOpenMetric(false)}
@@ -665,7 +666,7 @@ const [deletedComp, setDeletedComp] = useState();
                 />
               </View> 
           </View>
-          <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{flex: 1, width:"100%", justifyContent: 'space-between', marginTop: 5, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Spread</Text>
             
             <TouchableOpacity 
@@ -682,7 +683,7 @@ const [deletedComp, setDeletedComp] = useState();
                   }} 
                   title="Decrease Spread"
                 >
-              <Image style={{ width: "5%", aspectRatio: 1, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./minus_sign.png') }/>
+              <Image style={{ height: Dimensions.get('window').width/20, width: Dimensions.get('window').width/20, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./minus_sign.png') }/>
             </TouchableOpacity>
             <Text style={{ backgroundColor: 'white', fontSize: 15 }}>{valuationSpread*100}%</Text>
             <TouchableOpacity 
@@ -695,33 +696,33 @@ const [deletedComp, setDeletedComp] = useState();
                   }}} 
                   title="Increase Spread"
                 >
-              <Image style={{ aspectRatio: 1, width: "5%", borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_sign.png') }/>
+              <Image style={{ height: Dimensions.get('window').width/20, width: Dimensions.get('window').width/20, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_sign.png') }/>
             </TouchableOpacity>
           </View>
 
-          <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{flex: 1, width:"100%",  justifyContent: 'space-between',  flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Color</Text>
             <TouchableOpacity onPress={() => {setNewColor(1);setValuationColor("#94c0cc");}} 
               title="Blue">
-              <Image style={{aspectRatio: 40/25, width: "9%", borderRadius: 4, marginTop: 5, marginLeft: 5}} 
+              <Image style={{height: Dimensions.get('window').height/30, width: Dimensions.get('window').width/6, borderRadius: 4, marginTop: 5, marginLeft: 5}} 
                       source={require('./blue_color.png')} 
                     />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => {setNewColor(1);setValuationColor("#bcdf8a");}} 
             title="Green">
-            <Image style={{aspectRatio: 40/25, width: "9%", borderRadius: 4, marginTop: 5, marginLeft: 5}} 
+            <Image style={{height: Dimensions.get('window').height/30, width: Dimensions.get('window').width/6, borderRadius: 4, marginTop: 5, marginLeft: 5}} 
                     source={require('./green_color.png')} 
                   />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {setNewColor(1);setValuationColor("#fad48b");}} 
               title="Orange">
-              <Image style={{aspectRatio: 40/25, width: "9%", borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./orange_color.png')}/>
+              <Image style={{ height: Dimensions.get('window').height/30, width: Dimensions.get('window').width/6, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./orange_color.png')}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {setNewColor(1);setValuationColor("#f5f9ad");}} 
 
               title="Yellow">
-              <Image style={{aspectRatio: 40/25, width: "9%", borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./yellow_color.png')}/>
+              <Image style={{ height: Dimensions.get('window').height/30, width: Dimensions.get('window').width/6, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./yellow_color.png')}/>
             </TouchableOpacity>
           </View>
           <View style={{ justifyContent: 'space-between', marginTop: 5, flexDirection: 'row', alignItems: 'center' }}>
@@ -830,8 +831,8 @@ const [deletedComp, setDeletedComp] = useState();
     //Return of FootballField controls. Level 1.
 
     return(
-    <View style={{ flex: 1, margin: 10, aspectRatio: 2/1, width: "100%", borderWidth: 1 }}>
-      <View style={{ alignItems: 'center' }}> 
+    <View style={{ flex: 1, margin: 10, height: "40%", width: "100%", borderWidth: 1 }}>
+      <View style={{ flex:2, alignItems: 'center' }}> 
               <TouchableOpacity 
               style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }} 
               onPress={() => {
@@ -842,25 +843,23 @@ const [deletedComp, setDeletedComp] = useState();
               </TouchableOpacity>
       </View>
       <View>
+        <TextInput 
+          style={{ 
+            marginTop: 10, 
+            height: 40, 
+            width: "100%", 
+            padding: 5, 
+            borderRadius: 10, 
+            backgroundColor: '#FFF'
+          }}
+          placeholder={ffName}
+          //value={ffName}
+          //onChangeText={(text) => updateFootballFieldName(text)}
+          onSubmitEditing={(event) => updateFootballFieldName(event.nativeEvent.text)}
+          //keyboardType="default"
+        />
 
-      <TextInput 
-        style={{ 
-          marginTop: 10, 
-          aspectRatio: 250/40,
-          //height: 40, 
-          width: "60%", //250, 
-          padding: 5, 
-          borderRadius: 10, 
-          backgroundColor: '#FFF'
-        }}
-        placeholder={ffName}
-        //value={ffName}
-        //onChangeText={(text) => updateFootballFieldName(text)}
-        onSubmitEditing={(event) => updateFootballFieldName(event.nativeEvent.text)}
-        //keyboardType="default"
-      />
-
-        {/*<TextInput style={{ marginTop: 5, aspectRatio: 250/40, width: "50%", padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
+        {/*<TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
         placeholder="Target Name or Ticker"
         value={targetSymbol}
         //onChangeText={(text) => {
@@ -870,12 +869,12 @@ const [deletedComp, setDeletedComp] = useState();
       />*/}
       </View>
 
-      <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center', zIndex: 200 }}>
+      <View style={{flex:2, width: "100%", marginTop: 15, flexDirection: 'row', alignItems: 'center', zIndex: 200 }}>
         <Text style={{ color: 'white' }}>Output</Text>
         <View style={{ marginLeft: 20 }}>
           <DropDownPicker
-            style={{ bbackgroundColor: 'white', aspectRatio: 300/45, width: "90%" }}
-            containerStyle={{ width: "90%" }}
+            style={{ backgroundColor: 'white', height: 45, width: 300 }}
+            containerStyle={{ width: 300 }}
             open={openOutput}
             setOpen={setOpenOutput}
             onOpen={() => setOpenScale(false)}
@@ -886,12 +885,12 @@ const [deletedComp, setDeletedComp] = useState();
           />
         </View> 
       </View>
-      <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center', zIndex: 100 }}>
+      <View style={{flex:2, width: "100%", marginTop: 15, flexDirection: 'row', alignItems: 'center', zIndex: 100 }}>
         <Text style={{ color: 'white' }}>Scale</Text>
           <View style={{ marginLeft: 20 }}>
             <DropDownPicker
-              style={{ backgroundColor: 'white', aspectRatio: 300/40, width: "90%" }}
-              containerStyle={{ width: "90%" }}
+              style={{ backgroundColor: 'white', width: 300 }}
+              containerStyle={{ width: 300 }}
               open={openScale}
               setOpen={setOpenScale}
               onOpen={() => setOpenOutput(false)}
@@ -902,11 +901,26 @@ const [deletedComp, setDeletedComp] = useState();
             />
           </View> 
       </View>
-      <View style={{ alignItems: 'center', marginTop: 15 }}>
-        <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'red', padding: 5, borderRadius: 5, width: "50%"  }}onPress={() => {deleteFootballField()}}>
+      <View style={{flex:2, alignItems: 'center', marginTop: 15 }}>
+        <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'red', padding: 5, borderRadius: 5, width: 200 }}onPress={() => {deleteFootballField()}}>
           <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Delete</Text>
         </TouchableOpacity>
       </View>
+      <View style={{flex:2}}>
+      </View>
+      {<View style={[{ flex:1, position: "absolute", bottom: 0}]}>
+          <View style={{ flexDirection:"row" }}>
+            <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage', {footballFields:footballFields, latestFF:latestFF, targets:targets, name:userName, email:userEmail, userId:userId})}>
+              <Text style={styles.buttonText_1}>Coverage</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button_2}>
+              <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button_3}onPress={() => navigation.navigate('Profile_About', {footballFields:footballFields, latestFF:latestFF, targets:targets, name: userName , email: userEmail, userId:userId})}>
+              <Text style={styles.buttonText_1}>Profile</Text>
+            </TouchableOpacity>
+          </View>
+        </View>}
     </View>  
     );
   }
@@ -1235,20 +1249,20 @@ const [deletedComp, setDeletedComp] = useState();
           {Object.keys(table).length > 0 && (
             footballFieldOutput === "EV" ? (
               footballFieldScale === "billions" ? (
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidthLess, marginStart: 20 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 20 }}>
                   <Text>{"$" + (table.minRange / 1000000000).toFixed(2)}</Text>
                   <Text>{"$" + (tableMean / 1000000000).toFixed(2)}</Text>
                   <Text>{"$" + (table.maxRange / 1000000000).toFixed(2)}</Text>
                 </View>
               ) : (
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidthLess, marginStart: 20 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 20 }}>
                   <Text>{"$" + (table.minRange / 1000000).toFixed(2)}</Text>
                   <Text>{"$" + (tableMean / 1000000).toFixed(2)}</Text>
                   <Text>{"$" + (table.maxRange / 1000000).toFixed(2)}</Text>
                 </View>
               )
             ) : (
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidthLess, marginStart: 20 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 20 }}>
                   <Text>{"X " + (table.minRange).toFixed(2)}</Text>
                   <Text>{"X " + (tableMean).toFixed(2)}</Text>
                   <Text>{"X " + (table.maxRange).toFixed(2)}</Text>
@@ -1256,7 +1270,7 @@ const [deletedComp, setDeletedComp] = useState();
             )
           )}
           {/* In theory, when a valuation bar is pressed it should display the comp controls */}
-          <View style={{ backgroundColor: 'black', height: 1, width: valuationWidthLess, marginLeft: 20, marginTop: 5 }}/>
+          <View style={{ backgroundColor: 'black', height: 1, width: valuationWidth-40, marginLeft: 20, marginTop: 5 }}/>
           {showCompControls ? <CompControls/>:<FootballFieldChart onRenderComps={() => {setShowCompControls(true)}}/>} 
         </View>
         
@@ -1268,17 +1282,19 @@ const [deletedComp, setDeletedComp] = useState();
               <Text style={{ color: 'black', backgroundColor: 'light-gray', borderTopLeftRadius: 10, borderTopRightRadius: 10  }}> Multiple</Text>
             </View>
         </View> */}
-         <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
-          <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage', {footballFields:footballFields, latestFF:latestFF, targets:targets, name:userName, email:userEmail, userId:userId})}>
-            <Text style={styles.buttonText_1}>Coverage</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button_2}>
-            <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button_3}onPress={() => navigation.navigate('Profile_About', {footballFields:footballFields, latestFF:latestFF, targets:targets, name: userName , email: userEmail, userId:userId})}>
-            <Text style={styles.buttonText_1}>Profile</Text>
-          </TouchableOpacity>
-        </View>
+        {/*<View style={[{ flex:1, position: "absolute", bottom: 0}]}>
+          <View style={{ flexDirection:"row" }}>
+            <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage', {footballFields:footballFields, latestFF:latestFF, targets:targets, name:userName, email:userEmail, userId:userId})}>
+              <Text style={styles.buttonText_1}>Coverage</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button_2}>
+              <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button_3}onPress={() => navigation.navigate('Profile_About', {footballFields:footballFields, latestFF:latestFF, targets:targets, name: userName , email: userEmail, userId:userId})}>
+              <Text style={styles.buttonText_1}>Profile</Text>
+            </TouchableOpacity>
+          </View>
+        </View>*/}
     </SafeAreaView>
   );
 }
@@ -1290,9 +1306,8 @@ const styles = StyleSheet.create({
   },
   button_1: {
     right: 10,
-    width: "50%", //150,
-    aspectRatio: 3/1,
-    //height: 50,
+    width: 150,
+    height: 50,
     borderRadius: 4, 
     paddingVertical: 7,
     paddingHorizontal: 20,
@@ -1302,9 +1317,8 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   button_2: {
-    width: "10%", //50
-    aspectRatio: 1,
-    //height: 50,
+    width: 50,
+    height: 50,
     borderRadius: 4, 
     paddingVertical: 7,
     paddingHorizontal: 20,
@@ -1315,9 +1329,8 @@ const styles = StyleSheet.create({
   },
   button_3: {
     left: 10,
-    width: "50%", //150,
-    aspectRatio: 3/1,
-    //height: 50,
+    width: 150,
+    height: 50,
     borderRadius: 4, 
     paddingVertical: 7,
     paddingHorizontal: 20,
@@ -1327,8 +1340,7 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   buttonLogo: {
-    //height: 45,
-    width: "10%",
-    aspectRatio: 1
+    height: 45,
+    width: 45
   }
 });

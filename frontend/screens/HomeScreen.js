@@ -81,7 +81,6 @@ const HomeScreen = ({ route, navigation }) => {
         console.log("footballFieldId"+latestFootballField.footballFieldName)
         console.log("footballFieldTimeSeries"+ latestFootballField.footballFieldTimeSeries)
 
-        
         navigation.navigate('FootballField', {
           userName:userName,
           userEmail:userEmail,
@@ -89,7 +88,9 @@ const HomeScreen = ({ route, navigation }) => {
           targets:targets,
           targetId: latestFootballField.targetId,
           footballFieldName: latestFootballField.footballFieldName,
-          footballFieldTimeSeries: latestFootballField.footballFieldTimeSeries
+          footballFieldTimeSeries: latestFootballField.footballFieldTimeSeries,
+          footballFields:footballFields,
+          latestFF:latestFootballField
         });
       }}>
               <Text style={styles.buttonText_1}>Open Most Recent Football Field</Text>
@@ -100,11 +101,10 @@ const HomeScreen = ({ route, navigation }) => {
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
     )}
-
+                                                                                   
           <TouchableOpacity style={styles.buttons_2} onPress={() =>{if (footballFields){navigation.navigate('Coverage', { footballFields: footballFields , latestFF: latestFootballField, targets: targets, name: userName , email: userEmail, userId: userId})}}}>
               <Text style={styles.buttonText_2}>Open Coverage List</Text>
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.buttons_2} onPress={() => navigation.navigate('Profile_About', {footballFields: footballFields , latestFF: latestFootballField, targets: targets, name: userName , email: userEmail, userId: userId})}>
               <Text style={styles.buttonText_2}>User Profile</Text>
           </TouchableOpacity>
