@@ -23,8 +23,7 @@ def add_FOOTBALLFIELD(targetId,footballFieldType,footballFieldTimeSeries,iex_api
     #footballFieldTimeSeries=str(int(time()*1000000))
 
     url= "https://workshopfinance.iex.cloud/v1/data/workshopfinance/FOOTBALLFIELDS?&token="+iex_api_key
-
-    r = requests.post(url, json=[
+    footballField=[
     {
         "footballFieldName":footballFieldName,
         "footballFieldTimeSeries":footballFieldTimeSeries,
@@ -33,10 +32,11 @@ def add_FOOTBALLFIELD(targetId,footballFieldType,footballFieldTimeSeries,iex_api
         "timeDateCreated": timeDateCreated
 
     }
-  ])
+  ]
+    r = requests.post(url, json=footballField)
     if r.status_code==200:
 
-        return footballFieldName
+        return footballField
 
 
 def update_FF_NAME(targetId, footballFieldTimeSeries,footballFieldName,iex_api_key):

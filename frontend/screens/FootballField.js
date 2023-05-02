@@ -10,10 +10,12 @@ import DropDownPicker from 'react-native-dropdown-picker'
 //Original function level 0.
 const FootballField = ({ route, navigation }) => {
 
-  const {userName, userEmail, userId,targets, targetId, footballFieldName,footballFieldTimeSeries} = route.params; //Params we obtain from other screens
+  const {userName, userEmail, userId,targets, targetId, footballFieldName,footballFieldTimeSeries, footballFields, latestFF} = route.params; //Params we obtain from other screens
   const targetSymbol = targetId.split("-")[1] //tgtSymbol obtained
   // const [footballFieldOutput, setFootballFieldOutput]=useState("EV") // Picker value
-  
+  console.log("footballFields")
+
+  console.log(targetId)
   //Preparing pickers and inputs:-FootballFieldControls
   const [openOutput, setOpenOutput] = useState(false);
   const [footballFieldOutput, setFootballFieldOutput]=useState("EV")
@@ -66,6 +68,8 @@ const FootballField = ({ route, navigation }) => {
   const [data, setData] = useState([]);
   const [newComp, setNewComp] = useState()
   const [newDeleteComp, setNewDeleteComp] = useState()
+  const [reRender, setReRender] = useState()
+
 
 
 
@@ -111,6 +115,10 @@ const [deletedComp, setDeletedComp] = useState();
     
     tab.maxRange = Math.max(...tab.maxValuations);
     tab.minRange = Math.min(...tab.minValuations);
+    console.log("tab.maxRange")
+    console.log(tab.maxRange)
+    console.log("tab.minRange")
+    console.log(tab.minRange)
     
     const tableRange = tab.maxRange - tab.minRange;
     const tableMean = (tab.maxRange + tab.minRange) / 2;
@@ -285,10 +293,12 @@ const [deletedComp, setDeletedComp] = useState();
   )} 
               <View style={{ padding: 30 }}>
 
-                    <View style={{ display: 'flex', flexDirection: 'row', marginTop: 5}}>
-                      <Text style={{ flex: 2, textAlign: 'left', color: 'black', backgroundColor: 'gray', padding: 5 }}>Comp (Ticker)</Text>
-                      <Text style={{ flex: 1, color: 'black', backgroundColor: 'gray', padding: 5, marginLeft: 2 }}>Multiple</Text>
-                    </View>
+              <View style={{ display: 'flex', flexDirection: 'row', marginTop: 5}}>
+                  <Text style={{ flex: 2, textAlign: 'left', color: 'black', backgroundColor: 'gray', padding: 5 }}>Comp (Ticker)</Text>
+                  <Text style={{ flex: 0.75, color: 'black', backgroundColor: 'gray', padding: 5, marginLeft: 2 }}>Multiple</Text>
+                  <View style={{ flex: 0.25, color: 'white', height: 25, width: 20, borderRadius: 4, margin: 2 }}></View>
+                </View>
+
                     <ScrollView contentContainerStyle={{}} /*keyboardDismissMode='on-drag'*/>
                       {comps.map((comp) => {
                         console.log("comps")
@@ -298,19 +308,19 @@ const [deletedComp, setDeletedComp] = useState();
                         console.log(deletedComp)
                         if (comp.compSymbol !== deletedComp) {
                         return (
-                          <View style={{ display: 'flex', flexDirection: 'row', marginTop: 2 }}>
-                            <View style={{ flex: 2, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1 }}>
-                              <Text>{comp.compSymbol}</Text>
-                            </View>
-                            <View style={{ flex: 0.75, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1, marginLeft: 2 }}>
+                      <View style={{ display: 'flex', flexDirection: 'row', marginTop: 2 }}>
+                        <View style={{ flex: 2, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1 }}>
+                          <Text>{comp.compSymbol}</Text>
+                        </View>
+                        <View style={{ flex: 0.71, color: 'black', padding: 5, borderStyle: 'solid', borderColor: 'black', borderWidth: 1, marginLeft: 2 }}>
                               {valuationMetric === 'EV_E' ? <Text>{comp.evToEbitdaLTM.toFixed(2)}</Text> : valuationMetric === 'EV_R' ? <Text>{comp.evToRevenueLTM.toFixed(2)}</Text> : null}
-                            </View>
-                            <TouchableOpacity style={{ flex: 0.25 }} onPress={() => {
+                              </View>
+                            <TouchableOpacity style={{ flex: 0.29  }} onPress={() => {
                                                                               deleteComp(comp.compSymbol);                                                                              setDeletedComp(comp.compSymbol);
                                                                               ;                                                                            }}>
-                              <Image style={{ height: 25, width: 20, borderRadius: 4, margin: 2 }} source={require('./delete_icon.png')}/>
-                            </TouchableOpacity>
-                          </View>
+                          <Image style={{ height: 25, width: 20, borderRadius: 4, margin: 2 }} source={require('./delete_icon.png')}/>
+                        </TouchableOpacity>
+                      </View>
                         );
                       }else{
                       }
@@ -341,6 +351,7 @@ const [deletedComp, setDeletedComp] = useState();
                           </Text>
                         )}
                       </View>
+                      <View style={{ flex: 0.25, color: "white", height: 25, width: 20, borderRadius: 4, margin: 2 }}></View>
                     </View>
 
                     </ScrollView>
@@ -518,7 +529,6 @@ const [deletedComp, setDeletedComp] = useState();
 /*
       const updateValuationStat = useCallback(() => {
         if (newStat===1){
-
       fetch('http://10.239.21.226:5000/valuations/stat',{
           method:'PUT',
           headers:{
@@ -531,7 +541,6 @@ const [deletedComp, setDeletedComp] = useState();
             stat:valuationStat
           })
         })
-
       setNewStat(0)
       }
     }, [valuationStat, valuationTimeSeries]);*/
@@ -554,7 +563,6 @@ const [deletedComp, setDeletedComp] = useState();
           alert("Min Spread: 0%")
         }        
       }updateValuation();
-
       }, [valuationSpread]);*/
       
     function addComp(compSymbol){
@@ -590,11 +598,11 @@ const [deletedComp, setDeletedComp] = useState();
     console.log("valuationControls")
     return(
 
-      <View style={{ flex: 1, height: 200, width: 400, borderWidth: 1 }}>
-          <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{ flex: 1, width: "100%", borderWidth: 1 }}>
+          <View style={{width:"100%", justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{ color: 'white' }}>Add Comp</Text>
                 <TextInput 
-                  style={{ marginTop: 5, margin: 10, height: 40, width: 200, padding: 5, borderRadius: 10, backgroundColor: '#FFF' }}
+                  style={{ marginTop: 5, margin: 10, width: "60%", padding: 5, borderRadius: 10, backgroundColor: '#FFF' }}
                   placeholder="Company Name or Ticker"
                   //value={compSymbol}
                   
@@ -611,14 +619,14 @@ const [deletedComp, setDeletedComp] = useState();
                     }}
                     
                     >
-                      <Image style={{ height: 50, width: 50, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
+                      <Image style={{width: Dimensions.get('window').width/12, height: Dimensions.get('window').width/12, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_icon.png')}/>
                 </TouchableOpacity>
           </View>
-          <View style={{ marginTop: 10, flexDirection: 'row', alignItems: 'center', zIndex: 200 }}>
+          <View style={{flex:1, width:"100%", marginTop: 10, flexDirection: 'row', alignItems: 'center', zIndex: 200 }}>
             <Text style={{ color: 'white' }}>Metric</Text>
               <View style={{ marginLeft: 20 }}>
                 <DropDownPicker
-                  style={{ backgroundColor: 'white', height: 45, width: 300 }}
+                  style={{ backgroundColor: 'white',  width: "100%" }}
                   containerStyle={{ width: 300 }}
                   open={openMetric}
                   setOpen={setOpenMetric}
@@ -635,11 +643,11 @@ const [deletedComp, setDeletedComp] = useState();
              />
               </View> 
           </View>
-          <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center', zIndex: 100 }}>
+          <View style={{flex:1, width:"100%",  marginTop: 15, flexDirection: 'row', alignItems: 'center', zIndex: 100 }}>
             <Text style={{ color: 'white' }}>Stat</Text>
               <View style={{ marginLeft: 20 }}>
                 <DropDownPicker
-                  style={{ backgroundColor: 'white', height: 45, width: 300 }}
+                  style={{ backgroundColor: 'white', width: "100%" }}
                   containerStyle={{ width: 300 }}
                   open={openStat}
                   setOpen={setOpenStat}
@@ -658,7 +666,7 @@ const [deletedComp, setDeletedComp] = useState();
                 />
               </View> 
           </View>
-          <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{flex: 1, width:"100%", justifyContent: 'space-between', marginTop: 5, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Spread</Text>
             
             <TouchableOpacity 
@@ -675,7 +683,7 @@ const [deletedComp, setDeletedComp] = useState();
                   }} 
                   title="Decrease Spread"
                 >
-              <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./minus_sign.png') }/>
+              <Image style={{ height: Dimensions.get('window').width/20, width: Dimensions.get('window').width/20, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./minus_sign.png') }/>
             </TouchableOpacity>
             <Text style={{ backgroundColor: 'white', fontSize: 15 }}>{valuationSpread*100}%</Text>
             <TouchableOpacity 
@@ -688,40 +696,55 @@ const [deletedComp, setDeletedComp] = useState();
                   }}} 
                   title="Increase Spread"
                 >
-              <Image style={{ height: 25, width: 25, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_sign.png') }/>
+              <Image style={{ height: Dimensions.get('window').width/20, width: Dimensions.get('window').width/20, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./plus_sign.png') }/>
             </TouchableOpacity>
           </View>
 
-          <View style={{ justifyContent: 'space-between', marginTop: 15, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{flex: 1, width:"100%",  justifyContent: 'space-between',  flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>Color</Text>
             <TouchableOpacity onPress={() => {setNewColor(1);setValuationColor("#94c0cc");}} 
               title="Blue">
-              <Image style={{height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5}} 
+              <Image style={{height: Dimensions.get('window').height/30, width: Dimensions.get('window').width/6, borderRadius: 4, marginTop: 5, marginLeft: 5}} 
                       source={require('./blue_color.png')} 
                     />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => {setNewColor(1);setValuationColor("#bcdf8a");}} 
             title="Green">
-            <Image style={{height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5}} 
+            <Image style={{height: Dimensions.get('window').height/30, width: Dimensions.get('window').width/6, borderRadius: 4, marginTop: 5, marginLeft: 5}} 
                     source={require('./green_color.png')} 
                   />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {setNewColor(1);setValuationColor("#fad48b");}} 
               title="Orange">
-              <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./orange_color.png')}/>
+              <Image style={{ height: Dimensions.get('window').height/30, width: Dimensions.get('window').width/6, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./orange_color.png')}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {setNewColor(1);setValuationColor("#f5f9ad");}} 
 
               title="Yellow">
-              <Image style={{ height: 25, width: 40, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./yellow_color.png')}/>
+              <Image style={{ height: Dimensions.get('window').height/30, width: Dimensions.get('window').width/6, borderRadius: 4, marginTop: 5, marginLeft: 5 }} source={require('./yellow_color.png')}/>
             </TouchableOpacity>
           </View>
           <View style={{ justifyContent: 'space-between', marginTop: 5, flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableOpacity 
-            onPress={() => {
-              onClose()
-            }}>
+          <TouchableOpacity 
+              onPress={() => {
+                //onClose();
+                //setReRender(1)
+                navigation.navigate('FootballField', {
+                  userName: userName,
+                  userEmail: userEmail,
+                  userId: userId,
+                  targets: targets,
+                  targetId: targetId,
+                  footballFieldName: footballFieldName,
+                  footballFieldTimeSeries: footballFieldTimeSeries,
+                  footballFields: footballFields,
+                  latestFF: latestFF
+                });
+                onClose();
+              }}
+            >
+
               <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Back to Football Field Controls</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ backgroundColor: 'red', padding: 5, borderRadius: 5 }} onPress={() => {deleteValuation()}}>
@@ -735,7 +758,18 @@ const [deletedComp, setDeletedComp] = useState();
  //FootballFieldControls. Level1.   
   function FootballFieldControls({ onAdd }) {
     function updateFootballFieldName(newName)  {
-      console.log("here")
+      console.log("footballFields")
+      console.log(footballFields)
+      for (let i = 0; i < footballFields.length; i++) {
+        const field = footballFields[i];
+        if (field.targetId === targetId && field.footballFieldTimeSeries === footballFieldTimeSeries) {
+          field.footballFieldName = newName;
+          break; // Stop iterating once we find a match
+        }
+      }
+      console.log("footballFields2")
+      console.log(footballFields)
+
       let url="http://10.239.21.226:5000/footballFields/names"
       fetch(url,{
               method:'PUT',
@@ -753,6 +787,7 @@ const [deletedComp, setDeletedComp] = useState();
           .then(resp => {
             if (resp === "Successful FF Name update") {
               console.log(resp)
+
               setFootballFieldName(newName);
 
               //navigation.navigate('Coverage', { userId: resp});
@@ -796,8 +831,8 @@ const [deletedComp, setDeletedComp] = useState();
     //Return of FootballField controls. Level 1.
 
     return(
-    <View style={{ flex: 1, margin: 10, height: 200, width: 400, borderWidth: 1 }}>
-      <View style={{ alignItems: 'center' }}> 
+    <View style={{ flex: 1, margin: 10, height: "40%", width: "100%", borderWidth: 1 }}>
+      <View style={{ flex:2, alignItems: 'center' }}> 
               <TouchableOpacity 
               style={{ alignItems: 'center', backgroundColor: 'blue', padding: 5, borderRadius: 5, width: 200 }} 
               onPress={() => {
@@ -808,22 +843,21 @@ const [deletedComp, setDeletedComp] = useState();
               </TouchableOpacity>
       </View>
       <View>
-
-      <TextInput 
-        style={{ 
-          marginTop: 10, 
-          height: 40, 
-          width: 250, 
-          padding: 5, 
-          borderRadius: 10, 
-          backgroundColor: '#FFF'
-        }}
-        placeholder={ffName}
-        //value={ffName}
-        //onChangeText={(text) => updateFootballFieldName(text)}
-        onSubmitEditing={(event) => updateFootballFieldName(event.nativeEvent.text)}
-        //keyboardType="default"
-      />
+        <TextInput 
+          style={{ 
+            marginTop: 10, 
+            height: 40, 
+            width: "100%", 
+            padding: 5, 
+            borderRadius: 10, 
+            backgroundColor: '#FFF'
+          }}
+          placeholder={ffName}
+          //value={ffName}
+          //onChangeText={(text) => updateFootballFieldName(text)}
+          onSubmitEditing={(event) => updateFootballFieldName(event.nativeEvent.text)}
+          //keyboardType="default"
+        />
 
         {/*<TextInput style={{ marginTop: 5, height: 40, width: 250, padding: 5, borderRadius: 10, backgroundColor: '#FFF'}}
         placeholder="Target Name or Ticker"
@@ -835,7 +869,7 @@ const [deletedComp, setDeletedComp] = useState();
       />*/}
       </View>
 
-      <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center', zIndex: 200 }}>
+      <View style={{flex:2, width: "100%", marginTop: 15, flexDirection: 'row', alignItems: 'center', zIndex: 200 }}>
         <Text style={{ color: 'white' }}>Output</Text>
         <View style={{ marginLeft: 20 }}>
           <DropDownPicker
@@ -851,11 +885,11 @@ const [deletedComp, setDeletedComp] = useState();
           />
         </View> 
       </View>
-      <View style={{ marginTop: 15, flexDirection: 'row', alignItems: 'center', zIndex: 100 }}>
+      <View style={{flex:2, width: "100%", marginTop: 15, flexDirection: 'row', alignItems: 'center', zIndex: 100 }}>
         <Text style={{ color: 'white' }}>Scale</Text>
           <View style={{ marginLeft: 20 }}>
             <DropDownPicker
-              style={{ backgroundColor: 'white', height: 45, width: 300 }}
+              style={{ backgroundColor: 'white', width: 300 }}
               containerStyle={{ width: 300 }}
               open={openScale}
               setOpen={setOpenScale}
@@ -867,11 +901,26 @@ const [deletedComp, setDeletedComp] = useState();
             />
           </View> 
       </View>
-      <View style={{ alignItems: 'center', marginTop: 15 }}>
+      <View style={{flex:2, alignItems: 'center', marginTop: 15 }}>
         <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'red', padding: 5, borderRadius: 5, width: 200 }}onPress={() => {deleteFootballField()}}>
           <Text style={{ fontFamily: "Arial", color: "#FFF" }}>Delete</Text>
         </TouchableOpacity>
       </View>
+      <View style={{flex:2}}>
+      </View>
+      {<View style={[{ flex:1, position: "absolute", bottom: 0}]}>
+          <View style={{ flexDirection:"row" }}>
+            <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage', {footballFields:footballFields, latestFF:latestFF, targets:targets, name:userName, email:userEmail, userId:userId})}>
+              <Text style={styles.buttonText_1}>Coverage</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button_2}>
+              <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button_3}onPress={() => navigation.navigate('Profile_About', {footballFields:footballFields, latestFF:latestFF, targets:targets, name: userName , email: userEmail, userId:userId})}>
+              <Text style={styles.buttonText_1}>Profile</Text>
+            </TouchableOpacity>
+          </View>
+        </View>}
     </View>  
     );
   }
@@ -933,6 +982,8 @@ const [deletedComp, setDeletedComp] = useState();
   function retrieveValuations() {
     
     let url = "http://10.239.21.226:5000/valuations/" + targetId +"-"+footballFieldTimeSeries;
+    console.log("url valuations:")
+    console.log(url)
     return fetch(url, {
       method: "GET",
       headers: {
@@ -968,58 +1019,69 @@ const [deletedComp, setDeletedComp] = useState();
           let valuationName = valuation["valuationName"];
           if (output === "EV") {
             if (valuation["metric"] === "EV_E") {
-              if (valuation["stat"] === "AV") {
+              if (valuation["stat"] === "Mean") {
                 valuationCenter = valuation["valuationEvAvEvEbitdaLTM"];
-              } else if (valuation["stat"] === "HIGH") {
+              } else if (valuation["stat"] === "High") {
                 valuationCenter = valuation["valuationEvHighEvEbitdaLTM"];
-              } else if (valuation["stat"] === "MED") {
-                valuationCenter = valuation["valuationEvAvEvEbitdaLTM"];
+              } else if (valuation["stat"] === "Median") {
+                valuationCenter = valuation["valuationEvMedEvEbitdaLTM"];
               } else {
-                valuationCenter = valuation["valuationEvAvEvEbitdaLTM"];
+                valuationCenter = valuation["valuationEvLowEvEbitdaLTM"];
               }
             } else if (valuation["metric"] === "EV_R") {
-              if (valuation["stat"] === "AV") {
+              if (valuation["stat"] === "Mean") {
                 valuationCenter = valuation["valuationEvAvEvRevLTM"];
-              } else if (valuation["stat"] === "HIGH") {
+              } else if (valuation["stat"] === "High") {
                 valuationCenter = valuation["valuationEvHighEvRevLTM"];
-              } else if (valuation["stat"] === "MED") {
-                valuationCenter = valuation["valuationEvAvEvRevLTM"];
+              } else if (valuation["stat"] === "Median") {
+                valuationCenter = valuation["valuationEvMedEvRevLTM"];
               } else {
-                valuationCenter = valuation["valuationEvAvEvRevLTM"];
+                valuationCenter = valuation["valuationEvLowEvRevLTM"];
               }
             }
         } else if (output === "MULT") {
           if (valuation["metric"] === "EV_E") {
-            if (valuation["stat"] === "AV") {
+            if (valuation["stat"] === "Mean") {
               valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
-            } else if (valuation["stat"] === "HIGH") {
+            } else if (valuation["stat"] === "High") {
               valuationCenter = valuation["valuationMultHighEvEbitdaLTM"];
-            } else if (valuation["stat"] === "MED") {
-              valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
+            } else if (valuation["stat"] === "Median") {
+              valuationCenter = valuation["valuationMultMedEvEbitdaLTM"];
             } else {
-              valuationCenter = valuation["valuationMultAvEvEbitdaLTM"];
+              valuationCenter = valuation["valuationMultLowEvEbitdaLTM"];
             }
           } else if (valuation["metric"] === "EV_R") {
-            if (valuation["stat"] === "AV") {
+            if (valuation["stat"] === "Mean") {
               valuationCenter = valuation["valuationMultAvEvRevLTM"];
-            } else if (valuation["stat"] === "HIGH") {
+            } else if (valuation["stat"] === "High") {
               valuationCenter = valuation["valuationMultHighEvRevLTM"];
-            } else if (valuation["stat"] === "MED") {
-              valuationCenter = valuation["valuationMultAvEvRevLTM"];
+            } else if (valuation["stat"] === "Median") {
+              valuationCenter = valuation["valuationMultMedEvRevLTM"];
             } else {
               //console.log("manin deberia estar aqui")
-              valuationCenter = valuation["valuationMultAvEvRevLTM"];
+              valuationCenter = valuation["valuationMultLowEvRevLTM"];
               //console.log(valuation["valuationMultAvEvRevLTM"])
             }
           }
         }
-      
+        console.log("valuationCenter"+ valuationName)
+        console.log(valuationCenter)
+        console.log("valuation[spread]"+ valuationName)
+        console.log(valuation["spread"])
+
         let minValuation = valuationCenter - valuationCenter * valuation["spread"];
         let maxValuation = valuationCenter + valuationCenter * valuation["spread"];
-        if (valuationColor === "") {
+
+        console.log("minValuation:" + valuationName)
+        console.log(minValuation)
+
+        console.log("maxValuation:"+valuationName)
+        console.log(maxValuation)
+
+
+        //if (valuationColor === "") {
           valuation = {
             name: valuationName,
-            color: valuationColor,
             minValuation: minValuation,
             maxValuation: maxValuation,
             footballFieldId: valuation["footballFieldId"],
@@ -1029,10 +1091,10 @@ const [deletedComp, setDeletedComp] = useState();
             spread: valuation["spread"],
             color:valuation["color"]
           };
-        } else {
+        /*} else {
+          console.log("huele aqui")
           valuation = {
             name: valuationName,
-            color: valuationColor,
             minValuation: minValuation,
             maxValuation: maxValuation,
             footballFieldId: valuation["footballFieldId"],
@@ -1042,7 +1104,7 @@ const [deletedComp, setDeletedComp] = useState();
             spread: valuationSpread,
             color: valuationColor
           };
-        }
+        }*/
         
         valuations.push(valuation);}
         
@@ -1056,7 +1118,7 @@ const [deletedComp, setDeletedComp] = useState();
     const delay = setTimeout(async () => {
       async function getValuations() {
         let data = await retrieveValuations();
-        console.log("dataKLK")
+        console.log("data vakuations:")
         console.log(data)
         console.log("en este primer useeffect")
         //BLUE: #94c0cc
@@ -1095,7 +1157,6 @@ const [deletedComp, setDeletedComp] = useState();
     setValuations(val);
     console.log("val:")
     console.log(val)
-
     //nuevoValuatoionRender es val[valuationTimeSeries]
   }, [data, footballFieldOutput, valuationMetric, valuationStat, valuationSpread,valuationColor]);*/
 
@@ -1180,7 +1241,7 @@ const [deletedComp, setDeletedComp] = useState();
   return (
     
       <SafeAreaView style={{ flex: 2, alignItems: 'center', backgroundColor: '#000' }}>
-        <View style={{ flex: 1, backgroundColor: '#FFF', height: 0.4*(windowHeight), width: valuationWidth, borderRadius: 10 }}>
+        <View style={{ flex: 1, backgroundColor: '#FFF', height: "40%", width: valuationWidth, borderRadius: 10 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: valuationWidth-40, marginStart: 10 }}>
             <Text style={{ marginTop: 10, marginLeft: 10 }}>{ffName}</Text>
             <Text style={{ marginTop: 10 }}>{targetSymbol}</Text>
@@ -1221,19 +1282,19 @@ const [deletedComp, setDeletedComp] = useState();
               <Text style={{ color: 'black', backgroundColor: 'light-gray', borderTopLeftRadius: 10, borderTopRightRadius: 10  }}> Multiple</Text>
             </View>
         </View> */}
-        {/* <View style={[styles.bottomButtons, { flexDirection:"row" }]}>
-          <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage')}>
-            <Text style={styles.buttonText_1}>Coverage</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.button_2} onPress={() => navigation.navigate('FootballField', { targetId: latestFF.targetId, footballFieldName:latestFF.footballFieldName,footballFieldTimeSeries:latestFF.footballFieldTimeSeries})}>
-            <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.button_3}>
-            <Text style={styles.buttonText_1}>Profile</Text>
-          </TouchableOpacity>
-        </View> */}
+        {/*<View style={[{ flex:1, position: "absolute", bottom: 0}]}>
+          <View style={{ flexDirection:"row" }}>
+            <TouchableOpacity style={styles.button_1} onPress={() => navigation.navigate('Coverage', {footballFields:footballFields, latestFF:latestFF, targets:targets, name:userName, email:userEmail, userId:userId})}>
+              <Text style={styles.buttonText_1}>Coverage</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button_2}>
+              <Image style={styles.buttonLogo} source={require('./logo_ff.png')}/>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button_3}onPress={() => navigation.navigate('Profile_About', {footballFields:footballFields, latestFF:latestFF, targets:targets, name: userName , email: userEmail, userId:userId})}>
+              <Text style={styles.buttonText_1}>Profile</Text>
+            </TouchableOpacity>
+          </View>
+        </View>*/}
     </SafeAreaView>
   );
 }

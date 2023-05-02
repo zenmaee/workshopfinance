@@ -93,8 +93,14 @@ def update_VALUATION(footballFieldId, multiples,ev,valuationTimeSeries,iex_api_k
     url = "https://workshopfinance.iex.cloud/v1/data/workshopfinance/VALUATIONS/"+footballFieldId+"/"+valuationTimeSeries+"/?&token="+iex_api_key
     print(url)
     valuation=requests.get(url).json()
-    print("valuation0")
-    print(valuation)
+    print("valuationName")
+    print(valuation[0]["valuationName"])
+    
+    print("multiples")
+    print(multiples)
+    print("ev")
+    print(ev)
+
     #Depending on the desired stat, we will want one row of multiples/ev or another.
     #However, even though the stat is changed, no recalculations should be made. All possible calculation should already be made
     #If Output=Mult:

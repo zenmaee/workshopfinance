@@ -278,7 +278,12 @@ def retrieve_pub_targets(tgtSymbol):
 @app.route('/footballFields', methods=['POST'])
 def add_footballfields():
 
-    targetSymbol=request.json['targetSymbol']
+    try:
+
+        targetSymbol=request.json['targetSymbol']
+    except:
+        targetSymbol=request.json['targetName']
+    
     userId=request.json['userId']
     footballFieldType=request.json['footballFieldType']
     footballFieldTimeSeries = request.json['footballFieldTimeSeries']

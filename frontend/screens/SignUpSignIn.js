@@ -93,7 +93,6 @@ const SignUpSignIn = ({ navigation }) => {
                   </View>
               </TouchableOpacity>
           </View>
-
           <Text style={[styles.buttonText, { textAlign: "center", marginVertical: 10 }]}>or</Text> */}
 
           <View style={{ marginTop: 150 }}>
