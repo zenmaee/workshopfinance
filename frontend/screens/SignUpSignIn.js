@@ -18,7 +18,7 @@ const SignUpSignIn = ({ navigation }) => {
     const userName=resp.name
     const userEmail=resp.email
 
-    const url = 'http://10.239.21.226:5000/targets/'+userId+'/'
+    const url = 'http://10.239.75.139:5000/targets/'+userId+'/'
     console.log(url)
     return fetch(url, {
       method: "GET",
@@ -47,7 +47,7 @@ const SignUpSignIn = ({ navigation }) => {
 
           console.log("email")
           console.log(email)
-          const url = 'http://10.239.21.226:5000/users/'+email
+          const url = 'http://10.239.75.139:5000/users/'+email
           return fetch(url, {
             method:'POST',
             headers:{
@@ -182,9 +182,9 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     wfLogo: {
-      top: "10%", //100,
-      //height: 100,
-      width: "100%" //350
+      top: 100,
+      height: 100,
+      width: 350
     },
     logo: {
       height: 18,
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
       marginRight: 8
     },
     socialButton: {
-        marginTop: "30%", //150, 
+        marginTop: 150, 
         flexDirection: "row",
         marginHorizontal: 12,
         paddingVertical: 12,

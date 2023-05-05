@@ -69,7 +69,7 @@ const SignUp = ({ navigation }) => {
   };
 
   const addUsers = () => {
-    fetch('http://10.239.21.226:5000/users', {
+    fetch('http://10.239.75.139:5000/users', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -132,7 +132,7 @@ const SignUp = ({ navigation }) => {
               // placeholder="Enter first name here"
               // placeholderTextColor={styles.placeholderTextColorStyle}
               />
-            <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            <View style={{flex:2, width:"90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
 
           <View style={{flex:2, width:"100%", marginTop: 5, marginBottom: 10 }} >
@@ -208,7 +208,7 @@ const SignUp = ({ navigation }) => {
                 onPress={() => setSeeConfirmPassword(!seeConfirmPassword)}>
                 <Image source={seeConfirmPassword ? require('./Eye.png') : require('./EyeActive.png')} style={styles.icon} />
               </TouchableOpacity>
-            <View style={{ width: "95%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            <View style={{flex:2, width: "90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
 
         {/*
@@ -275,11 +275,11 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   wfLogo: {
-    flex: 1,
-    top: "3%",//55,
+    //flex: 1,
+    //top: "3%",//55,
     //height: 100,
     width: "100%", //350
-    aspectRatio: 5/1
+    //aspectRatio: 5/1
   },
   logo: {
     height: 18,

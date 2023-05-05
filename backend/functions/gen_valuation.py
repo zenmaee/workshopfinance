@@ -19,17 +19,30 @@ import time
 #get_output:Gets valuation output
 #generate_valuation:Generates Valuation. Main function to call
 
-def get_metrics(company,comp_tgt,iex_api_key):
+def get_metrics(valuationId, company,comp_tgt,iex_api_key):
     #Preparing code
     fundamentals = [] #Fundamentals will store desired financial metrics of each company
+    userId = valuationId.split("-")[0]
 
     ##Fetching API
     #fundamentals_api obtains ebitda and revenue
     #both if we are dealing with the comp or with a tgt, we want the ebitdaLTM and the revenueLTM
-    fundamentals_api="https://cloud.iexapis.com/stable/time-series/fundamentals/"+company+"/ttm?token="+iex_api_key
-    fundamentals_request=requests.get(fundamentals_api)
-    ebitdaLTM = fundamentals_request.json()[0]['ebitdaReported']
-    revenueLTM= fundamentals_request.json()[0]['revenue']
+    try:
+        fundamentals_api="https://cloud.iexapis.com/stable/time-series/fundamentals/"+company+"/ttm?token="+iex_api_key
+        fundamentals_request=requests.get(fundamentals_api)
+        
+        ebitdaLTM = fundamentals_request.json()[0]['ebitdaReported']
+        revenueLTM= fundamentals_request.json()[0]['revenue']
+    except:
+        
+        url="https://WORKSHOPFINANCE.iex.cloud/v1/data/WORKSHOPFINANCE/TARGETS/"+userId+"/"+company+"?&token="+iex_api_key
+        r=requests.get(url).json()
+        print("url")
+        print(url)
+
+        ebitdaLTM=r[0]["targetEbitdaLTM"]
+        revenueLTM=r[0]['targetRevenueLTM']
+
 
     
     if comp_tgt=="comp":
@@ -61,7 +74,7 @@ def get_metrics(company,comp_tgt,iex_api_key):
 
 def add_COMP(compSymbol, valuationId, iex_api_key):
     # Get fundamentals
-    fundamentals = get_metrics(compSymbol, "comp", iex_api_key)
+    fundamentals = get_metrics(valuationId, compSymbol, "comp", iex_api_key)
     evToEbitdaLTM, evToRevenueLTM = fundamentals[:2]
 
     # Create comps object
@@ -145,7 +158,6 @@ def get_output(basket_of_comps, valuationId, targetSymbol, desired_multiples, ie
 
     comps_raw_data = []
     tgt_raw_data=[]
-    
     #We obtain evToEbitdaLTM and evToRevenueLTM for the comps
 
     for comp in basket_of_comps:
@@ -158,8 +170,8 @@ def get_output(basket_of_comps, valuationId, targetSymbol, desired_multiples, ie
         
 
     #We obtain ebitdaLTM and revenueLTM for the tgt
-    tgt_raw_data.append(get_metrics(targetSymbol,"tgt",iex_api_key))
-  
+    tgt_raw_data.append(get_metrics(valuationId, targetSymbol,"tgt",iex_api_key))
+
     #Specify the columns for the tgt dataframe (ebitdaLTM and revenueLTM)
     
     desired_metrics=desired_multiples[:]
