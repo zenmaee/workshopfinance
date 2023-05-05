@@ -132,7 +132,7 @@ const SignUp = ({ navigation }) => {
               // placeholder="Enter first name here"
               // placeholderTextColor={styles.placeholderTextColorStyle}
               />
-            <View style={{flex:2, width:"90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            <View style={{width:"90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
 
           <View style={{flex:2, width:"100%", marginTop: 5, marginBottom: 10 }} >
@@ -147,7 +147,7 @@ const SignUp = ({ navigation }) => {
               // placeholder="Enter last name here"
               // placeholderTextColor={styles.placeholderTextColorStyle}
               />
-            <View style={{flex:2, width:"90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            <View style={{width:"90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
 
           <View style={{flex:2, width:"100%", marginTop: 5 }} >
@@ -163,7 +163,7 @@ const SignUp = ({ navigation }) => {
               // placeholder="Enter email address here"
               // placeholderTextColor={styles.placeholderTextColorStyle}
               />
-            <View style={{flex:2, width:"90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            <View style={{width:"90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
           {checkValidEmail ? (
             <Text style={styles.textFailed}>Wrong format email</Text>
@@ -188,7 +188,7 @@ const SignUp = ({ navigation }) => {
                 onPress={() => setSeePassword(!seePassword)}>
                 <Image source={seePassword ? require('./Eye.png') : require('./EyeActive.png')} style={styles.icon} />
               </TouchableOpacity>
-            <View style={{flex:2, width:"90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            <View style={{width:"90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
 
           <View style={{flex:2, width:"100%", marginTop: 5, marginBottom: 10 }} >
@@ -208,7 +208,7 @@ const SignUp = ({ navigation }) => {
                 onPress={() => setSeeConfirmPassword(!seeConfirmPassword)}>
                 <Image source={seeConfirmPassword ? require('./Eye.png') : require('./EyeActive.png')} style={styles.icon} />
               </TouchableOpacity>
-            <View style={{flex:2, width: "90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            <View style={{width: "90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
 
         {/*
@@ -275,11 +275,11 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   wfLogo: {
-    flex: 1,
-    top: "3%",//55,
+    //flex: 1,
+    top: "10%",//55,
     //height: 100,
     width: "100%", //350
-    aspectRatio: 5/1
+    //aspectRatio: 5/1
   },
   logo: {
     height: 18,
