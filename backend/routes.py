@@ -43,6 +43,7 @@ def get_users():
 @app.route('/users', methods = ['POST'])
 def add_users():
     #First we get info from frontend
+    print("addUsers")
     firstName=request.json['firstName']
     lastName=request.json['lastName']
     email=request.json['email']
