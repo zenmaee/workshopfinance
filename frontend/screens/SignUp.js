@@ -208,7 +208,7 @@ const SignUp = ({ navigation }) => {
                 onPress={() => setSeeConfirmPassword(!seeConfirmPassword)}>
                 <Image source={seeConfirmPassword ? require('./Eye.png') : require('./EyeActive.png')} style={styles.icon} />
               </TouchableOpacity>
-            <View style={{ width: "95%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            <View style={{flex:2, width: "90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
 
         {/*
