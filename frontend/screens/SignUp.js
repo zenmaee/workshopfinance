@@ -132,7 +132,7 @@ const SignUp = ({ navigation }) => {
               // placeholder="Enter first name here"
               // placeholderTextColor={styles.placeholderTextColorStyle}
               />
-            <View style={{ width: 250, borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
+            <View style={{flex:2, width:"90%", borderBottomWidth: 1, borderBottomColor: "#FFF"}}></View>
           </View>
 
           <View style={{flex:2, width:"100%", marginTop: 5, marginBottom: 10 }} >
