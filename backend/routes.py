@@ -344,4 +344,4 @@ def search_ticker(input):
 
 #    return articles_schema.jsonify(article)
 if __name__=="__main__":
-    app.run(host='10.239.75.139',port=5000, debug=True) #changes every time we change wifi
+    app.run(host='192.168.1.158',port=5000, debug=True) #changes every time we change wifi

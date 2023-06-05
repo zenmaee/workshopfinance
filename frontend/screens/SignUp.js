@@ -70,7 +70,7 @@ const SignUp = ({ navigation }) => {
 
   const addUsers = () => {
     console.log("addUsers")
-    fetch('http://10.239.75.139:5000/users', {
+    fetch('http://192.168.1.158:5000/users', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
